@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=3 uid="uid://dpfj3g00hncl8"]
+
+[ext_resource type="PackedScene" uid="uid://dl0p8dvvo8wa6" path="res://player.tscn" id="1_5lsu1"]
+[ext_resource type="PackedScene" uid="uid://cp7dq1ufuuj4a" path="res://floor.tscn" id="2_bvlpl"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_5lsu1")]
+
+[node name="Floor" parent="." instance=ExtResource("2_bvlpl")]
+scale = Vector2(40, 1)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Floor2" parent="." instance=ExtResource("2_bvlpl")]
+position = Vector2(23, 495)
+rotation = 1.5708
+scale = Vector2(40, 1)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Floor4" parent="." instance=ExtResource("2_bvlpl")]
+position = Vector2(253, 96)
+rotation = 1.5708
+collision_layer = 2
+collision_mask = 0
+
+[node name="Floor3" parent="." instance=ExtResource("2_bvlpl")]
+position = Vector2(1102, 533)
+rotation = 1.5708
+scale = Vector2(40, 1)
+collision_layer = 2
+collision_mask = 0

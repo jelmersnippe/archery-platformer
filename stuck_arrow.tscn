@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://bo2rpe4c3ixxr"]
+
+[ext_resource type="Script" path="res://StuckArrow.cs" id="1_nq8ni"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wf8ly"]
+size = Vector2(40, 40)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ckxtd"]
+size = Vector2(44, 60)
+
+[node name="StuckArrow" type="StaticBody2D" node_paths=PackedStringArray("PlayerDetectionArea")]
+position = Vector2(683, 403)
+scale = Vector2(1, 0.2)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_nq8ni")
+PlayerDetectionArea = NodePath("PlayerDetectionArea")
+metadata/_edit_group_ = true
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.254902, 0.329412, 0.890196, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wf8ly")
+
+[node name="PlayerDetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionArea"]
+shape = SubResource("RectangleShape2D_ckxtd")

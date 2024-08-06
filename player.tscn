@@ -1,0 +1,32 @@
+[gd_scene load_steps=4 format=3 uid="uid://dl0p8dvvo8wa6"]
+
+[ext_resource type="Script" path="res://Player.cs" id="1_2qic4"]
+[ext_resource type="PackedScene" uid="uid://cqpc2he5alk77" path="res://shot_arrow.tscn" id="2_6546e"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_nu74t"]
+size = Vector2(40, 40)
+
+[node name="Player" type="CharacterBody2D"]
+position = Vector2(585, 420)
+collision_mask = 6
+script = ExtResource("1_2qic4")
+ArrowScene = ExtResource("2_6546e")
+JumpVelocity = -500.0
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_nu74t")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
