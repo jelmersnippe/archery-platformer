@@ -24,7 +24,6 @@ public partial class StuckArrow : StaticBody2D
 	{
 		if (body == _trackingPlayer)
 		{
-			GD.Print("no longer tracking player");
 			_trackingPlayer = null;
 		}
 	}
@@ -36,7 +35,6 @@ public partial class StuckArrow : StaticBody2D
 			return;
 		}
 
-		GD.Print("tracking player");
 		_trackingPlayer = player;
 	}
 
@@ -45,12 +43,10 @@ public partial class StuckArrow : StaticBody2D
 		if (_trackingPlayer != null && _trackingPlayer.Velocity.Y == 0)
 		{
 			_remainingLifeTime -= (float)delta;
-			GD.Print("reduced life time to " + _remainingLifeTime);
 		}
 
 		if (_remainingLifeTime <= 0)
 		{
-			GD.Print("life time ran out");
 			EmitSignal(SignalName.LifeTimeRanOut);
 			QueueFree();
 		}
