@@ -12,6 +12,11 @@ public partial class Player : CharacterBody2D
 	
 	[Export] public float Speed = 300.0f;
 	[Export] public float JumpVelocity = -600.0f;
+	[Export] public float CoyoteTime = 0.1f;
+	[Export] public float InputBufferTime = 0.1f;
+
+	private float _remainingCoyoteTime = 0.1f;
+	private float _remainingInputBufferTime = 0;
 
 	[Export] public AnimatedSprite2D Sprite;
 
@@ -20,30 +25,43 @@ public partial class Player : CharacterBody2D
 	[Export] public Node2D FiringPoint;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
-	public float gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
+	private float _gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
 	public override void _Ready()
 	{
 		_currentArrowCount = InitialArrowCount;
 	}
 
-	public override void _PhysicsProcess(double delta)
-	{
+	public override void _PhysicsProcess(double delta) {
+		_remainingInputBufferTime -= (float)delta;
+		
 		RotationPoint.Rotation = RotationPoint.GlobalPosition.DirectionTo(GetGlobalMousePosition()).Angle();
 		
 		Vector2 velocity = Velocity;
 
-		// Add the gravity.
 		if (!IsOnFloor())
 		{
+			_remainingCoyoteTime -= (float)delta;
 			CancelArrow();
-			velocity.Y += gravity * (float)delta;
+			velocity.Y += _gravity * (float)delta;
 			Sprite.Play("jump");
 		}
-		// Handle Jump.
-		else if (Input.IsActionJustPressed("ui_accept"))
+		else
 		{
+			_remainingCoyoteTime = CoyoteTime;
+		}
+
+		if (_remainingInputBufferTime > 0 && IsOnFloor()) {
 			velocity.Y = JumpVelocity;
+		}
+		if (Input.IsActionJustPressed("jump"))
+		{
+			if (IsOnFloor() || _remainingCoyoteTime > 0) {
+				velocity.Y = JumpVelocity;
+			}
+			else {
+				_remainingInputBufferTime = InputBufferTime;
+			}
 		}
 
 		// Get the input direction and handle the movement/deceleration.

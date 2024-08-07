@@ -6,4 +6,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>ArcherPlatformer</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Content Include=".editorconfig" />
+  </ItemGroup>
 </Project>

@@ -7,15 +7,23 @@ public partial class Arrow : CharacterBody2D
 	
 	[Export] public PackedScene StuckArrowScene;
 	[Export] public AnimatedSprite2D Sprite;
+
+	private bool _collided;
 	
 	public override void _PhysicsProcess(double delta)
 	{
-		var collision = MoveAndCollide(Velocity * (float)delta, true);
-		if (collision != null)
-		{
+		if (_collided) {
+			return;
+		}
+		
+		KinematicCollision2D collision = MoveAndCollide(Velocity * (float)delta, true);
+		if (collision != null) {
+			var spriteOffset = (Sprite.SpriteFrames.GetFrameTexture("default", 0).GetSize().X / 4);
+			GlobalPosition = collision.GetPosition() - Velocity.Normalized() * spriteOffset;
 			Velocity = Vector2.Zero;
 			Sprite.Play();
 			Sprite.AnimationFinished += SpawnStuckArrow;
+			_collided = true;
 			return;
 		}
 		
