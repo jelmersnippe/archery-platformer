@@ -1,7 +1,9 @@
-[gd_scene load_steps=3 format=3 uid="uid://dpfj3g00hncl8"]
+[gd_scene load_steps=5 format=3 uid="uid://dpfj3g00hncl8"]
 
 [ext_resource type="PackedScene" uid="uid://dl0p8dvvo8wa6" path="res://player.tscn" id="1_5lsu1"]
 [ext_resource type="PackedScene" uid="uid://cp7dq1ufuuj4a" path="res://floor.tscn" id="2_bvlpl"]
+[ext_resource type="PackedScene" uid="uid://bpm6myq1xakxq" path="res://door.tscn" id="3_r84n6"]
+[ext_resource type="PackedScene" uid="uid://dbtbx2hlm1jg3" path="res://lever.tscn" id="4_h6ror"]
 
 [node name="Main" type="Node2D"]
 
@@ -26,12 +28,26 @@ collision_layer = 2
 collision_mask = 0
 
 [node name="Floor3" parent="." instance=ExtResource("2_bvlpl")]
-position = Vector2(1102, 533)
+position = Vector2(1019, -49)
 rotation = 1.5708
-scale = Vector2(40, 1)
+scale = Vector2(20, 1)
 collision_layer = 2
 collision_mask = 0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(451, 308)
 zoom = Vector2(1.3, 1.3)
+
+[node name="Floor5" parent="." instance=ExtResource("2_bvlpl")]
+position = Vector2(901, 331)
+scale = Vector2(5, 1)
+collision_layer = 2
+collision_mask = 0
+
+[node name="Door" parent="." node_paths=PackedStringArray("Lever") instance=ExtResource("3_r84n6")]
+position = Vector2(822, 432)
+Lever = NodePath("../Lever")
+
+[node name="Lever" parent="." instance=ExtResource("4_h6ror")]
+position = Vector2(525, 485.5)
+scale = Vector2(3, 3)

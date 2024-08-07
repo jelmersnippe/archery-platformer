@@ -131,6 +131,7 @@ public partial class Player : CharacterBody2D
 		
 		_currentArrow.Velocity = GlobalPosition.DirectionTo(GetGlobalMousePosition())* 1000f;
 
+		_currentArrow.CollisionShape2D.SetDeferred("disabled", false);
 		_currentArrow.Reparent(GetTree().CurrentScene);
 		
 		_activeArrows.Add(_currentArrow);
@@ -138,7 +139,7 @@ public partial class Player : CharacterBody2D
 		{
 			_activeArrows.Remove(arrow);
 			_activeArrows.Add(stuckArrow);
-			stuckArrow.LifeTimeRanOut += () =>
+			stuckArrow.TreeExiting += () =>
 			{
 				_activeArrows.Remove(stuckArrow);
 				_currentArrowCount++;
