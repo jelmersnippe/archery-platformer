@@ -23,76 +23,158 @@ public partial class Player : CharacterBody2D
 	[Export] public AnimationPlayer BowAnimationPlayer;
 	[Export] public Node2D RotationPoint;
 	[Export] public Node2D FiringPoint;
+	[Export] public Area2D GrabArea;
 
 	// Get the gravity from the project settings to be synced with RigidBody nodes.
 	private float _gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
+	private bool _isClimbing;
+
 	public override void _Ready()
 	{
 		_currentArrowCount = InitialArrowCount;
+		GrabArea.AreaEntered += GrabAreaOnAreaEntered;
+		GrabArea.AreaExited += GrabAreaOnAreaExited;
 	}
 
-	public override void _PhysicsProcess(double delta) {
-		_remainingInputBufferTime -= (float)delta;
-		
-		RotationPoint.Rotation = RotationPoint.GlobalPosition.DirectionTo(GetGlobalMousePosition()).Angle();
-		
-		Vector2 velocity = Velocity;
-
-		if (!IsOnFloor())
-		{
-			_remainingCoyoteTime -= (float)delta;
-			CancelArrow();
-			velocity.Y += _gravity * (float)delta;
-			Sprite.Play("jump");
-		}
-		else
-		{
-			_remainingCoyoteTime = CoyoteTime;
+	private void GrabAreaOnAreaExited(Area2D area) {
+		if (area is not Vine vine) {
+			return;
 		}
 
-		if (_remainingInputBufferTime > 0 && IsOnFloor()) {
-			velocity.Y = JumpVelocity;
+		if (vine == _vineInRange) {
+			_vineInRange = null;
+			_isClimbing = false;
 		}
+	}
+
+	private Vine _vineInRange;
+
+	private void GrabAreaOnAreaEntered(Area2D area) {
+		if (area is not Vine vine) {
+			return;
+		}
+
+		_vineInRange = vine;
+	}
+
+	private Vector2 _velocity;
+	private void HandleAir(float delta) {
+		if (IsOnFloor() || _isClimbing) {
+			return;
+		}
+		
+		CancelArrow();
+		_remainingCoyoteTime -= delta;
+		_velocity.Y += _gravity * delta;
+		Sprite.Play("jump");
+		
 		if (Input.IsActionJustPressed("jump"))
 		{
-			if (IsOnFloor() || _remainingCoyoteTime > 0) {
-				velocity.Y = JumpVelocity;
+			if ( _remainingCoyoteTime > 0) {
+				_velocity.Y = JumpVelocity;
 			}
 			else {
 				_remainingInputBufferTime = InputBufferTime;
 			}
 		}
+		MoveHorizontal();
+		GrabVine();
+	}
 
+	private void GrabVine() {
+		if (!_isClimbing && _vineInRange != null && Input.IsActionPressed("move_up")) {
+			_isClimbing = true;
+			GlobalPosition = new Vector2(_vineInRange.GlobalPosition.X, GlobalPosition.Y);
+		}
+	}
+	
+	private void HandleGrounded(float delta) {
+		if (!IsOnFloor()) {
+			return;
+		}
+		
+		_remainingCoyoteTime = CoyoteTime;
+		
+		if (_remainingInputBufferTime > 0) {
+			_velocity.Y = JumpVelocity;
+		}
+		
+		if (Input.IsActionJustPressed("jump"))
+		{
+			_velocity.Y = JumpVelocity;
+		}
+		var horizontalDirection = MoveHorizontal();
+		
+		Sprite.Play(horizontalDirection != 0 ? "move" : "idle");
+
+		if (Input.IsActionJustPressed("shoot"))
+		{
+			ReadyArrow();
+		}
+		if (Input.IsActionJustReleased("shoot"))
+		{
+			ReleaseArrow();
+		}
+		
+		GrabVine();
+	}
+	
+	private void HandleClimbing(float delta) {
+		if (!_isClimbing) {
+			return;
+		}
+
+		_velocity = Vector2.Zero;
+		_velocity.Y = Mathf.MoveToward(Velocity.Y, 0, Speed);
+		
+		var direction = Input.GetAxis("move_up", "move_down");
+		if (direction != 0)
+		{
+			_velocity.Y = direction * Speed;
+		}
+		else
+		{
+			_velocity.Y = Mathf.MoveToward(Velocity.Y, 0, Speed);
+		}
+		
+		if (Input.IsActionJustPressed("jump"))
+		{
+			_velocity.Y = JumpVelocity;
+			_isClimbing = false;
+		}
+	}
+
+	private float MoveHorizontal() {
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
 		var direction = Input.GetAxis("move_left", "move_right");
 		if (direction != 0)
 		{
-			velocity.X = direction * Speed;
+			_velocity.X = direction * Speed;
 			Sprite.FlipH = direction < 0;
 		}
 		else
 		{
-			velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
+			_velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
 		}
+		
+		return direction;
+	}
 
-		if (IsOnFloor())
-		{
-			Sprite.Play(direction != 0 ? "move" : "idle");
-		}
+	public override void _PhysicsProcess(double delta) {
+		_velocity = Velocity;
+		_remainingInputBufferTime -= (float)delta;
+		
+		RotationPoint.Rotation = RotationPoint.GlobalPosition.DirectionTo(GetGlobalMousePosition()).Angle();
+		
+		HandleAir((float)delta);
+		HandleGrounded((float)delta);
+		HandleClimbing((float)delta);
 
-		Velocity = velocity;
+		Velocity = _velocity;
 		MoveAndSlide();
-
-		if (Input.IsActionJustPressed("shoot") && IsOnFloor())
-		{
-			ReadyArrow();
-		}
-		if (Input.IsActionJustReleased("shoot") && IsOnFloor())
-		{
-			ReleaseArrow();
-		}
+		
 		if (Input.IsActionJustPressed("recall"))
 		{
 			Recall();
