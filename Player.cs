@@ -3,18 +3,27 @@ using Godot.Collections;
 
 public partial class Player : CharacterBody2D
 {
-	[Export] public PackedScene ArrowScene;
+	[ExportCategory("Refs")]
+	[Export] public AnimatedSprite2D Sprite;
+	[Export] public AnimationPlayer BowAnimationPlayer;
+	[Export] public Node2D RotationPoint;
+	[Export] public Node2D FiringPoint;
+	[Export] public Area2D GrabArea;
 	
+	[ExportCategory("Archery")]
+	[Export] public PackedScene ArrowScene;
 	[Export] public int InitialArrowCount = 5;
 
 	private int _currentArrowCount;
 	private Array<Node2D> _activeArrows = new();
 
-	[Export] public float AerialAccelerationTime = 0.2f;
+	[ExportCategory("Movement")]
 	[Export] public float AccelerationTime = 0.3f;
 	[Export] public float DecelerationTime = 0.2f;
 	[Export] public float MaxSpeed = 300.0f;
+	[Export] public float AerialAccelerationTime = 0.2f;
 
+	[ExportCategory("Jumping")]
 	[Export] public float MaxJumpHeight = 128f;
 	[Export] public float JumpTimeToPeak = 0.5f;
 	[Export] public float JumpTimeToGround = 0.3f;
@@ -31,12 +40,6 @@ public partial class Player : CharacterBody2D
 	private float _remainingCoyoteTime = 0.1f;
 	private float _remainingInputBufferTime = 0;
 
-	[Export] public AnimatedSprite2D Sprite;
-
-	[Export] public AnimationPlayer BowAnimationPlayer;
-	[Export] public Node2D RotationPoint;
-	[Export] public Node2D FiringPoint;
-	[Export] public Area2D GrabArea;
 
 	private bool _isClimbing;
 
