@@ -9,8 +9,11 @@ public partial class Player : CharacterBody2D
 
 	private int _currentArrowCount;
 	private Array<Node2D> _activeArrows = new();
-	
-	[Export] public float Speed = 300.0f;
+
+	[Export] public float AerialAccelerationTime = 0.2f;
+	[Export] public float AccelerationTime = 0.3f;
+	[Export] public float DecelerationTime = 0.2f;
+	[Export] public float MaxSpeed = 300.0f;
 
 	[Export] public float MaxJumpHeight = 128f;
 	[Export] public float JumpTimeToPeak = 0.5f;
@@ -89,7 +92,7 @@ public partial class Player : CharacterBody2D
 				_remainingInputBufferTime = InputBufferTime;
 			}
 		}
-		MoveHorizontal();
+		MoveHorizontal(delta);
 		GrabVine();
 	}
 
@@ -116,7 +119,7 @@ public partial class Player : CharacterBody2D
 		{
 			_velocity.Y = JumpVelocity;
 		}
-		var horizontalDirection = MoveHorizontal();
+		var horizontalDirection = MoveHorizontal(delta);
 		
 		Sprite.Play(horizontalDirection != 0 ? "move" : "idle");
 
@@ -138,16 +141,16 @@ public partial class Player : CharacterBody2D
 		}
 
 		_velocity = Vector2.Zero;
-		_velocity.Y = Mathf.MoveToward(Velocity.Y, 0, Speed);
 		
 		var direction = Input.GetAxis("move_up", "move_down");
+		
 		if (direction != 0)
 		{
-			_velocity.Y = direction * Speed;
+			_velocity.Y = Mathf.MoveToward(Velocity.Y, MaxSpeed * direction, (MaxSpeed / AccelerationTime) * delta);
 		}
 		else
 		{
-			_velocity.Y = Mathf.MoveToward(Velocity.Y, 0, Speed);
+			_velocity.Y = Mathf.MoveToward(Velocity.Y, 0, (MaxSpeed / DecelerationTime) * delta);
 		}
 		
 		if (Input.IsActionJustPressed("jump"))
@@ -157,18 +160,19 @@ public partial class Player : CharacterBody2D
 		}
 	}
 
-	private float MoveHorizontal() {
+	private float MoveHorizontal(float delta) {
 		// Get the input direction and handle the movement/deceleration.
 		// As good practice, you should replace UI actions with custom gameplay actions.
 		var direction = Input.GetAxis("move_left", "move_right");
+		
 		if (direction != 0)
 		{
-			_velocity.X = direction * Speed;
+			_velocity.X = Mathf.MoveToward(Velocity.X, MaxSpeed * direction, (MaxSpeed / (IsOnFloor() ? AccelerationTime : AerialAccelerationTime)) * delta);
 			Sprite.FlipH = direction < 0;
 		}
 		else
 		{
-			_velocity.X = Mathf.MoveToward(Velocity.X, 0, Speed);
+			_velocity.X = Mathf.MoveToward(Velocity.X, 0, (MaxSpeed / DecelerationTime) * delta);
 		}
 		
 		return direction;
