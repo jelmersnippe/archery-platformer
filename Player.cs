@@ -12,11 +12,10 @@ public partial class Player : CharacterBody2D
 	
 	[Export] public float Speed = 300.0f;
 
-	[Export] public float MinJumpHeight = 64f;
 	[Export] public float MaxJumpHeight = 128f;
 	[Export] public float JumpTimeToPeak = 0.5f;
 	[Export] public float JumpTimeToGround = 0.3f;
-	[Export] public float JumpDecelerationOnRelease = 10f;
+	[Export] public float JumpDecelerationOnRelease = 0.5f;
 	
 	[Export] public float CoyoteTime = 0.1f;
 	[Export] public float InputBufferTime = 0.1f;
@@ -78,7 +77,7 @@ public partial class Player : CharacterBody2D
 		Sprite.Play("jump");
 
 		if (_velocity.Y < 0 && Input.IsActionJustReleased("jump")) {
-			_velocity.Y += Gravity * JumpDecelerationOnRelease * delta;
+			_velocity.Y *= JumpDecelerationOnRelease;
 		}
 
 		if (Input.IsActionJustPressed("jump"))
