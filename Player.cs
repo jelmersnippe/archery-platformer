@@ -11,9 +11,20 @@ public partial class Player : CharacterBody2D
 	private Array<Node2D> _activeArrows = new();
 	
 	[Export] public float Speed = 300.0f;
-	[Export] public float JumpVelocity = -600.0f;
+
+	[Export] public float MinJumpHeight = 64f;
+	[Export] public float MaxJumpHeight = 128f;
+	[Export] public float JumpTimeToPeak = 0.5f;
+	[Export] public float JumpTimeToGround = 0.3f;
+	[Export] public float JumpDecelerationOnRelease = 10f;
+	
 	[Export] public float CoyoteTime = 0.1f;
 	[Export] public float InputBufferTime = 0.1f;
+
+	private float JumpVelocity => 2f * MaxJumpHeight / JumpTimeToPeak * -1f;
+	private float JumpGravity => -2f * MaxJumpHeight / (JumpTimeToPeak * JumpTimeToPeak) * -1f;
+	private float FallGravity => -2f * MaxJumpHeight / (JumpTimeToGround * JumpTimeToGround) * -1f;
+	private float Gravity => Velocity.Y < 0f ? JumpGravity : FallGravity;
 
 	private float _remainingCoyoteTime = 0.1f;
 	private float _remainingInputBufferTime = 0;
@@ -24,9 +35,6 @@ public partial class Player : CharacterBody2D
 	[Export] public Node2D RotationPoint;
 	[Export] public Node2D FiringPoint;
 	[Export] public Area2D GrabArea;
-
-	// Get the gravity from the project settings to be synced with RigidBody nodes.
-	private float _gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
 	private bool _isClimbing;
 
@@ -66,9 +74,13 @@ public partial class Player : CharacterBody2D
 		
 		CancelArrow();
 		_remainingCoyoteTime -= delta;
-		_velocity.Y += _gravity * delta;
+		_velocity.Y += Gravity * delta;
 		Sprite.Play("jump");
-		
+
+		if (_velocity.Y < 0 && Input.IsActionJustReleased("jump")) {
+			_velocity.Y += Gravity * JumpDecelerationOnRelease * delta;
+		}
+
 		if (Input.IsActionJustPressed("jump"))
 		{
 			if ( _remainingCoyoteTime > 0) {
@@ -95,6 +107,7 @@ public partial class Player : CharacterBody2D
 		}
 		
 		_remainingCoyoteTime = CoyoteTime;
+		_velocity.Y = 0;
 		
 		if (_remainingInputBufferTime > 0) {
 			_velocity.Y = JumpVelocity;

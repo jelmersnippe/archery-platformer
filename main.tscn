@@ -1,14 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://dpfj3g00hncl8"]
+[gd_scene load_steps=7 format=3 uid="uid://dpfj3g00hncl8"]
 
 [ext_resource type="PackedScene" uid="uid://dl0p8dvvo8wa6" path="res://player.tscn" id="1_5lsu1"]
 [ext_resource type="PackedScene" uid="uid://cp7dq1ufuuj4a" path="res://floor.tscn" id="2_bvlpl"]
 [ext_resource type="PackedScene" uid="uid://bpm6myq1xakxq" path="res://door.tscn" id="3_r84n6"]
 [ext_resource type="PackedScene" uid="uid://dbtbx2hlm1jg3" path="res://lever.tscn" id="4_h6ror"]
 [ext_resource type="PackedScene" uid="uid://blyjbqtbsr3sh" path="res://vine.tscn" id="5_2lo0l"]
+[ext_resource type="PackedScene" uid="uid://b0naympix01rm" path="res://block.tscn" id="6_njipt"]
 
 [node name="Main" type="Node2D"]
 
 [node name="Player" parent="." instance=ExtResource("1_5lsu1")]
+JumpTimeToGround = 0.35
 
 [node name="Floor" parent="." instance=ExtResource("2_bvlpl")]
 scale = Vector2(40, 1)
@@ -35,6 +37,10 @@ zoom = Vector2(1.3, 1.3)
 position = Vector2(901, 331)
 scale = Vector2(5, 1)
 
+[node name="Floor6" parent="." instance=ExtResource("2_bvlpl")]
+position = Vector2(371, 276)
+scale = Vector2(5, 1)
+
 [node name="Door" parent="." node_paths=PackedStringArray("Lever") instance=ExtResource("3_r84n6")]
 position = Vector2(822, 432)
 Lever = NodePath("../Lever")
@@ -46,3 +52,12 @@ scale = Vector2(3, 3)
 [node name="Vine" parent="." instance=ExtResource("5_2lo0l")]
 position = Vector2(253, 296)
 Length = 160.0
+
+[node name="Block" parent="." instance=ExtResource("6_njipt")]
+position = Vector2(434, 492)
+
+[node name="Block2" parent="." instance=ExtResource("6_njipt")]
+position = Vector2(435, 458)
+
+[node name="Block3" parent="." instance=ExtResource("6_njipt")]
+position = Vector2(436, 424)
