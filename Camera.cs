@@ -23,7 +23,6 @@ public partial class Camera : Camera2D {
 			return;
 		}
 		
-		GD.Print("Resetting limits to follow player");
 		ResetLimits();
 	}
 

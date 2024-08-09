@@ -65,7 +65,6 @@ public partial class SceneTransitionHandler : Node {
 		if (string.Equals(targetScene, GetTree().CurrentScene.Name, StringComparison.OrdinalIgnoreCase)) {
 			var targetDoor = GetTargetDoor(targetDoorId);
 			if (targetDoor == null) {
-				GD.PrintErr($"Door with id {targetDoorId} not found in scene {targetScene}");
 				return;
 			}
 			MovePlayerToDoor(targetDoor);

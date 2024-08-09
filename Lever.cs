@@ -1,13 +1,12 @@
 using Godot;
 
 public partial class Lever : Node2D {
-	[Signal]
-	public delegate void FlippedEventHandler(bool isFlipped);
-	
+	[Export] public Trigger Trigger;
 	[Export] public AnimationPlayer AnimationPlayer;
 	[Export] public Area2D ArrowDetection;
 	[Export] public Node2D StickingPoint;
 	[Export] public Sprite2D Sprite;
+	[Export] public bool ResetOnArrowRemove;
 	
 	private bool _flipped;
 	private Node2D _arrow;
@@ -16,6 +15,8 @@ public partial class Lever : Node2D {
 		Sprite.Frame = 0;
 		ArrowDetection.BodyEntered += ArrowDetectionOnBodyEntered;
 		AnimationPlayer.AnimationFinished += _ => AnimationPlayer.Stop(true);
+
+		_flipped = GlobalTriggerState.GetTriggerState(Trigger);
 	}
 
 	private void ArrowDetectionOnBodyEntered(Node2D body) {
@@ -37,6 +38,9 @@ public partial class Lever : Node2D {
 
 	public override void _Process(double delta)
 	{
+		if (!ResetOnArrowRemove) {
+			return;
+		}
 		if (!_flipped) {
 			return;
 		}
@@ -47,13 +51,13 @@ public partial class Lever : Node2D {
 
 		_flipped = false;
 		AnimationPlayer.PlayBackwards("switch");
-		EmitSignal(SignalName.Flipped, false);
+		GlobalTriggerState.SetTriggerState(Trigger, false);
 	}
 
 	private void Flip(Node2D arrow) {
 		_arrow = arrow;
 		_flipped = true;
 		AnimationPlayer.Play("switch");
-		EmitSignal(SignalName.Flipped, true);
+		GlobalTriggerState.SetTriggerState(Trigger, true);
 	}
 }
