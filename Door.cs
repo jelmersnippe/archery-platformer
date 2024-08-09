@@ -25,7 +25,14 @@ public partial class Door : StaticBody2D {
 	}
 
 	private void SetOpened(bool opened) {
-		CollisionShape2D.SetDeferred("disabled", opened);
-		Visible = !opened;
+		var targetPosition = new Vector2(0, 160);
+		var tween = GetTree().CreateTween();
+
+		tween.TweenProperty(this, "position", Position + (isFlipped ? -targetPosition : targetPosition), 2f)
+			 .SetTrans(Tween.TransitionType.Bounce)
+			 .SetEase(Tween.EaseType.Out);
+		
+		tween.Play();
 	}
 }
+
