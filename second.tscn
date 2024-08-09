@@ -114,7 +114,7 @@ script = ExtResource("8_ukkk7")
 TargetSceneName = "main"
 TargetDoorId = "main-1"
 Id = "second-1"
-Direction = Vector2(1, 2.08165e-12)
+Direction = Vector2i(1, 0)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneDoor"]
@@ -127,7 +127,7 @@ script = ExtResource("8_ukkk7")
 TargetSceneName = "second"
 TargetDoorId = "second-1"
 Id = "second-2"
-Direction = Vector2(-1, 2.08165e-12)
+Direction = Vector2i(-1, 0)
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneDoor2"]
