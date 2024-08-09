@@ -21,6 +21,7 @@ public partial class Player : CharacterBody2D {
 	[Export] public float JumpTimeToPeak = 0.5f;
 	[Export] public float JumpTimeToGround = 0.3f;
 	[Export] public float JumpDecelerationOnRelease = 0.5f;
+	[Export] public float TerminalVelocity = 1000f;
 
 	[Export] public float CoyoteTime = 0.1f;
 	[Export] public float InputBufferTime = 0.1f;
@@ -86,6 +87,8 @@ public partial class Player : CharacterBody2D {
 				_remainingInputBufferTime = InputBufferTime;
 			}
 		}
+
+		_velocity.Y = Mathf.Min(_velocity.Y, TerminalVelocity);
 
 		MoveHorizontal(delta);
 		GrabVine();

@@ -10,7 +10,6 @@ size = Vector2(32, 6)
 size = Vector2(36, 10)
 
 [node name="StuckArrow" type="StaticBody2D" node_paths=PackedStringArray("PlayerDetectionArea")]
-position = Vector2(0, 402)
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_nq8ni")

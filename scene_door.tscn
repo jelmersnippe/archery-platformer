@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://dbhd8qjpg1pmw"]
+
+[ext_resource type="Script" path="res://SceneDoor.cs" id="1_353wv"]
+
+[node name="SceneDoor" type="Area2D"]
+position = Vector2(1029, 432)
+collision_layer = 0
+script = ExtResource("1_353wv")
+metadata/_edit_group_ = true

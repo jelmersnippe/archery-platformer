@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Godot;
 
 public static class GlobalTriggerState {
 	public static Action<Trigger, bool>? TriggerChanged;
 	private static readonly Dictionary<string, bool> TriggerStates = new();
 
 	public static void SetTriggerState(Trigger trigger, bool state) {
-		GD.Print($"Setting trigger state for {trigger.Name} to {state}");
 		TriggerStates[trigger.Name] = state;
 		TriggerChanged?.Invoke(trigger, state);
 	}

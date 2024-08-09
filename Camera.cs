@@ -14,15 +14,6 @@ public partial class Camera : Camera2D {
 
 	public override void _Ready() {
 		Area2D.AreaEntered += Area2DOnAreaEntered;
-		Area2D.BodyExited += Area2DOnBodyExited;
-	}
-
-	private void Area2DOnBodyExited(Node2D body) {
-		if (body is not Player) {
-			return;
-		}
-
-		ResetLimits();
 	}
 
 	private void Area2DOnAreaEntered(Area2D area) {
@@ -35,13 +26,6 @@ public partial class Camera : Camera2D {
 		LimitRight = Mathf.RoundToInt(areaCenter.X + rectShape.Size.X / 2f);
 		LimitTop = Mathf.RoundToInt(areaCenter.Y - rectShape.Size.Y / 2f);
 		LimitBottom = Mathf.RoundToInt(areaCenter.Y + rectShape.Size.Y / 2f);
-	}
-
-	private void ResetLimits() {
-		LimitLeft = -100000000;
-		LimitRight = 100000000;
-		LimitTop = -100000000;
-		LimitBottom = 100000000;
 	}
 
 	public override void _Process(double delta) {

@@ -2,16 +2,13 @@ using System;
 using Godot;
 
 public partial class SceneDoor : Area2D {
-	[Export] public string TargetSceneName;
-	[Export] public string TargetDoorId;
-	[Export] public string Id;
+	[Export] public string? TargetSceneName;
+	[Export] public string? TargetDoorId;
+	[Export] public string Id = string.Empty;
 	[Export] public Vector2I Direction;
-
-	private bool _disabled;
 
 	public override void _Ready() {
 		BodyEntered += OnBodyEntered;
-		BodyExited += OnBodyExited;
 
 		Direction = new Vector2I(Mathf.Sign(Direction.X), Mathf.Sign(Direction.Y));
 
@@ -20,16 +17,12 @@ public partial class SceneDoor : Area2D {
 		}
 	}
 
-	private void OnBodyExited(Node2D body) {
-		_disabled = false;
-	}
-
-	public void Disable() {
-		_disabled = true;
-	}
-
 	private void OnBodyEntered(Node2D body) {
-		if (_disabled || body is not Player) {
+		if (string.IsNullOrWhiteSpace(TargetSceneName) || string.IsNullOrWhiteSpace(TargetDoorId)) {
+			return;
+		}
+
+		if (body is not Player) {
 			return;
 		}
 
@@ -37,10 +30,10 @@ public partial class SceneDoor : Area2D {
 		int xDirection = Mathf.Sign(directionToBody.X);
 		int yDirection = Mathf.Sign(directionToBody.Y);
 		if ((Direction.X != 0 && xDirection != Direction.X) ||
-		    (Direction.Y != 0 && yDirection != Direction.Y)) {
+			(Direction.Y != 0 && yDirection != Direction.Y)) {
 			return;
 		}
 
-		SceneTransitionHandler.Instance.CallDeferred("HandleTransition", TargetSceneName, TargetDoorId);
+		SceneTransitionHandler.Instance.CallDeferred("HandleTransition", this);
 	}
 }
