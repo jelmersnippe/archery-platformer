@@ -27,7 +27,7 @@ public partial class Door : StaticBody2D {
 	}
 
 	private void SetOpened(bool opened, bool withAnimation = true) {
-		Vector2 targetPosition = opened ? _initialPosition - new Vector2(0,160) : _initialPosition;
+		Vector2 targetPosition = opened ? _initialPosition - new Vector2(0, 160) : _initialPosition;
 		if (withAnimation) {
 			Tween? tween = GetTree().CreateTween();
 

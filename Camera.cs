@@ -1,5 +1,4 @@
 using Godot;
-using System;
 
 public partial class Camera : Camera2D {
 	private Player? _target;
@@ -22,7 +21,7 @@ public partial class Camera : Camera2D {
 		if (body is not Player) {
 			return;
 		}
-		
+
 		ResetLimits();
 	}
 
@@ -31,7 +30,7 @@ public partial class Camera : Camera2D {
 			return;
 		}
 
-		var areaCenter = cameraZone.CollisionShape2D.GlobalPosition;
+		Vector2 areaCenter = cameraZone.CollisionShape2D.GlobalPosition;
 		LimitLeft = Mathf.RoundToInt(areaCenter.X - rectShape.Size.X / 2f);
 		LimitRight = Mathf.RoundToInt(areaCenter.X + rectShape.Size.X / 2f);
 		LimitTop = Mathf.RoundToInt(areaCenter.Y - rectShape.Size.Y / 2f);

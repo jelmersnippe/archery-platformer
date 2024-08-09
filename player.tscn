@@ -1,11 +1,10 @@
-[gd_scene load_steps=20 format=3 uid="uid://dl0p8dvvo8wa6"]
+[gd_scene load_steps=16 format=3 uid="uid://dl0p8dvvo8wa6"]
 
 [ext_resource type="Script" path="res://Player.cs" id="1_2qic4"]
-[ext_resource type="PackedScene" uid="uid://cqpc2he5alk77" path="res://shot_arrow.tscn" id="2_6546e"]
 [ext_resource type="Texture2D" uid="uid://bk5cpkkag2b6y" path="res://sprites/player_idle.png" id="3_nldyr"]
 [ext_resource type="Texture2D" uid="uid://bg55sr4q1ovhj" path="res://sprites/player_jump.png" id="4_lmhu6"]
 [ext_resource type="Texture2D" uid="uid://7rwxoh5nclqr" path="res://sprites/player_walk.png" id="4_tf127"]
-[ext_resource type="Texture2D" uid="uid://cxhskr4c8o65d" path="res://sprites/bow.png" id="6_ekt6d"]
+[ext_resource type="PackedScene" uid="uid://cqbr3gu6pegqx" path="res://bow.tscn" id="5_dg5ms"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nu74t"]
 size = Vector2(28, 30)
@@ -77,80 +76,18 @@ animations = [{
 "speed": 8.0
 }]
 
-[sub_resource type="Animation" id="Animation_aiead"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("FiringPoint:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(16.5, 0)]
-}
-
-[sub_resource type="Animation" id="Animation_7ivcm"]
-resource_name = "draw"
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 3]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("FiringPoint:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector2(16.5, 0), Vector2(13.5, 0), Vector2(12.5, 0), Vector2(11, 0)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_72uwt"]
-_data = {
-"RESET": SubResource("Animation_aiead"),
-"draw": SubResource("Animation_7ivcm")
-}
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_eqi88"]
 radius = 12.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "BowAnimationPlayer", "RotationPoint", "FiringPoint", "GrabArea")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "RotationPoint", "GrabArea", "Bow")]
 z_index = 10
 position = Vector2(585, 420)
 collision_mask = 6
 script = ExtResource("1_2qic4")
 Sprite = NodePath("AnimatedSprite2D")
-BowAnimationPlayer = NodePath("Bow/AnimationPlayer")
-RotationPoint = NodePath("Bow")
-FiringPoint = NodePath("Bow/FiringPoint")
+RotationPoint = NodePath("RotationPoint")
 GrabArea = NodePath("GrabArea")
-ArrowScene = ExtResource("2_6546e")
+Bow = NodePath("RotationPoint/Node2D/Bow")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -163,25 +100,16 @@ sprite_frames = SubResource("SpriteFrames_3q3o4")
 animation = &"jump"
 autoplay = "idle"
 
-[node name="Bow" type="Node2D" parent="."]
-
-[node name="Sprite2D" type="Sprite2D" parent="Bow"]
-position = Vector2(20, 0)
-scale = Vector2(1.4, 1.4)
-texture = ExtResource("6_ekt6d")
-hframes = 4
-
-[node name="FiringPoint" type="Node2D" parent="Bow"]
-position = Vector2(16.5, 0)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Bow"]
-libraries = {
-"": SubResource("AnimationLibrary_72uwt")
-}
-
 [node name="GrabArea" type="Area2D" parent="."]
 collision_layer = 0
 collision_mask = 128
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GrabArea"]
 shape = SubResource("CircleShape2D_eqi88")
+
+[node name="RotationPoint" type="Node2D" parent="."]
+
+[node name="Node2D" type="Node2D" parent="RotationPoint"]
+position = Vector2(20, 0)
+
+[node name="Bow" parent="RotationPoint/Node2D" instance=ExtResource("5_dg5ms")]

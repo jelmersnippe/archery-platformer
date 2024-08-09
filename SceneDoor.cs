@@ -1,5 +1,5 @@
-using Godot;
 using System;
+using Godot;
 
 public partial class SceneDoor : Area2D {
 	[Export] public string TargetSceneName;
@@ -7,7 +7,7 @@ public partial class SceneDoor : Area2D {
 	[Export] public string Id;
 	[Export] public Vector2I Direction;
 
-	private bool _disabled = false;
+	private bool _disabled;
 
 	public override void _Ready() {
 		BodyEntered += OnBodyEntered;
@@ -37,7 +37,7 @@ public partial class SceneDoor : Area2D {
 		int xDirection = Mathf.Sign(directionToBody.X);
 		int yDirection = Mathf.Sign(directionToBody.Y);
 		if ((Direction.X != 0 && xDirection != Direction.X) ||
-			(Direction.Y != 0 && yDirection != Direction.Y)) {
+		    (Direction.Y != 0 && yDirection != Direction.Y)) {
 			return;
 		}
 

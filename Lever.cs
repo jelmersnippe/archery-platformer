@@ -7,7 +7,7 @@ public partial class Lever : Node2D {
 	[Export] public Node2D StickingPoint;
 	[Export] public Sprite2D Sprite;
 	[Export] public bool ResetOnArrowRemove;
-	
+
 	private bool _flipped;
 	private Node2D _arrow;
 
@@ -17,7 +17,7 @@ public partial class Lever : Node2D {
 		AnimationPlayer.AnimationFinished += _ => AnimationPlayer.Stop(true);
 
 		_flipped = GlobalTriggerState.GetTriggerState(Trigger);
-		
+
 		if (!_flipped) {
 			return;
 		}
@@ -44,11 +44,11 @@ public partial class Lever : Node2D {
 		Flip(arrow);
 	}
 
-	public override void _Process(double delta)
-	{
+	public override void _Process(double delta) {
 		if (!ResetOnArrowRemove) {
 			return;
 		}
+
 		if (!_flipped) {
 			return;
 		}
@@ -66,7 +66,7 @@ public partial class Lever : Node2D {
 		if (_flipped) {
 			return;
 		}
-		
+
 		_arrow = arrow;
 		_flipped = true;
 		AnimationPlayer.Play("switch");

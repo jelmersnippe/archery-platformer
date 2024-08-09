@@ -51,7 +51,6 @@ animations = [{
 }]
 
 [node name="ShotArrow" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "CollisionShape2D")]
-position = Vector2(683, 403)
 collision_layer = 8
 collision_mask = 2
 motion_mode = 1
@@ -68,6 +67,7 @@ shape = SubResource("RectangleShape2D_wf8ly")
 disabled = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, 1)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_w0ado")
 frame = 4
