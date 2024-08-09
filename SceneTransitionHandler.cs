@@ -50,9 +50,6 @@ public partial class SceneTransitionHandler : Node {
 			: new Vector2(_playerRelativePositionToDoor.X, -_playerRelativePositionToDoor.Y);
 		// TODO: Use player collisionshape size
 		_player.GlobalPosition = door.GlobalPosition + door.Direction * 16 + invertedDoorOffset;
-		GD.Print("");
-		GD.Print(door.GlobalPosition);
-		GD.Print(_player.GlobalPosition);
 		EmitSignal(SignalName.PlayerSpawned, _player);
 		return _player;
 	}

@@ -3,16 +3,16 @@
 [ext_resource type="Script" path="res://Camera.cs" id="1_y3lri"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1106x"]
+size = Vector2(16, 16)
 
 [node name="Camera2D" type="Camera2D" node_paths=PackedStringArray("Area2D")]
-position = Vector2(451, 308)
 zoom = Vector2(1.7, 1.7)
 script = ExtResource("1_y3lri")
 Area2D = NodePath("Area2D")
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 0
-collision_mask = 32769
+collision_mask = 32768
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_1106x")
