@@ -151,7 +151,6 @@ RotationPoint = NodePath("Bow")
 FiringPoint = NodePath("Bow/FiringPoint")
 GrabArea = NodePath("GrabArea")
 ArrowScene = ExtResource("2_6546e")
-JumpTimeToGround = 0.4
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

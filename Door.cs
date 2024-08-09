@@ -1,15 +1,17 @@
 using Godot;
 
 public partial class Door : StaticBody2D {
-	[Export] public Trigger Trigger;
+	private Vector2 _initialPosition;
 	[Export] public CollisionShape2D CollisionShape2D;
+	[Export] public Trigger Trigger;
 
 	public override void _EnterTree() {
 		GlobalTriggerState.TriggerChanged += OnTriggerChanged;
 	}
 
 	public override void _Ready() {
-		SetOpened(GlobalTriggerState.GetTriggerState(Trigger));
+		_initialPosition = GlobalPosition;
+		SetOpened(GlobalTriggerState.GetTriggerState(Trigger), false);
 	}
 
 	public override void _ExitTree() {
@@ -24,15 +26,19 @@ public partial class Door : StaticBody2D {
 		SetOpened(b);
 	}
 
-	private void SetOpened(bool opened) {
-		var targetPosition = new Vector2(0, 160);
-		var tween = GetTree().CreateTween();
+	private void SetOpened(bool opened, bool withAnimation = true) {
+		Vector2 targetPosition = opened ? _initialPosition - new Vector2(0,160) : _initialPosition;
+		if (withAnimation) {
+			Tween? tween = GetTree().CreateTween();
 
-		tween.TweenProperty(this, "position", Position + (isFlipped ? -targetPosition : targetPosition), 2f)
-			 .SetTrans(Tween.TransitionType.Bounce)
-			 .SetEase(Tween.EaseType.Out);
-		
-		tween.Play();
+			tween.TweenProperty(this, "global_position", targetPosition, 2f)
+				 .SetTrans(Tween.TransitionType.Bounce)
+				 .SetEase(Tween.EaseType.Out);
+
+			tween.Play();
+		}
+		else {
+			GlobalPosition = targetPosition;
+		}
 	}
 }
-
