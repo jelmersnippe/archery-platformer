@@ -3,6 +3,7 @@ using Godot;
 public partial class Player : CharacterBody2D {
 	[ExportCategory("Refs")] [Export] public AnimatedSprite2D Sprite = null!;
 	[Export] public Node2D RotationPoint = null!;
+	[Export] public Node2D BowOffset = null!;
 	[Export] public Area2D GrabArea = null!;
 
 	[ExportCategory("Archery")] [Export] public Bow? Bow;
@@ -34,7 +35,6 @@ public partial class Player : CharacterBody2D {
 	private float _remainingCoyoteTime = 0.1f;
 	private float _remainingInputBufferTime;
 
-
 	private bool _isClimbing;
 
 	public override void _Ready() {
@@ -43,24 +43,41 @@ public partial class Player : CharacterBody2D {
 	}
 
 	private void GrabAreaOnAreaExited(Area2D area) {
-		if (area is not Vine vine) {
-			return;
-		}
+		switch (area) {
+			case Vine vine: {
+				if (vine == _vineInRange) {
+					_vineInRange = null;
+					_isClimbing = false;
+				}
 
-		if (vine == _vineInRange) {
-			_vineInRange = null;
-			_isClimbing = false;
+				break;
+			}
+			case Pickup pickup: {
+				if (pickup == _pickupInRange) {
+					_pickupInRange = null;
+				}
+
+				break;
+			}
 		}
 	}
 
+	public void Equip(Bow bow) {
+		Bow = bow;
+		BowOffset.AddChild(bow);
+	}
+
 	private Vine? _vineInRange;
+	private Pickup? _pickupInRange;
 
 	private void GrabAreaOnAreaEntered(Area2D area) {
-		if (area is not Vine vine) {
-			return;
+		if (area is Vine vine) {
+			_vineInRange = vine;
 		}
 
-		_vineInRange = vine;
+		if (area is Pickup pickup) {
+			_pickupInRange = pickup;
+		}
 	}
 
 	private Vector2 _velocity;
@@ -190,6 +207,10 @@ public partial class Player : CharacterBody2D {
 
 		if (Input.IsActionJustPressed("recall")) {
 			Bow?.Recall();
+		}
+
+		if (Input.IsActionJustPressed("interact")) {
+			_pickupInRange?.Grab(this);
 		}
 	}
 }

@@ -78,13 +78,14 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_eqi88"]
 radius = 12.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "RotationPoint", "GrabArea", "Bow")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "RotationPoint", "BowOffset", "GrabArea", "Bow")]
 z_index = 10
 position = Vector2(585, 420)
 collision_mask = 6
 script = ExtResource("1_2qic4")
 Sprite = NodePath("AnimatedSprite2D")
 RotationPoint = NodePath("RotationPoint")
+BowOffset = NodePath("RotationPoint/Offset")
 GrabArea = NodePath("GrabArea")
 Bow = NodePath("")
 metadata/_edit_group_ = true
@@ -100,7 +101,6 @@ animation = &"jump"
 autoplay = "idle"
 
 [node name="GrabArea" type="Area2D" parent="."]
-collision_layer = 0
 collision_mask = 128
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GrabArea"]

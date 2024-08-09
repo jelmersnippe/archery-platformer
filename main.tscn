@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://dpfj3g00hncl8"]
+[gd_scene load_steps=9 format=3 uid="uid://dpfj3g00hncl8"]
 
 [ext_resource type="Script" path="res://CameraZone.cs" id="1_ythn1"]
 [ext_resource type="Texture2D" uid="uid://bwh6blxq2wmr2" path="res://sprites/tilemap.png" id="2_pnmah"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://scene_door.tscn" id="3_tnx1g"]
+[ext_resource type="PackedScene" uid="uid://d3gu3jio3rqym" path="res://bow_pickup.tscn" id="4_x5mja"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rj1pj"]
 size = Vector2(881.5, 495)
@@ -71,3 +72,6 @@ Direction = Vector2i(-1, 0)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneDoor3"]
 rotation = 1.5708
 shape = SubResource("RectangleShape2D_yqr4f")
+
+[node name="BowPickup" parent="." instance=ExtResource("4_x5mja")]
+position = Vector2(600, 256)
