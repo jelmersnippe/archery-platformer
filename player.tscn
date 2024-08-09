@@ -1,10 +1,9 @@
-[gd_scene load_steps=16 format=3 uid="uid://dl0p8dvvo8wa6"]
+[gd_scene load_steps=15 format=3 uid="uid://dl0p8dvvo8wa6"]
 
 [ext_resource type="Script" path="res://Player.cs" id="1_2qic4"]
 [ext_resource type="Texture2D" uid="uid://bk5cpkkag2b6y" path="res://sprites/player_idle.png" id="3_nldyr"]
 [ext_resource type="Texture2D" uid="uid://bg55sr4q1ovhj" path="res://sprites/player_jump.png" id="4_lmhu6"]
 [ext_resource type="Texture2D" uid="uid://7rwxoh5nclqr" path="res://sprites/player_walk.png" id="4_tf127"]
-[ext_resource type="PackedScene" uid="uid://cqbr3gu6pegqx" path="res://bow.tscn" id="5_dg5ms"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nu74t"]
 size = Vector2(28, 30)
@@ -87,7 +86,7 @@ script = ExtResource("1_2qic4")
 Sprite = NodePath("AnimatedSprite2D")
 RotationPoint = NodePath("RotationPoint")
 GrabArea = NodePath("GrabArea")
-Bow = NodePath("RotationPoint/Node2D/Bow")
+Bow = NodePath("")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -109,7 +108,5 @@ shape = SubResource("CircleShape2D_eqi88")
 
 [node name="RotationPoint" type="Node2D" parent="."]
 
-[node name="Node2D" type="Node2D" parent="RotationPoint"]
+[node name="Offset" type="Node2D" parent="RotationPoint"]
 position = Vector2(20, 0)
-
-[node name="Bow" parent="RotationPoint/Node2D" instance=ExtResource("5_dg5ms")]
