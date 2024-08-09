@@ -5,7 +5,7 @@ using Godot;
 
 public partial class SceneTransitionHandler : Node {
 	[Signal]
-	public delegate void PlayerSpawnedEventHandler(Node2D player);
+	public delegate void PlayerSpawnedEventHandler(Player player);
 	
 	private readonly PackedScene _playerScene =
 		ResourceLoader.Load<PackedScene>("res://player.tscn");

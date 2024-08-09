@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://dbcpypxs2qjhu"]
+[gd_scene load_steps=11 format=3 uid="uid://dbcpypxs2qjhu"]
 
+[ext_resource type="Script" path="res://CameraZone.cs" id="1_k7w12"]
 [ext_resource type="PackedScene" uid="uid://cp7dq1ufuuj4a" path="res://floor.tscn" id="2_odt8r"]
 [ext_resource type="PackedScene" uid="uid://bpm6myq1xakxq" path="res://door.tscn" id="4_dbv5r"]
 [ext_resource type="PackedScene" uid="uid://dbtbx2hlm1jg3" path="res://lever.tscn" id="5_ahhfo"]
@@ -7,18 +8,44 @@
 [ext_resource type="PackedScene" uid="uid://b0naympix01rm" path="res://block.tscn" id="7_5mb53"]
 [ext_resource type="Script" path="res://SceneDoor.cs" id="8_ukkk7"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6q5cl"]
+size = Vector2(1244, 761)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y103w"]
+size = Vector2(2353, 728)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k7nbm"]
 size = Vector2(20, 160)
 
 [node name="Second" type="Node2D"]
 
+[node name="CameraZone" type="Area2D" parent="." node_paths=PackedStringArray("CollisionShape2D")]
+collision_layer = 32768
+collision_mask = 0
+script = ExtResource("1_k7w12")
+CollisionShape2D = NodePath("CollisionShape2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraZone"]
+position = Vector2(553, 432.5)
+shape = SubResource("RectangleShape2D_6q5cl")
+
+[node name="CameraZone2" type="Area2D" parent="." node_paths=PackedStringArray("CollisionShape2D")]
+collision_layer = 32768
+collision_mask = 0
+script = ExtResource("1_k7w12")
+CollisionShape2D = NodePath("CollisionShape2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraZone2"]
+position = Vector2(711.5, -319)
+shape = SubResource("RectangleShape2D_y103w")
+
 [node name="Floor" parent="." instance=ExtResource("2_odt8r")]
 scale = Vector2(40, 1)
 
 [node name="Floor2" parent="." instance=ExtResource("2_odt8r")]
-position = Vector2(27, -48)
+position = Vector2(27, 78)
 rotation = 1.5708
-scale = Vector2(20, 1)
+scale = Vector2(13.52, 1)
 
 [node name="Floor4" parent="." instance=ExtResource("2_odt8r")]
 position = Vector2(253, 96)
@@ -31,6 +58,26 @@ scale = Vector2(20, 1)
 
 [node name="Floor5" parent="." instance=ExtResource("2_odt8r")]
 position = Vector2(901, 331)
+scale = Vector2(5, 1)
+
+[node name="Floor7" parent="." instance=ExtResource("2_odt8r")]
+position = Vector2(541, 106)
+scale = Vector2(5, 1)
+
+[node name="Floor8" parent="." instance=ExtResource("2_odt8r")]
+position = Vector2(706, -54)
+scale = Vector2(5, 1)
+
+[node name="Floor9" parent="." instance=ExtResource("2_odt8r")]
+position = Vector2(468, -229)
+scale = Vector2(5, 1)
+
+[node name="Floor10" parent="." instance=ExtResource("2_odt8r")]
+position = Vector2(162, -316)
+scale = Vector2(5, 1)
+
+[node name="Floor11" parent="." instance=ExtResource("2_odt8r")]
+position = Vector2(-144, -385)
 scale = Vector2(5, 1)
 
 [node name="Floor6" parent="." instance=ExtResource("2_odt8r")]

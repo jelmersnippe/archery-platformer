@@ -1,13 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://dpfj3g00hncl8"]
+[gd_scene load_steps=7 format=3 uid="uid://dpfj3g00hncl8"]
 
+[ext_resource type="Script" path="res://CameraZone.cs" id="1_ythn1"]
 [ext_resource type="PackedScene" uid="uid://cp7dq1ufuuj4a" path="res://floor.tscn" id="2_bvlpl"]
 [ext_resource type="PackedScene" uid="uid://blyjbqtbsr3sh" path="res://vine.tscn" id="5_2lo0l"]
 [ext_resource type="Script" path="res://SceneDoor.cs" id="8_xn1fd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rj1pj"]
+size = Vector2(1233, 712)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k7nbm"]
 size = Vector2(20, 160)
 
 [node name="Main" type="Node2D"]
+
+[node name="CameraZone" type="Area2D" parent="." node_paths=PackedStringArray("CollisionShape2D")]
+collision_layer = 32768
+collision_mask = 0
+script = ExtResource("1_ythn1")
+CollisionShape2D = NodePath("CollisionShape2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraZone"]
+position = Vector2(616.5, 195)
+shape = SubResource("RectangleShape2D_rj1pj")
 
 [node name="Floor" parent="." instance=ExtResource("2_bvlpl")]
 scale = Vector2(40, 1)
