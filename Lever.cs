@@ -17,6 +17,14 @@ public partial class Lever : Node2D {
 		AnimationPlayer.AnimationFinished += _ => AnimationPlayer.Stop(true);
 
 		_flipped = GlobalTriggerState.GetTriggerState(Trigger);
+		
+		if (!_flipped) {
+			return;
+		}
+
+		float switchAnimationLength = AnimationPlayer.GetAnimation("switch").Length;
+		AnimationPlayer.CurrentAnimation = "switch";
+		AnimationPlayer.Seek(switchAnimationLength, true);
 	}
 
 	private void ArrowDetectionOnBodyEntered(Node2D body) {
@@ -55,6 +63,10 @@ public partial class Lever : Node2D {
 	}
 
 	private void Flip(Node2D arrow) {
+		if (_flipped) {
+			return;
+		}
+		
 		_arrow = arrow;
 		_flipped = true;
 		AnimationPlayer.Play("switch");
