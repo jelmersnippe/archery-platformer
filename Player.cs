@@ -22,6 +22,12 @@ public partial class Player : CharacterBody2D
 	[Export] public float DecelerationTime = 0.2f;
 	[Export] public float MaxSpeed = 300.0f;
 	[Export] public float AerialAccelerationTime = 0.2f;
+	
+	[ExportCategory("Climbing")]
+	[Export] public float ClimbingAccelerationTime = 0.2f;
+	[Export] public float ClimbingDecelerationTime = 0.2f;
+	[Export] public float ClimbingMaxSpeed = 200.0f;
+	[Export] public float MoveToVineCenterSpeed = 150f;
 
 	[ExportCategory("Jumping")]
 	[Export] public float MaxJumpHeight = 128f;
@@ -102,7 +108,6 @@ public partial class Player : CharacterBody2D
 	private void GrabVine() {
 		if (!_isClimbing && _vineInRange != null && Input.IsActionPressed("move_up")) {
 			_isClimbing = true;
-			GlobalPosition = new Vector2(_vineInRange.GlobalPosition.X, GlobalPosition.Y);
 		}
 	}
 	
@@ -144,16 +149,17 @@ public partial class Player : CharacterBody2D
 		}
 
 		_velocity = Vector2.Zero;
+		GlobalPosition =  new Vector2(Mathf.MoveToward(GlobalPosition.X,  _vineInRange.GlobalPosition.X, MoveToVineCenterSpeed * delta), GlobalPosition.Y);
 		
 		var direction = Input.GetAxis("move_up", "move_down");
 		
 		if (direction != 0)
 		{
-			_velocity.Y = Mathf.MoveToward(Velocity.Y, MaxSpeed * direction, (MaxSpeed / AccelerationTime) * delta);
+			_velocity.Y = Mathf.MoveToward(Velocity.Y, ClimbingMaxSpeed * direction, (ClimbingMaxSpeed / ClimbingAccelerationTime) * delta);
 		}
 		else
 		{
-			_velocity.Y = Mathf.MoveToward(Velocity.Y, 0, (MaxSpeed / DecelerationTime) * delta);
+			_velocity.Y = Mathf.MoveToward(Velocity.Y, 0, (ClimbingMaxSpeed / ClimbingDecelerationTime) * delta);
 		}
 		
 		if (Input.IsActionJustPressed("jump"))

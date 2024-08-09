@@ -138,20 +138,20 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_eqi88"]
-radius = 20.0
+radius = 12.0
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "BowAnimationPlayer", "RotationPoint", "FiringPoint", "GrabArea")]
 z_index = 10
 position = Vector2(585, 420)
 collision_mask = 6
 script = ExtResource("1_2qic4")
-ArrowScene = ExtResource("2_6546e")
-JumpTimeToGround = 0.4
 Sprite = NodePath("AnimatedSprite2D")
 BowAnimationPlayer = NodePath("Bow/AnimationPlayer")
 RotationPoint = NodePath("Bow")
 FiringPoint = NodePath("Bow/FiringPoint")
 GrabArea = NodePath("GrabArea")
+ArrowScene = ExtResource("2_6546e")
+JumpTimeToGround = 0.4
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

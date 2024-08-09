@@ -15,6 +15,11 @@ run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
+[autoload]
+
+SceneTransitionHandler="*res://SceneTransitionHandler.cs"
+Camera="*res://camera.tscn"
+
 [dotnet]
 
 project/assembly_name="Archer Platformer"

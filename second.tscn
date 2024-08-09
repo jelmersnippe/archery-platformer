@@ -1,0 +1,85 @@
+[gd_scene load_steps=8 format=3 uid="uid://dbcpypxs2qjhu"]
+
+[ext_resource type="PackedScene" uid="uid://cp7dq1ufuuj4a" path="res://floor.tscn" id="2_odt8r"]
+[ext_resource type="PackedScene" uid="uid://bpm6myq1xakxq" path="res://door.tscn" id="4_dbv5r"]
+[ext_resource type="PackedScene" uid="uid://dbtbx2hlm1jg3" path="res://lever.tscn" id="5_ahhfo"]
+[ext_resource type="PackedScene" uid="uid://blyjbqtbsr3sh" path="res://vine.tscn" id="6_soitc"]
+[ext_resource type="PackedScene" uid="uid://b0naympix01rm" path="res://block.tscn" id="7_5mb53"]
+[ext_resource type="Script" path="res://SceneDoor.cs" id="8_ukkk7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k7nbm"]
+size = Vector2(20, 160)
+
+[node name="Second" type="Node2D"]
+
+[node name="Floor" parent="." instance=ExtResource("2_odt8r")]
+scale = Vector2(40, 1)
+
+[node name="Floor2" parent="." instance=ExtResource("2_odt8r")]
+position = Vector2(27, -48)
+rotation = 1.5708
+scale = Vector2(20, 1)
+
+[node name="Floor4" parent="." instance=ExtResource("2_odt8r")]
+position = Vector2(253, 96)
+rotation = 1.5708
+
+[node name="Floor3" parent="." instance=ExtResource("2_odt8r")]
+position = Vector2(1019, -49)
+rotation = 1.5708
+scale = Vector2(20, 1)
+
+[node name="Floor5" parent="." instance=ExtResource("2_odt8r")]
+position = Vector2(901, 331)
+scale = Vector2(5, 1)
+
+[node name="Floor6" parent="." instance=ExtResource("2_odt8r")]
+position = Vector2(371, 276)
+scale = Vector2(5, 1)
+
+[node name="Door" parent="." node_paths=PackedStringArray("Lever") instance=ExtResource("4_dbv5r")]
+position = Vector2(822, 432)
+Lever = NodePath("../Lever")
+
+[node name="Lever" parent="." instance=ExtResource("5_ahhfo")]
+position = Vector2(869, 286)
+scale = Vector2(3, 3)
+
+[node name="Vine" parent="." instance=ExtResource("6_soitc")]
+position = Vector2(253, 296)
+Length = 200.0
+
+[node name="Block" parent="." instance=ExtResource("7_5mb53")]
+position = Vector2(434, 492)
+
+[node name="Block2" parent="." instance=ExtResource("7_5mb53")]
+position = Vector2(435, 458)
+
+[node name="Block3" parent="." instance=ExtResource("7_5mb53")]
+position = Vector2(436, 424)
+
+[node name="SceneDoor" type="Area2D" parent="."]
+position = Vector2(17, 430)
+collision_layer = 0
+script = ExtResource("8_ukkk7")
+TargetSceneName = "main"
+TargetDoorId = "main-1"
+Id = "second-1"
+Direction = Vector2(1, 2.08165e-12)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneDoor"]
+shape = SubResource("RectangleShape2D_k7nbm")
+
+[node name="SceneDoor2" type="Area2D" parent="."]
+position = Vector2(1028, 431)
+collision_layer = 0
+script = ExtResource("8_ukkk7")
+TargetSceneName = "second"
+TargetDoorId = "second-1"
+Id = "second-2"
+Direction = Vector2(-1, 2.08165e-12)
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SceneDoor2"]
+shape = SubResource("RectangleShape2D_k7nbm")
