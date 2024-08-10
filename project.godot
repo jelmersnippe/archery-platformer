@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 SceneTransitionHandler="*res://SceneTransitionHandler.cs"
 Camera="*res://camera.tscn"
 
+[display]
+
+window/stretch/mode="viewport"
+
 [dotnet]
 
 project/assembly_name="Archer Platformer"
