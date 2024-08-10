@@ -50,7 +50,10 @@ public partial class SceneTransitionHandler : Node {
 	private Player MovePlayerToDoor(SceneDoor door) {
 		if (Player == null || !IsInstanceValid(Player)) {
 			Player = _playerScene.Instantiate<Player>();
-			GetTree().Root.CallDeferred("add_child", Player);
+			GetTree().CurrentScene.CallDeferred("add_child", Player);
+		}
+		else {
+			Player.Reparent(GetTree().CurrentScene);
 		}
 
 		Vector2 invertedDoorOffset = door.Direction.X != 0
@@ -80,6 +83,7 @@ public partial class SceneTransitionHandler : Node {
 			return;
 		}
 
+		Player.Reparent(GetTree().Root);
 		GetTree().ChangeSceneToFile($"res://{fromDoor.TargetSceneName}.tscn");
 	}
 }

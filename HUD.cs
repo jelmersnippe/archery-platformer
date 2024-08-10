@@ -15,6 +15,7 @@ public partial class HUD : CanvasLayer {
 
 	private void InstanceOnPlayerSpawned(Player player) {
 		player.QuiverEquipped += SetQuiver;
+		SetQuiver(player.Quiver);
 	}
 
 	private void SetQuiver(Quiver? quiver) {

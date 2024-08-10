@@ -1,0 +1,78 @@
+[gd_scene load_steps=2 format=3 uid="uid://cvqwe2ls1lhwg"]
+
+[ext_resource type="Script" path="res://PauseMenu.cs" id="1_qnpwe"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_qnpwe")
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.376471)
+
+[node name="ResumeButton" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = -115.5
+offset_right = 20.5
+offset_bottom = -84.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Resume
+"
+
+[node name="RestartButton" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.5
+offset_top = -48.9
+offset_right = 32.5
+offset_bottom = -17.9
+grow_horizontal = 2
+grow_vertical = 2
+text = "Restart"
+
+[node name="MainMenuButton" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = 17.77
+offset_right = 48.0
+offset_bottom = 48.77
+grow_horizontal = 2
+grow_vertical = 2
+text = "Main menu
+"
+
+[node name="ExitButton" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.5
+offset_top = 84.5
+offset_right = 20.5
+offset_bottom = 115.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Exit"
+
+[connection signal="pressed" from="ResumeButton" to="." method="OnResumeButtonPressed"]
+[connection signal="pressed" from="RestartButton" to="." method="OnRestartButtonPressed"]
+[connection signal="pressed" from="MainMenuButton" to="." method="OnMainMenuButtonPressed"]
+[connection signal="pressed" from="ExitButton" to="." method="OnExitButtonPressed"]

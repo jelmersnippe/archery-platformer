@@ -1,10 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://clg6pvxusa4fi"]
+[gd_scene load_steps=6 format=3 uid="uid://clg6pvxusa4fi"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="2_14ctw"]
 [ext_resource type="PackedScene" uid="uid://dba6uv67l33se" path="res://quiver_pickup.tscn" id="2_622jt"]
 [ext_resource type="PackedScene" uid="uid://d3gu3jio3rqym" path="res://bow_pickup.tscn" id="3_ca8hq"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://scene_door.tscn" id="4_a6y13"]
-[ext_resource type="PackedScene" uid="uid://i6mk0ooox6y1" path="res://hud.tscn" id="5_6udoi"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5n656"]
 size = Vector2(10, 160)
@@ -29,5 +28,3 @@ Direction = Vector2i(1, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneDoor"]
 shape = SubResource("RectangleShape2D_5n656")
-
-[node name="HUD" parent="." instance=ExtResource("5_6udoi")]

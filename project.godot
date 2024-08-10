@@ -19,6 +19,8 @@ config/icon="res://icon.svg"
 
 PauseController="*res://PauseController.cs"
 SceneTransitionHandler="*res://SceneTransitionHandler.cs"
+PauseMenu="*res://pause_menu.tscn"
+Hud="*res://hud.tscn"
 Camera="*res://camera.tscn"
 
 [display]
