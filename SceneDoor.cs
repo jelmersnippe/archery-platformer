@@ -34,6 +34,7 @@ public partial class SceneDoor : Area2D {
 			return;
 		}
 
+
 		SceneTransitionHandler.Instance.CallDeferred("HandleTransition", this);
 	}
 }

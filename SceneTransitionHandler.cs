@@ -19,7 +19,9 @@ public partial class SceneTransitionHandler : Node {
 	[Export] public Label Title = null!;
 	public static SceneTransitionHandler Instance => _instance!;
 
-	private string? _targetDoorId = "main-1";
+	private bool _isTransitioning;
+	private string? _targetDoorId = "spawn";
+	private SceneDoor? _targetDoor;
 	private Vector2 _playerRelativePositionToDoor = Vector2.Zero;
 
 	public override void _EnterTree() {
@@ -48,27 +50,52 @@ public partial class SceneTransitionHandler : Node {
 	}
 
 	private Player MovePlayerToDoor(SceneDoor door) {
+		_targetDoor = door;
 		if (Player == null || !IsInstanceValid(Player)) {
 			Player = _playerScene.Instantiate<Player>();
 			GetTree().CurrentScene.CallDeferred("add_child", Player);
 		}
 		else {
-			Player.Reparent(GetTree().CurrentScene);
+			Player.CallDeferred("reparent", GetTree().CurrentScene);
 		}
 
-		Vector2 invertedDoorOffset = door.Direction.X != 0
-			? new Vector2(-_playerRelativePositionToDoor.X, _playerRelativePositionToDoor.Y)
-			: new Vector2(_playerRelativePositionToDoor.X, -_playerRelativePositionToDoor.Y);
-		// TODO: Use player collisionshape size
-		Player.GlobalPosition = door.GlobalPosition + door.Direction * 16 + invertedDoorOffset;
+		Vector2 doorOffset = door.Direction.X == 0
+			// Vertical transition, keep horizontal position
+			? new Vector2(_playerRelativePositionToDoor.X, 0)
+			// Horizontal transition, keep vertical position
+			: new Vector2(0, _playerRelativePositionToDoor.Y);
+
+		GD.Print("MovePlayerToDoor");
+		GD.Print(doorOffset);
+		GD.Print(door.GlobalPosition);
+
+		door.BodyExited += DoorOnBodyExited;
+
+		Player.GlobalPosition = door.GlobalPosition + doorOffset;
 		EmitSignal(SignalName.PlayerSpawned, Player);
+
 		return Player;
 	}
 
+	private void DoorOnBodyExited(Node2D body) {
+		if (body is Player) {
+			GD.Print("Setting transitioning to false");
+			_isTransitioning = false;
+		}
+
+		if (_targetDoor != null) {
+			_targetDoor.BodyExited -= DoorOnBodyExited;
+		}
+	}
+
 	public void HandleTransition(SceneDoor fromDoor) {
-		if (string.IsNullOrWhiteSpace(fromDoor.TargetDoorId) || string.IsNullOrWhiteSpace(fromDoor.TargetSceneName)) {
+		if (_isTransitioning || string.IsNullOrWhiteSpace(fromDoor.TargetDoorId) ||
+			string.IsNullOrWhiteSpace(fromDoor.TargetSceneName)) {
 			return;
 		}
+
+		GD.Print("Transitioning from " + fromDoor.Id);
+		_isTransitioning = true;
 
 		_targetDoorId = fromDoor.TargetDoorId;
 		_playerRelativePositionToDoor = Player!.GlobalPosition - fromDoor.GlobalPosition;

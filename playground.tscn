@@ -23,7 +23,7 @@ position = Vector2(563, 467)
 
 [node name="SceneDoor" parent="." instance=ExtResource("4_a6y13")]
 position = Vector2(357, 399)
-Id = "main-1"
+Id = "spawn"
 Direction = Vector2i(1, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SceneDoor"]

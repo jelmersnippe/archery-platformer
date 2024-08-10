@@ -1,0 +1,16 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwbpkyuodjt0q"]
+
+[ext_resource type="PackedScene" uid="uid://d0mtphymm7xht" path="res://forest/forest1.tscn" id="1_6dwwl"]
+[ext_resource type="PackedScene" uid="uid://fg32aticxo6x" path="res://forest/forest2.tscn" id="2_goo75"]
+[ext_resource type="PackedScene" uid="uid://3sme3sr25tfo" path="res://forest/forest3.tscn" id="3_gu2ck"]
+[ext_resource type="PackedScene" uid="uid://wh65enrrb02w" path="res://forest/forest4.tscn" id="4_d2xs1"]
+
+[node name="WorldMap" type="Node2D"]
+
+[node name="Forest1" parent="." instance=ExtResource("1_6dwwl")]
+
+[node name="Forest2" parent="." instance=ExtResource("2_goo75")]
+
+[node name="Forest3" parent="." instance=ExtResource("3_gu2ck")]
+
+[node name="Forest4" parent="." instance=ExtResource("4_d2xs1")]
