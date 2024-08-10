@@ -31,7 +31,11 @@ public abstract partial class Pickup : Area2D {
 		ShowInteractable(true);
 	}
 
-	public virtual void Grab(Player player) {
+	protected abstract void Apply(Player player);
+
+	public void Grab(Player player) {
+		Apply(player);
+
 		if (SingleUseTrigger != null) {
 			GlobalTriggerState.SetTriggerState(SingleUseTrigger, true);
 		}

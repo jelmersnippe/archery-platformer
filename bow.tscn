@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://cqbr3gu6pegqx"]
+[gd_scene load_steps=6 format=3 uid="uid://cqbr3gu6pegqx"]
 
 [ext_resource type="Script" path="res://Bow.cs" id="1_5q7mw"]
 [ext_resource type="Texture2D" uid="uid://cxhskr4c8o65d" path="res://sprites/bow.png" id="1_mqf4f"]
-[ext_resource type="PackedScene" uid="uid://cqpc2he5alk77" path="res://shot_arrow.tscn" id="2_wgn8o"]
 
 [sub_resource type="Animation" id="Animation_aiead"]
 tracks/0/type = "value"
@@ -65,7 +64,6 @@ _data = {
 
 [node name="Bow" type="Node2D" node_paths=PackedStringArray("BowAnimationPlayer", "FiringPoint")]
 script = ExtResource("1_5q7mw")
-ArrowScene = ExtResource("2_wgn8o")
 BowAnimationPlayer = NodePath("AnimationPlayer")
 FiringPoint = NodePath("FiringPoint")
 

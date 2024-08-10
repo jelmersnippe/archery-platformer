@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://dpfj3g00hncl8"]
+[gd_scene load_steps=8 format=3 uid="uid://dpfj3g00hncl8"]
 
 [ext_resource type="Texture2D" uid="uid://bwh6blxq2wmr2" path="res://sprites/tilemap.png" id="2_pnmah"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://scene_door.tscn" id="3_tnx1g"]
+[ext_resource type="PackedScene" uid="uid://dba6uv67l33se" path="res://quiver_pickup.tscn" id="4_oaecd"]
 [ext_resource type="PackedScene" uid="uid://d3gu3jio3rqym" path="res://bow_pickup.tscn" id="4_x5mja"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_60568"]
@@ -60,4 +61,7 @@ rotation = 1.5708
 shape = SubResource("RectangleShape2D_yqr4f")
 
 [node name="BowPickup" parent="." instance=ExtResource("4_x5mja")]
-position = Vector2(725, -631)
+position = Vector2(685, 252)
+
+[node name="QuiverPickup" parent="." instance=ExtResource("4_oaecd")]
+position = Vector2(782, 250)

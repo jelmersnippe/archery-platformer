@@ -4,9 +4,12 @@ public partial class Arrow : CharacterBody2D {
 	[Signal]
 	public delegate void TransitionedToStuckEventHandler(Arrow activeArrow, StuckArrow stuckArrow);
 
-	[Export] public PackedScene StuckArrowScene;
-	[Export] public AnimatedSprite2D Sprite;
-	[Export] public CollisionShape2D CollisionShape2D;
+	[Signal]
+	public delegate void ReleasedEventHandler(Arrow activeArrow);
+
+	[Export] public PackedScene StuckArrowScene = null!;
+	[Export] public AnimatedSprite2D Sprite = null!;
+	[Export] public CollisionShape2D CollisionShape2D = null!;
 
 	private bool _collided;
 
@@ -43,5 +46,12 @@ public partial class Arrow : CharacterBody2D {
 		GetParent().CallDeferred("add_child", stuckArrow);
 		EmitSignal(SignalName.TransitionedToStuck, this, stuckArrow);
 		QueueFree();
+	}
+
+	public void Release(Vector2 velocity) {
+		Velocity = velocity;
+		CollisionShape2D.SetDeferred("disabled", false);
+		Reparent(GetTree().CurrentScene);
+		EmitSignal(SignalName.Released, this);
 	}
 }

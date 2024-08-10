@@ -7,6 +7,7 @@ public partial class Player : CharacterBody2D {
 	[Export] public Area2D GrabArea = null!;
 
 	[ExportCategory("Archery")] [Export] public Bow? Bow;
+	[Export] public Quiver? Quiver;
 
 	[ExportCategory("Movement")] [Export] public float AccelerationTime = 0.3f;
 	[Export] public float DecelerationTime = 0.2f;
@@ -65,6 +66,11 @@ public partial class Player : CharacterBody2D {
 	public void Equip(Bow bow) {
 		Bow = bow;
 		BowOffset.AddChild(bow);
+	}
+
+	public void Equip(Quiver quiver) {
+		Quiver = quiver;
+		AddChild(quiver);
 	}
 
 	private Vine? _vineInRange;
@@ -138,7 +144,10 @@ public partial class Player : CharacterBody2D {
 		Sprite.Play(horizontalDirection != 0 ? "move" : "idle");
 
 		if (Input.IsActionJustPressed("shoot")) {
-			Bow?.ReadyArrow();
+			Arrow? arrow = Quiver?.GetArrow();
+			if (arrow != null) {
+				Bow?.ReadyArrow(arrow);
+			}
 		}
 
 		if (Input.IsActionJustReleased("shoot")) {
@@ -149,7 +158,7 @@ public partial class Player : CharacterBody2D {
 	}
 
 	private void HandleClimbing(float delta) {
-		if (!_isClimbing) {
+		if (!_isClimbing || _vineInRange == null) {
 			return;
 		}
 
@@ -176,8 +185,6 @@ public partial class Player : CharacterBody2D {
 	}
 
 	private float MoveHorizontal(float delta) {
-		// Get the input direction and handle the movement/deceleration.
-		// As good practice, you should replace UI actions with custom gameplay actions.
 		float direction = Input.GetAxis("move_left", "move_right");
 
 		if (direction != 0) {
@@ -206,7 +213,7 @@ public partial class Player : CharacterBody2D {
 		MoveAndSlide();
 
 		if (Input.IsActionJustPressed("recall")) {
-			Bow?.Recall();
+			Quiver?.Recall();
 		}
 
 		if (Input.IsActionJustPressed("interact")) {

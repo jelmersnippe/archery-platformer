@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="Trigger" load_steps=2 format=3 uid="uid://ny4c624rkfbd"]
+
+[ext_resource type="Script" path="res://Trigger.cs" id="1_b4ff0"]
+
+[resource]
+script = ExtResource("1_b4ff0")
+Name = "quiver_pickup"
