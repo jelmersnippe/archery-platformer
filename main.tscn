@@ -1,21 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://dpfj3g00hncl8"]
+[gd_scene load_steps=7 format=3 uid="uid://dpfj3g00hncl8"]
 
-[ext_resource type="Script" path="res://CameraZone.cs" id="1_ythn1"]
 [ext_resource type="Texture2D" uid="uid://bwh6blxq2wmr2" path="res://sprites/tilemap.png" id="2_pnmah"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://scene_door.tscn" id="3_tnx1g"]
 [ext_resource type="PackedScene" uid="uid://d3gu3jio3rqym" path="res://bow_pickup.tscn" id="4_x5mja"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rj1pj"]
-size = Vector2(881.5, 495)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0boyd"]
-size = Vector2(881.5, 1403.5)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_en6p3"]
-size = Vector2(774, 906)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_63iqp"]
-size = Vector2(884, 420)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_60568"]
 texture = ExtResource("2_pnmah")
@@ -37,46 +24,6 @@ sources/1 = SubResource("TileSetAtlasSource_60568")
 size = Vector2(10, 112)
 
 [node name="Main" type="Node2D"]
-
-[node name="CameraZone" type="Area2D" parent="." node_paths=PackedStringArray("CollisionShape2D")]
-collision_layer = 32768
-collision_mask = 0
-script = ExtResource("1_ythn1")
-CollisionShape2D = NodePath("CollisionShape2D")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraZone"]
-position = Vector2(443.25, 250)
-shape = SubResource("RectangleShape2D_rj1pj")
-
-[node name="CameraZone2" type="Area2D" parent="." node_paths=PackedStringArray("CollisionShape2D")]
-collision_layer = 32768
-collision_mask = 0
-script = ExtResource("1_ythn1")
-CollisionShape2D = NodePath("CollisionShape2D")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraZone2"]
-position = Vector2(1326, -204.25)
-shape = SubResource("RectangleShape2D_0boyd")
-
-[node name="CameraZone3" type="Area2D" parent="." node_paths=PackedStringArray("CollisionShape2D")]
-collision_layer = 32768
-collision_mask = 0
-script = ExtResource("1_ythn1")
-CollisionShape2D = NodePath("CollisionShape2D")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraZone3"]
-position = Vector2(500, -454)
-shape = SubResource("RectangleShape2D_en6p3")
-
-[node name="CameraZone4" type="Area2D" parent="." node_paths=PackedStringArray("CollisionShape2D")]
-collision_layer = 32768
-collision_mask = 0
-script = ExtResource("1_ythn1")
-CollisionShape2D = NodePath("CollisionShape2D")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraZone4"]
-position = Vector2(2210, 6)
-shape = SubResource("RectangleShape2D_63iqp")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_s52bq")

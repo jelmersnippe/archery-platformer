@@ -6,8 +6,12 @@ public partial class SceneTransitionHandler : Node {
 	[Signal]
 	public delegate void PlayerSpawnedEventHandler(Player player);
 
+	[Signal]
+	public delegate void TileMapSpawnedEventHandler(TileMap tileMap);
+
 	private readonly PackedScene _playerScene =
 		ResourceLoader.Load<PackedScene>("res://player.tscn");
+
 
 	private Player? _player;
 
@@ -32,6 +36,10 @@ public partial class SceneTransitionHandler : Node {
 	private void OnNodeAdded(Node node) {
 		if (node is SceneDoor door && (_targetDoorId == null || _targetDoorId == door.Id)) {
 			MovePlayerToDoor(door);
+		}
+
+		if (node is TileMap tileMap) {
+			EmitSignal(SignalName.TileMapSpawned, tileMap);
 		}
 	}
 
