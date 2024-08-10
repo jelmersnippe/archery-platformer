@@ -10,13 +10,23 @@ public partial class Arrow : CharacterBody2D {
 	[Export] public PackedScene StuckArrowScene = null!;
 	[Export] public AnimatedSprite2D Sprite = null!;
 	[Export] public CollisionShape2D CollisionShape2D = null!;
+	[Export] public float Gravity;
 
 	private bool _collided;
+	private bool _released;
 
 	public override void _PhysicsProcess(double delta) {
 		if (_collided) {
 			return;
 		}
+
+		if (!_released) {
+			return;
+		}
+
+		Velocity += new Vector2(0, Gravity);
+
+		LookAt(Position + Velocity);
 
 		KinematicCollision2D collision = MoveAndCollide(Velocity * (float)delta, true);
 		if (collision != null) {
@@ -53,5 +63,6 @@ public partial class Arrow : CharacterBody2D {
 		CollisionShape2D.SetDeferred("disabled", false);
 		Reparent(GetTree().CurrentScene);
 		EmitSignal(SignalName.Released, this);
+		_released = true;
 	}
 }

@@ -59,6 +59,7 @@ script = ExtResource("1_kx56d")
 StuckArrowScene = ExtResource("2_7olxw")
 Sprite = NodePath("AnimatedSprite2D")
 CollisionShape2D = NodePath("CollisionShape2D")
+Gravity = 20.0
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
