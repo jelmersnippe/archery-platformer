@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://dpfj3g00hncl8"]
+[gd_scene load_steps=9 format=3 uid="uid://dpfj3g00hncl8"]
 
 [ext_resource type="Texture2D" uid="uid://bwh6blxq2wmr2" path="res://sprites/tilemap.png" id="2_pnmah"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://scene_door.tscn" id="3_tnx1g"]
 [ext_resource type="PackedScene" uid="uid://dba6uv67l33se" path="res://quiver_pickup.tscn" id="4_oaecd"]
 [ext_resource type="PackedScene" uid="uid://d3gu3jio3rqym" path="res://bow_pickup.tscn" id="4_x5mja"]
+[ext_resource type="PackedScene" uid="uid://i6mk0ooox6y1" path="res://hud.tscn" id="5_ts642"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_60568"]
 texture = ExtResource("2_pnmah")
@@ -65,3 +66,5 @@ position = Vector2(685, 252)
 
 [node name="QuiverPickup" parent="." instance=ExtResource("4_oaecd")]
 position = Vector2(782, 250)
+
+[node name="HUD" parent="." instance=ExtResource("5_ts642")]

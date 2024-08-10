@@ -13,7 +13,7 @@ public partial class SceneTransitionHandler : Node {
 		ResourceLoader.Load<PackedScene>("res://player.tscn");
 
 
-	private Player? _player;
+	public Player? Player { get; private set; }
 
 	private static SceneTransitionHandler? _instance;
 	[Export] public Label Title = null!;
@@ -48,18 +48,18 @@ public partial class SceneTransitionHandler : Node {
 	}
 
 	private Player MovePlayerToDoor(SceneDoor door) {
-		if (_player == null || !IsInstanceValid(_player)) {
-			_player = _playerScene.Instantiate<Player>();
-			GetTree().Root.CallDeferred("add_child", _player);
+		if (Player == null || !IsInstanceValid(Player)) {
+			Player = _playerScene.Instantiate<Player>();
+			GetTree().Root.CallDeferred("add_child", Player);
 		}
 
 		Vector2 invertedDoorOffset = door.Direction.X != 0
 			? new Vector2(-_playerRelativePositionToDoor.X, _playerRelativePositionToDoor.Y)
 			: new Vector2(_playerRelativePositionToDoor.X, -_playerRelativePositionToDoor.Y);
 		// TODO: Use player collisionshape size
-		_player.GlobalPosition = door.GlobalPosition + door.Direction * 16 + invertedDoorOffset;
-		EmitSignal(SignalName.PlayerSpawned, _player);
-		return _player;
+		Player.GlobalPosition = door.GlobalPosition + door.Direction * 16 + invertedDoorOffset;
+		EmitSignal(SignalName.PlayerSpawned, Player);
+		return Player;
 	}
 
 	public void HandleTransition(SceneDoor fromDoor) {
@@ -68,7 +68,7 @@ public partial class SceneTransitionHandler : Node {
 		}
 
 		_targetDoorId = fromDoor.TargetDoorId;
-		_playerRelativePositionToDoor = _player!.GlobalPosition - fromDoor.GlobalPosition;
+		_playerRelativePositionToDoor = Player!.GlobalPosition - fromDoor.GlobalPosition;
 
 		if (string.Equals(fromDoor.TargetSceneName, GetTree().CurrentScene.Name, StringComparison.OrdinalIgnoreCase)) {
 			SceneDoor? targetDoor = GetTargetDoor(fromDoor.TargetDoorId);

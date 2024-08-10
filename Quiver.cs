@@ -2,6 +2,9 @@ using Godot;
 using Godot.Collections;
 
 public partial class Quiver : Node {
+	[Signal]
+	public delegate void ArrowCountChangedEventHandler(int current, int max);
+
 	[Export] public PackedScene ArrowScene = null!;
 	[Export] public int InitialArrowCount = 5;
 
@@ -11,6 +14,11 @@ public partial class Quiver : Node {
 
 	public override void _Ready() {
 		_maxArrowCount = InitialArrowCount;
+		NotifyArrowChanges();
+	}
+
+	public void NotifyArrowChanges() {
+		EmitSignal(SignalName.ArrowCountChanged, _maxArrowCount - _activeArrows.Count, _maxArrowCount);
 	}
 
 	public void Recall() {
@@ -19,6 +27,7 @@ public partial class Quiver : Node {
 		}
 
 		_activeArrows.Clear();
+		NotifyArrowChanges();
 	}
 
 	public Arrow? GetArrow() {
@@ -37,12 +46,16 @@ public partial class Quiver : Node {
 		}
 
 		_activeArrows.Add(activeArrow);
+		NotifyArrowChanges();
 		_currentArrow.Released -= CurrentArrowOnReleased;
 
 		_currentArrow.TransitionedToStuck += (arrow, stuckArrow) => {
 			_activeArrows.Remove(arrow);
 			_activeArrows.Add(stuckArrow);
-			stuckArrow.TreeExiting += () => { _activeArrows.Remove(stuckArrow); };
+			stuckArrow.TreeExiting += () => {
+				_activeArrows.Remove(stuckArrow);
+				NotifyArrowChanges();
+			};
 		};
 
 		_currentArrow = null;

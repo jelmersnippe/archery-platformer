@@ -1,6 +1,12 @@
 using Godot;
 
 public partial class Player : CharacterBody2D {
+	[Signal]
+	public delegate void BowEquippedEventHandler(Bow? bow);
+
+	[Signal]
+	public delegate void QuiverEquippedEventHandler(Quiver? quiver);
+
 	[ExportCategory("Refs")] [Export] public AnimatedSprite2D Sprite = null!;
 	[Export] public Node2D RotationPoint = null!;
 	[Export] public Node2D BowOffset = null!;
@@ -63,14 +69,30 @@ public partial class Player : CharacterBody2D {
 		}
 	}
 
-	public void Equip(Bow bow) {
+	public void Equip(Bow? bow) {
+		if (bow == null) {
+			Bow?.QueueFree();
+		}
+		else {
+			BowOffset.AddChild(bow);
+		}
+
 		Bow = bow;
-		BowOffset.AddChild(bow);
+		EmitSignal(SignalName.BowEquipped, bow);
 	}
 
-	public void Equip(Quiver quiver) {
+	public void Equip(Quiver? quiver) {
+		if (quiver == null) {
+			Quiver?.QueueFree();
+		}
+		else {
+			AddChild(quiver);
+		}
+
 		Quiver = quiver;
-		AddChild(quiver);
+
+		EmitSignal(SignalName.QuiverEquipped, quiver);
+		quiver?.NotifyArrowChanges();
 	}
 
 	private Vine? _vineInRange;
