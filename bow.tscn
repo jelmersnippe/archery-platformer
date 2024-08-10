@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cqbr3gu6pegqx"]
+[gd_scene load_steps=7 format=3 uid="uid://cqbr3gu6pegqx"]
 
 [ext_resource type="Script" path="res://Bow.cs" id="1_5q7mw"]
 [ext_resource type="Texture2D" uid="uid://cxhskr4c8o65d" path="res://sprites/bow.png" id="1_mqf4f"]
+[ext_resource type="PackedScene" uid="uid://c678dmd8ppen0" path="res://trajectory_line.tscn" id="3_6cg7x"]
 
 [sub_resource type="Animation" id="Animation_aiead"]
 tracks/0/type = "value"
@@ -62,10 +63,11 @@ _data = {
 "draw": SubResource("Animation_7ivcm")
 }
 
-[node name="Bow" type="Node2D" node_paths=PackedStringArray("BowAnimationPlayer", "FiringPoint")]
+[node name="Bow" type="Node2D" node_paths=PackedStringArray("BowAnimationPlayer", "FiringPoint", "TrajectoryLine")]
 script = ExtResource("1_5q7mw")
 BowAnimationPlayer = NodePath("AnimationPlayer")
 FiringPoint = NodePath("FiringPoint")
+TrajectoryLine = NodePath("FiringPoint/TrajectoryLine")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(1.4, 1.4)
@@ -74,6 +76,9 @@ hframes = 4
 
 [node name="FiringPoint" type="Node2D" parent="."]
 position = Vector2(-3.5, 0)
+
+[node name="TrajectoryLine" parent="FiringPoint" instance=ExtResource("3_6cg7x")]
+points = PackedVector2Array(0, 0, 10, 0, 20, 2)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
