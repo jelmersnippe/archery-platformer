@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bo2rpe4c3ixxr"]
 
-[ext_resource type="Script" path="res://StuckArrow.cs" id="1_nq8ni"]
-[ext_resource type="Texture2D" uid="uid://df0reywfjo2w3" path="res://sprites/arrow.png" id="2_8jjxl"]
+[ext_resource type="Script" path="res://arrows/scripts/StuckArrow.cs" id="1_k12qw"]
+[ext_resource type="Texture2D" uid="uid://df0reywfjo2w3" path="res://sprites/arrow.png" id="2_fdm8s"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wf8ly"]
 size = Vector2(32, 6)
@@ -12,7 +12,7 @@ size = Vector2(36, 10)
 [node name="StuckArrow" type="StaticBody2D" node_paths=PackedStringArray("PlayerDetectionArea", "CollisionShape", "PlayerDetectionShape")]
 collision_layer = 4
 collision_mask = 0
-script = ExtResource("1_nq8ni")
+script = ExtResource("1_k12qw")
 PlayerDetectionArea = NodePath("PlayerDetectionArea")
 CollisionShape = NodePath("CollisionShape2D")
 PlayerDetectionShape = NodePath("PlayerDetectionArea/CollisionShape2D")
@@ -35,5 +35,5 @@ disabled = true
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, 1)
 scale = Vector2(2, 2)
-texture = ExtResource("2_8jjxl")
+texture = ExtResource("2_fdm8s")
 hframes = 5

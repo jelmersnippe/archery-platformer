@@ -1,10 +1,12 @@
-[gd_scene load_steps=2 format=3 uid="uid://i6mk0ooox6y1"]
+[gd_scene load_steps=3 format=3 uid="uid://i6mk0ooox6y1"]
 
 [ext_resource type="Script" path="res://HUD.cs" id="1_afb1x"]
+[ext_resource type="Texture2D" uid="uid://bfrprpcet30pb" path="res://sprites/default_arrow_ui.png" id="2_kgbfd"]
 
-[node name="HUD" type="CanvasLayer" node_paths=PackedStringArray("ArrowCount")]
+[node name="HUD" type="CanvasLayer" node_paths=PackedStringArray("ArrowCountDisplay", "ArrowTypeDisplay")]
 script = ExtResource("1_afb1x")
-ArrowCount = NodePath("ArrowCount")
+ArrowCountDisplay = NodePath("ArrowCount")
+ArrowTypeDisplay = NodePath("ArrowType")
 
 [node name="ArrowCount" type="Label" parent="."]
 offset_left = 14.0
@@ -12,3 +14,10 @@ offset_top = 9.0
 offset_right = 87.0
 offset_bottom = 32.0
 text = "Arrows: 1"
+
+[node name="ArrowType" type="TextureRect" parent="."]
+offset_left = 10.0
+offset_top = 10.0
+offset_right = 90.0
+offset_bottom = 90.0
+texture = ExtResource("2_kgbfd")

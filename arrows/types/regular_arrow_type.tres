@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ArrowType" load_steps=4 format=3 uid="uid://c14eor8x11kco"]
+
+[ext_resource type="PackedScene" uid="uid://cqpc2he5alk77" path="res://arrows/scenes/regular_arrow.tscn" id="1_sonh3"]
+[ext_resource type="Script" path="res://arrows/scripts/ArrowType.cs" id="1_t1s4j"]
+[ext_resource type="Texture2D" uid="uid://bfrprpcet30pb" path="res://sprites/default_arrow_ui.png" id="2_d17ep"]
+
+[resource]
+script = ExtResource("1_t1s4j")
+Name = "Regular"
+DisplaySprite = ExtResource("2_d17ep")
+ArrowScene = ExtResource("1_sonh3")

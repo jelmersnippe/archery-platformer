@@ -6,12 +6,12 @@ public partial class Quiver : Node {
 	public delegate void ArrowCountChangedEventHandler(int current, int max);
 
 	[Signal]
-	public delegate void ArrowTypeChangedEventHandler(PackedScene arrowScene);
+	public delegate void ArrowTypeChangedEventHandler(ArrowType? arrowType);
 
 	[Export] public int InitialArrowCount = 5;
 
-	[Export] public Array<PackedScene> ArrowTypes = new();
-	private PackedScene? _currentArrowType;
+	[Export] public Array<ArrowType> ArrowTypes = new();
+	private ArrowType? _currentArrowType;
 
 	private int _maxArrowCount;
 	private int _availableArrowCount;
@@ -28,6 +28,10 @@ public partial class Quiver : Node {
 
 	public void NotifyArrowChanges() {
 		EmitSignal(SignalName.ArrowCountChanged, _availableArrowCount, _maxArrowCount);
+	}
+
+	public void NotifyArrowTypeChanged() {
+		EmitSignal(SignalName.ArrowTypeChanged, _currentArrowType!);
 	}
 
 	public void ChangeArrowType(int change) {
@@ -53,8 +57,8 @@ public partial class Quiver : Node {
 		}
 
 		_currentArrowType = ArrowTypes[index];
-		Node? arrowType = _currentArrowType.Instantiate();
-		GD.Print($"Changed arrow type to index {index}: {arrowType.Name}");
+		GD.Print($"Changed arrow type to index {index}: {_currentArrowType.Name}");
+		NotifyArrowTypeChanged();
 	}
 
 	public void Recall() {
@@ -74,7 +78,7 @@ public partial class Quiver : Node {
 
 		_availableArrowCount = Mathf.Clamp(_availableArrowCount - 1, 0, _maxArrowCount);
 		NotifyArrowChanges();
-		var arrow = _currentArrowType.Instantiate<Arrow>();
+		var arrow = _currentArrowType.ArrowScene.Instantiate<Arrow>();
 
 		// TODO: Move into specific RecallQuiver -> normal quiver does not automatically get arrows back
 		// arrow.Released += CurrentArrowOnReleased;

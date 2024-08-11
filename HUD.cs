@@ -1,12 +1,14 @@
 using Godot;
 
 public partial class HUD : CanvasLayer {
-	[Export] public Label ArrowCount = null!;
+	[Export] public Label ArrowCountDisplay = null!;
+	[Export] public TextureRect ArrowTypeDisplay = null!;
 
 	private Quiver? _currentQuiver;
 
 	public override void _Ready() {
-		ArrowCount.Hide();
+		ArrowCountDisplay.Hide();
+		ArrowTypeDisplay.Hide();
 		SceneTransitionHandler.Instance.PlayerSpawned += InstanceOnPlayerSpawned;
 		if (SceneTransitionHandler.Instance.Player != null) {
 			SceneTransitionHandler.Instance.Player.QuiverEquipped += SetQuiver;
@@ -24,22 +26,36 @@ public partial class HUD : CanvasLayer {
 		}
 
 		if (quiver == null) {
-			ArrowCount.Hide();
+			ArrowCountDisplay.Hide();
+			ArrowTypeDisplay.Hide();
 			if (_currentQuiver != null) {
 				_currentQuiver.ArrowCountChanged -= QuiverOnArrowCountChanged;
+				_currentQuiver.ArrowTypeChanged -= QuiverOnArrowTypeChanged;
 			}
 
 			_currentQuiver = null;
 			return;
 		}
 
-		ArrowCount.Show();
+		ArrowCountDisplay.Show();
+		ArrowTypeDisplay.Show();
 
 		quiver.ArrowCountChanged += QuiverOnArrowCountChanged;
+		quiver.ArrowTypeChanged += QuiverOnArrowTypeChanged;
 		_currentQuiver = quiver;
 	}
 
+	private void QuiverOnArrowTypeChanged(ArrowType? arrowType) {
+		if (arrowType == null) {
+			ArrowTypeDisplay.Hide();
+			return;
+		}
+
+		ArrowTypeDisplay.Show();
+		ArrowTypeDisplay.Texture = arrowType.DisplaySprite;
+	}
+
 	private void QuiverOnArrowCountChanged(int current, int max) {
-		ArrowCount.Text = $"Arrows: {current}/{max}";
+		ArrowCountDisplay.Text = $"Arrows: {current}/{max}";
 	}
 }

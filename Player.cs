@@ -93,6 +93,7 @@ public partial class Player : CharacterBody2D {
 
 		EmitSignal(SignalName.QuiverEquipped, quiver);
 		quiver?.NotifyArrowChanges();
+		quiver?.NotifyArrowTypeChanged();
 	}
 
 	private Vine? _vineInRange;

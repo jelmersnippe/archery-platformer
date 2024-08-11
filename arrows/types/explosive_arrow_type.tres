@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="ArrowType" load_steps=4 format=3 uid="uid://d05acp4wly8y8"]
+
+[ext_resource type="Script" path="res://arrows/scripts/ArrowType.cs" id="1_p3kfs"]
+[ext_resource type="PackedScene" uid="uid://hkvea43osh4m" path="res://arrows/scenes/explosive_arrow.tscn" id="1_ucj16"]
+[ext_resource type="Texture2D" uid="uid://bgwjuogasibmp" path="res://sprites/exploding_arrow_ui.png" id="2_krvgn"]
+
+[resource]
+script = ExtResource("1_p3kfs")
+Name = "Explosive"
+DisplaySprite = ExtResource("2_krvgn")
+ArrowScene = ExtResource("1_ucj16")
