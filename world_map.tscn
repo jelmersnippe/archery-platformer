@@ -10,7 +10,10 @@
 [node name="Forest1" parent="." instance=ExtResource("1_6dwwl")]
 
 [node name="Forest2" parent="." instance=ExtResource("2_goo75")]
+position = Vector2(1152, 0)
 
 [node name="Forest3" parent="." instance=ExtResource("3_gu2ck")]
+position = Vector2(1984, 0)
 
 [node name="Forest4" parent="." instance=ExtResource("4_d2xs1")]
+position = Vector2(1152, -1056)

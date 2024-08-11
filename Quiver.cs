@@ -9,21 +9,23 @@ public partial class Quiver : Node {
 	[Export] public int InitialArrowCount = 5;
 
 	private int _maxArrowCount;
+	private int _availableArrowCount;
 	private Array<Node2D> _activeArrows = new();
-	private Arrow? _currentArrow;
 
 	public override void _Ready() {
 		_maxArrowCount = InitialArrowCount;
+		_availableArrowCount = _maxArrowCount;
 		NotifyArrowChanges();
 	}
 
 	public void NotifyArrowChanges() {
-		EmitSignal(SignalName.ArrowCountChanged, _maxArrowCount - _activeArrows.Count, _maxArrowCount);
+		EmitSignal(SignalName.ArrowCountChanged, _availableArrowCount, _maxArrowCount);
 	}
 
 	public void Recall() {
 		foreach (Node2D? arrow in _activeArrows) {
 			arrow.QueueFree();
+			_availableArrowCount = Mathf.Clamp(_availableArrowCount + 1, 0, _maxArrowCount);
 		}
 
 		_activeArrows.Clear();
@@ -31,33 +33,45 @@ public partial class Quiver : Node {
 	}
 
 	public Arrow? GetArrow() {
-		if (_activeArrows.Count >= _maxArrowCount || _currentArrow != null) {
+		if (_availableArrowCount <= 0) {
 			return null;
 		}
 
-		_currentArrow = ArrowScene.Instantiate<Arrow>();
-		_currentArrow.Released += CurrentArrowOnReleased;
-		return _currentArrow;
+		_availableArrowCount = Mathf.Clamp(_availableArrowCount - 1, 0, _maxArrowCount);
+		NotifyArrowChanges();
+		var arrow = ArrowScene.Instantiate<Arrow>();
+
+		// TODO: Move into specific RecallQuiver -> normal quiver does not automatically get arrows back
+		// arrow.Released += CurrentArrowOnReleased;
+
+		return arrow;
 	}
 
-	private void CurrentArrowOnReleased(Arrow activeArrow) {
-		if (activeArrow != _currentArrow) {
-			return;
-		}
-
-		_activeArrows.Add(activeArrow);
+	public void ReturnArrow(Arrow arrow) {
+		_activeArrows.Remove(arrow);
+		_availableArrowCount = Mathf.Clamp(_availableArrowCount + 1, 0, _maxArrowCount);
 		NotifyArrowChanges();
-		_currentArrow.Released -= CurrentArrowOnReleased;
+	}
 
-		_currentArrow.TransitionedToStuck += (arrow, stuckArrow) => {
-			_activeArrows.Remove(arrow);
-			_activeArrows.Add(stuckArrow);
-			stuckArrow.TreeExiting += () => {
-				_activeArrows.Remove(stuckArrow);
-				NotifyArrowChanges();
-			};
-		};
+	// TODO: Move into specific RecallQuiver -> normal quiver does not automatically get arrows back
+	// private void CurrentArrowOnReleased(Arrow arrow) {
+	// 	_activeArrows.Add(arrow);
+	// 	
+	// 	arrow.Released -= CurrentArrowOnReleased;
 
-		_currentArrow = null;
+	// 	arrow.TransitionedToStuck += (shotArrow, stuckArrow) => {
+	// 		_activeArrows.Remove(shotArrow);
+	// 		_activeArrows.Add(stuckArrow);
+	// 		stuckArrow.TreeExiting += () => {
+	// 			_activeArrows.Remove(stuckArrow);
+	// 			_availableArrowCount = Mathf.Clamp(_availableArrowCount + 1, 0, _maxArrowCount);
+	// 			NotifyArrowChanges();
+	// 		};
+	// 	};
+	// }
+
+	public void Restock() {
+		_availableArrowCount = _maxArrowCount;
+		NotifyArrowChanges();
 	}
 }

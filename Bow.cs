@@ -10,43 +10,43 @@ public partial class Bow : Node2D {
 
 	private float _drawTime;
 
-	private Arrow? _currentArrow;
+	public Arrow? CurrentArrow { get; private set; }
 
 	private Vector2 ArrowVelocity => GlobalPosition.DirectionTo(GetGlobalMousePosition()) *
 									 Mathf.Lerp(MinArrowVelocity, MaxArrowVelocity, _drawTime / MaxDrawTime);
 
 	public override void _PhysicsProcess(double delta) {
-		if (_currentArrow == null) {
+		if (CurrentArrow == null) {
 			_drawTime = 0f;
 			return;
 		}
 
 		_drawTime = Mathf.Min(_drawTime + (float)delta, MaxDrawTime);
-		TrajectoryLine.Update(ArrowVelocity, _currentArrow.Gravity, (float)delta);
+		TrajectoryLine.Update(ArrowVelocity, CurrentArrow.Gravity, (float)delta);
 	}
 
 	public void ReadyArrow(Arrow arrow) {
 		FiringPoint.AddChild(arrow);
 		arrow.Position = Vector2.Zero;
 		BowAnimationPlayer.Play("draw");
-		_currentArrow = arrow;
+		CurrentArrow = arrow;
 	}
 
 	public void CancelArrow() {
-		_currentArrow?.QueueFree();
-		_currentArrow = null;
+		CurrentArrow?.QueueFree();
+		CurrentArrow = null;
 		BowAnimationPlayer.Stop();
 		TrajectoryLine.ClearPoints();
 	}
 
 	public void ReleaseArrow() {
-		if (_currentArrow == null) {
+		if (CurrentArrow == null) {
 			return;
 		}
 
-		_currentArrow.Release(ArrowVelocity);
+		CurrentArrow.Release(ArrowVelocity);
 
-		_currentArrow = null;
+		CurrentArrow = null;
 		BowAnimationPlayer.Stop();
 		TrajectoryLine.ClearPoints();
 	}

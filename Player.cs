@@ -110,12 +110,21 @@ public partial class Player : CharacterBody2D {
 
 	private Vector2 _velocity;
 
+	private void CancelArrow() {
+		if (Bow?.CurrentArrow != null) {
+			Quiver?.ReturnArrow(Bow.CurrentArrow);
+		}
+
+		Bow?.CancelArrow();
+	}
+
 	private void HandleAir(float delta) {
 		if (IsOnFloor() || _isClimbing) {
 			return;
 		}
 
-		Bow?.CancelArrow();
+		CancelArrow();
+		
 		_remainingCoyoteTime -= delta;
 		_velocity.Y += Gravity * delta;
 		Sprite.Play("jump");
@@ -183,6 +192,8 @@ public partial class Player : CharacterBody2D {
 		if (!_isClimbing || _vineInRange == null) {
 			return;
 		}
+		
+		CancelArrow();
 
 		_velocity = Vector2.Zero;
 		GlobalPosition =

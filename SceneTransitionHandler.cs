@@ -66,7 +66,7 @@ public partial class SceneTransitionHandler : Node {
 			: new Vector2(0, _playerRelativePositionToDoor.Y);
 
 		door.BodyExited += DoorOnBodyExited;
-		
+
 		Player.GlobalPosition = door.GlobalPosition + doorOffset;
 		EmitSignal(SignalName.PlayerSpawned, Player);
 
@@ -92,7 +92,7 @@ public partial class SceneTransitionHandler : Node {
 			string.IsNullOrWhiteSpace(fromDoor.TargetSceneName)) {
 			return;
 		}
-		
+
 		if (GetTree().CurrentScene == null) {
 			return;
 		}
@@ -112,7 +112,9 @@ public partial class SceneTransitionHandler : Node {
 			return;
 		}
 
-		Player.Reparent(GetTree().Root);
+		Player?.Reparent(GetTree().Root);
+		Player?.Quiver?.Restock();
+
 		GetTree().ChangeSceneToFile($"res://{fromDoor.TargetSceneName}.tscn");
 	}
 }
