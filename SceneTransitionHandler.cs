@@ -65,12 +65,8 @@ public partial class SceneTransitionHandler : Node {
 			// Horizontal transition, keep vertical position
 			: new Vector2(0, _playerRelativePositionToDoor.Y);
 
-		GD.Print("MovePlayerToDoor");
-		GD.Print(doorOffset);
-		GD.Print(door.GlobalPosition);
-
 		door.BodyExited += DoorOnBodyExited;
-
+		
 		Player.GlobalPosition = door.GlobalPosition + doorOffset;
 		EmitSignal(SignalName.PlayerSpawned, Player);
 
@@ -79,7 +75,6 @@ public partial class SceneTransitionHandler : Node {
 
 	private void DoorOnBodyExited(Node2D body) {
 		if (body is Player) {
-			GD.Print("Setting transitioning to false");
 			_isTransitioning = false;
 		}
 
@@ -89,12 +84,19 @@ public partial class SceneTransitionHandler : Node {
 	}
 
 	public void HandleTransition(SceneDoor fromDoor) {
-		if (_isTransitioning || string.IsNullOrWhiteSpace(fromDoor.TargetDoorId) ||
-			string.IsNullOrWhiteSpace(fromDoor.TargetSceneName)) {
+		if (_isTransitioning) {
 			return;
 		}
 
-		GD.Print("Transitioning from " + fromDoor.Id);
+		if (string.IsNullOrWhiteSpace(fromDoor.TargetDoorId) ||
+			string.IsNullOrWhiteSpace(fromDoor.TargetSceneName)) {
+			return;
+		}
+		
+		if (GetTree().CurrentScene == null) {
+			return;
+		}
+
 		_isTransitioning = true;
 
 		_targetDoorId = fromDoor.TargetDoorId;

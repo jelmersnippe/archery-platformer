@@ -9,11 +9,34 @@ public partial class SceneDoor : Area2D {
 
 	public override void _Ready() {
 		BodyEntered += OnBodyEntered;
+		BodyExited += OnBodyExited;
 
 		Direction = new Vector2I(Mathf.Sign(Direction.X), Mathf.Sign(Direction.Y));
 
 		if (Direction.X != 0 && Direction.Y != 0) {
 			throw new Exception($"Direction for SceneDoor {Id} is not one of the cardinal directions");
+		}
+	}
+
+	private void OnBodyExited(Node2D body) {
+		if (string.IsNullOrWhiteSpace(TargetSceneName) || string.IsNullOrWhiteSpace(TargetDoorId)) {
+			return;
+		}
+
+		if (body is not Player) {
+			return;
+		}
+
+		var directionToPlayer = GlobalPosition.DirectionTo(body.GlobalPosition);
+		if (Direction.X != 0) {
+			if (Mathf.Sign(directionToPlayer.X) != Direction.X) {
+				SceneTransitionHandler.Instance.CallDeferred("HandleTransition", this);
+			}
+		}
+		else {
+			if (Mathf.Sign(directionToPlayer.Y) != Direction.Y) {
+				SceneTransitionHandler.Instance.CallDeferred("HandleTransition", this);
+			}
 		}
 	}
 

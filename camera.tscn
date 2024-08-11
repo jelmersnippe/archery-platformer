@@ -6,6 +6,7 @@
 size = Vector2(16, 16)
 
 [node name="Camera2D" type="Camera2D" node_paths=PackedStringArray("Area2D")]
+zoom = Vector2(1.7, 1.7)
 script = ExtResource("1_y3lri")
 Area2D = NodePath("Area2D")
 
