@@ -4,7 +4,6 @@ public abstract partial class Arrow : CharacterBody2D {
 	[Signal]
 	public delegate void ReleasedEventHandler(Arrow activeArrow);
 
-	[Export] public PackedScene StuckArrowScene = null!;
 	[Export] public AnimatedSprite2D Sprite = null!;
 	[Export] public CollisionShape2D CollisionShape2D = null!;
 	[Export] public float Gravity = 20f;
@@ -30,14 +29,13 @@ public abstract partial class Arrow : CharacterBody2D {
 			_collided = true;
 
 			// Move to collision + extra bit of sprite to simulate penetration
-			float spriteOffset = Sprite.SpriteFrames.GetFrameTexture("default", 0).GetSize().X / 2;
-			GlobalPosition += collision.GetTravel() + Velocity.Normalized() * spriteOffset;
+			float spriteOffset = Sprite.SpriteFrames.GetFrameTexture("default", 0).GetSize().X / 4;
+			GlobalPosition = collision.GetPosition() + Velocity.Normalized() * spriteOffset;
 
 			Velocity = Vector2.Zero;
 			Sprite.Play();
 
 			Impact(collision);
-
 			return;
 		}
 

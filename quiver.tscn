@@ -1,9 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdb52ynp8qtxn"]
+[gd_scene load_steps=5 format=3 uid="uid://bdb52ynp8qtxn"]
 
 [ext_resource type="Script" path="res://Quiver.cs" id="1_60msv"]
+[ext_resource type="PackedScene" uid="uid://cqpc2he5alk77" path="res://regular_arrow.tscn" id="2_chnlk"]
 [ext_resource type="PackedScene" uid="uid://dpqd7gs5j458d" path="res://reinforced_arrow.tscn" id="2_ulc0a"]
+[ext_resource type="PackedScene" uid="uid://hkvea43osh4m" path="res://explosive_arrow.tscn" id="4_ct3lc"]
 
 [node name="Quiver" type="Node"]
 script = ExtResource("1_60msv")
-ArrowScene = ExtResource("2_ulc0a")
 InitialArrowCount = 3
+ArrowTypes = [ExtResource("2_chnlk"), ExtResource("2_ulc0a"), ExtResource("4_ct3lc")]

@@ -23,10 +23,17 @@ public partial class StuckArrow : StaticBody2D {
 		// Always detect player when solid so arrow can break
 		PlayerDetectionShape.SetDeferred("disabled", false);
 
+		float normalizedRotation = (GlobalRotationDegrees + 360) % 360;
+
+		if (!(lifeTime > 0f)) {
+			return;
+		}
+
 		// Collision for jumping is disabled by default, otherwise player can jump once with
 		// input buffering time before touching the arrow. SO when it has lifetime we enable
-		if (lifeTime > 0f) {
-			CollisionShape.SetDeferred("disabled", false);
+		CollisionShape.SetDeferred("disabled", false);
+		if (normalizedRotation >= 90f && normalizedRotation <= 270f) {
+			CollisionShape.RotationDegrees = 180f;
 		}
 	}
 

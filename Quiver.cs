@@ -5,8 +5,13 @@ public partial class Quiver : Node {
 	[Signal]
 	public delegate void ArrowCountChangedEventHandler(int current, int max);
 
-	[Export] public PackedScene ArrowScene = null!;
+	[Signal]
+	public delegate void ArrowTypeChangedEventHandler(PackedScene arrowScene);
+
 	[Export] public int InitialArrowCount = 5;
+
+	[Export] public Array<PackedScene> ArrowTypes = new();
+	private PackedScene? _currentArrowType;
 
 	private int _maxArrowCount;
 	private int _availableArrowCount;
@@ -15,11 +20,41 @@ public partial class Quiver : Node {
 	public override void _Ready() {
 		_maxArrowCount = InitialArrowCount;
 		_availableArrowCount = _maxArrowCount;
+
+		SetArrowType(0);
+
 		NotifyArrowChanges();
 	}
 
 	public void NotifyArrowChanges() {
 		EmitSignal(SignalName.ArrowCountChanged, _availableArrowCount, _maxArrowCount);
+	}
+
+	public void ChangeArrowType(int change) {
+		if (_currentArrowType == null) {
+			SetArrowType(0);
+			return;
+		}
+
+		int currentIndex = ArrowTypes.IndexOf(_currentArrowType);
+		if (currentIndex == -1) {
+			_currentArrowType = null;
+			SetArrowType(0);
+			return;
+		}
+
+		SetArrowType((currentIndex + change) % ArrowTypes.Count);
+	}
+
+	public void SetArrowType(int index) {
+		if (index < 0 || index >= ArrowTypes.Count) {
+			GD.Print("Cant change arrow type because index is not in bounds");
+			return;
+		}
+
+		_currentArrowType = ArrowTypes[index];
+		Node? arrowType = _currentArrowType.Instantiate();
+		GD.Print($"Changed arrow type to index {index}: {arrowType.Name}");
 	}
 
 	public void Recall() {
@@ -33,13 +68,13 @@ public partial class Quiver : Node {
 	}
 
 	public Arrow? GetArrow() {
-		if (_availableArrowCount <= 0) {
+		if (_availableArrowCount <= 0 || _currentArrowType == null) {
 			return null;
 		}
 
 		_availableArrowCount = Mathf.Clamp(_availableArrowCount - 1, 0, _maxArrowCount);
 		NotifyArrowChanges();
-		var arrow = ArrowScene.Instantiate<Arrow>();
+		var arrow = _currentArrowType.Instantiate<Arrow>();
 
 		// TODO: Move into specific RecallQuiver -> normal quiver does not automatically get arrows back
 		// arrow.Released += CurrentArrowOnReleased;

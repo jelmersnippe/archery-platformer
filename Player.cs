@@ -124,7 +124,7 @@ public partial class Player : CharacterBody2D {
 		}
 
 		CancelArrow();
-		
+
 		_remainingCoyoteTime -= delta;
 		_velocity.Y += Gravity * delta;
 		Sprite.Play("jump");
@@ -192,7 +192,7 @@ public partial class Player : CharacterBody2D {
 		if (!_isClimbing || _vineInRange == null) {
 			return;
 		}
-		
+
 		CancelArrow();
 
 		_velocity = Vector2.Zero;
@@ -251,6 +251,10 @@ public partial class Player : CharacterBody2D {
 
 		if (Input.IsActionJustPressed("interact")) {
 			_pickupInRange?.Grab(this);
+		}
+
+		if (Input.IsActionJustPressed("next_arrow_type")) {
+			Quiver?.ChangeArrowType(1);
 		}
 	}
 }

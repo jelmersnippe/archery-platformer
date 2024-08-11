@@ -2,6 +2,7 @@ using Godot;
 
 public partial class RegularArrow : Arrow {
 	[Export] public float StuckArrowLifeTime;
+	[Export] public PackedScene StuckArrowScene = null!;
 
 	protected override void Impact(KinematicCollision2D collision) {
 		Vector2 normal = collision.GetNormal();
@@ -10,13 +11,13 @@ public partial class RegularArrow : Arrow {
 
 	private void SpawnStuckArrow(bool isSolid) {
 		var stuckArrow = StuckArrowScene.Instantiate<StuckArrow>();
+		stuckArrow.Transform = Transform;
+		GetParent().CallDeferred("add_child", stuckArrow);
 
 		if (isSolid) {
 			stuckArrow.SetSolid(StuckArrowLifeTime);
 		}
 
-		stuckArrow.Transform = Transform;
-		GetParent().CallDeferred("add_child", stuckArrow);
 		QueueFree();
 	}
 }
