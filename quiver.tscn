@@ -1,9 +1,9 @@
 [gd_scene load_steps=3 format=3 uid="uid://bdb52ynp8qtxn"]
 
 [ext_resource type="Script" path="res://Quiver.cs" id="1_60msv"]
-[ext_resource type="PackedScene" uid="uid://cqpc2he5alk77" path="res://shot_arrow.tscn" id="2_chnlk"]
+[ext_resource type="PackedScene" uid="uid://dpqd7gs5j458d" path="res://reinforced_arrow.tscn" id="2_ulc0a"]
 
 [node name="Quiver" type="Node"]
 script = ExtResource("1_60msv")
-ArrowScene = ExtResource("2_chnlk")
+ArrowScene = ExtResource("2_ulc0a")
 InitialArrowCount = 3

@@ -4,17 +4,30 @@ public partial class StuckArrow : StaticBody2D {
 	[Signal]
 	public delegate void LifeTimeRanOutEventHandler();
 
-	[Export] public float InitialLifeTime = 3f;
-	[Export] public Area2D PlayerDetectionArea;
+	[Export] public Area2D PlayerDetectionArea = null!;
+	[Export] public CollisionShape2D CollisionShape = null!;
+	[Export] public CollisionShape2D PlayerDetectionShape = null!;
 
 	private float _remainingLifeTime;
+	private Player? _trackingPlayer;
 
-	private Player _trackingPlayer;
+	private bool _destroyOnContact = true;
 
 	public override void _Ready() {
-		_remainingLifeTime = InitialLifeTime;
 		PlayerDetectionArea.BodyEntered += PlayerDetectionAreaOnAreaEntered;
 		PlayerDetectionArea.BodyExited += PlayerDetectionAreaOnBodyExited;
+	}
+
+	public void SetSolid(float lifeTime) {
+		_remainingLifeTime = lifeTime;
+		// Always detect player when solid so arrow can break
+		PlayerDetectionShape.SetDeferred("disabled", false);
+
+		// Collision for jumping is disabled by default, otherwise player can jump once with
+		// input buffering time before touching the arrow. SO when it has lifetime we enable
+		if (lifeTime > 0f) {
+			CollisionShape.SetDeferred("disabled", false);
+		}
 	}
 
 	private void PlayerDetectionAreaOnBodyExited(Node2D body) {
@@ -32,11 +45,17 @@ public partial class StuckArrow : StaticBody2D {
 	}
 
 	public override void _Process(double delta) {
-		if (_trackingPlayer != null && _trackingPlayer.Velocity.Y == 0) {
+		// If we are tracking the player and the player is not moving up
+		if (_trackingPlayer == null || _trackingPlayer.Velocity.Y < 0) {
+			return;
+		}
+
+		// Player is standing on the arrow
+		if (_trackingPlayer.Velocity.Y == 0) {
 			_remainingLifeTime -= (float)delta;
 		}
 
-		if (_remainingLifeTime <= 0) {
+		if (_remainingLifeTime <= 0f) {
 			EmitSignal(SignalName.LifeTimeRanOut);
 			QueueFree();
 		}

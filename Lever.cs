@@ -34,14 +34,14 @@ public partial class Lever : Node2D {
 
 		// Only allow collisions from left
 		if (arrow.Velocity.X < 0) {
-			return;
 		}
 
-		arrow.Velocity = Vector2.Zero;
-		arrow.CallDeferred("reparent", StickingPoint);
-		arrow.TransitionedToStuck += (self, stuckArrow) => _arrow = stuckArrow;
-		arrow.Stick();
-		Flip(arrow);
+		// TODO: Reimplement with detection zone on arrow
+		// arrow.Velocity = Vector2.Zero;
+		// arrow.CallDeferred("reparent", StickingPoint);
+		// arrow.TransitionedToStuck += (self, stuckArrow) => _arrow = stuckArrow;
+		// arrow.Stick();
+		// Flip(arrow);
 	}
 
 	public override void _Process(double delta) {
