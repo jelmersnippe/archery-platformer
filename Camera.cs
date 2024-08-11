@@ -20,14 +20,13 @@ public partial class Camera : Camera2D {
 	private void SetLimitsToTileMap(TileMap tileMap) {
 		Rect2I tileMapRect = tileMap.GetUsedRect();
 
-		var offset = new Vector2(tileMap.CellQuadrantSize / 2f, tileMap.CellQuadrantSize / 2f);
-		Vector2 areaCenter = tileMapRect.GetCenter() * tileMap.CellQuadrantSize + offset;
-		Vector2I worldTileMapSize = tileMapRect.Size * tileMap.CellQuadrantSize;
-		Vector2 distanceToTileMapSide = new Vector2(worldTileMapSize.X, worldTileMapSize.Y) / 2f;
-		LimitLeft = Mathf.RoundToInt(areaCenter.X - distanceToTileMapSide.X);
-		LimitRight = Mathf.RoundToInt(areaCenter.X + distanceToTileMapSide.X);
-		LimitTop = Mathf.RoundToInt(areaCenter.Y - distanceToTileMapSide.Y);
-		LimitBottom = Mathf.RoundToInt(areaCenter.Y + distanceToTileMapSide.Y);
+		Vector2I topLeft = tileMapRect.Position * tileMap.CellQuadrantSize;
+		Vector2I bottomRight = tileMapRect.End * tileMap.CellQuadrantSize;
+
+		LimitLeft = topLeft.X;
+		LimitRight = bottomRight.X;
+		LimitTop = topLeft.Y;
+		LimitBottom = bottomRight.Y;
 	}
 
 	private void Area2DOnAreaEntered(Area2D area) {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Godot;
 
 public partial class PauseController : Node {
@@ -24,7 +24,12 @@ public partial class PauseController : Node {
 	}
 
 	public override void _Input(InputEvent @event) {
-		if (string.Equals(GetTree().CurrentScene.Name, "MainMenu", StringComparison.OrdinalIgnoreCase)) {
+		if (!@event.IsAction("pause")) {
+			return;
+		}
+
+		Node? currentScene = GetTree().CurrentScene;
+		if (currentScene == null || string.Equals(currentScene.Name, "MainMenu", StringComparison.OrdinalIgnoreCase)) {
 			return;
 		}
 
