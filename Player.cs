@@ -45,12 +45,20 @@ public partial class Player : CharacterBody2D {
 
 	private bool _isClimbing;
 
+	[ExportCategory("KillZone")]
+	[Export] public float KillZoneControlLossTime = 0.5f;
+	[Export] public float TimeBetweenGroundedPositionTracking = 2f;
+	private Vector2 _lastGroundedPosition;
+	private bool _inControl = true;
+	private float _timeSinceLastGroundedPosition;
+
 	public override void _Ready() {
 		GrabArea.AreaEntered += GrabAreaOnAreaEntered;
 		GrabArea.AreaExited += GrabAreaOnAreaExited;
 		
 		PickupArea.AreaEntered += PickupAreaOnAreaEntered;
 		PickupArea.AreaExited += PickupAreaOnAreaExited;
+		_lastGroundedPosition = GlobalPosition;
 	}
 	
 	private void PickupAreaOnAreaExited(Area2D area) {
@@ -169,6 +177,11 @@ public partial class Player : CharacterBody2D {
 			return;
 		}
 
+		if (_timeSinceLastGroundedPosition >= TimeBetweenGroundedPositionTracking) {
+			_lastGroundedPosition = GlobalPosition;
+			_timeSinceLastGroundedPosition = 0f;
+		}
+		
 		_remainingCoyoteTime = CoyoteTime;
 		_velocity.Y = 0;
 
@@ -245,8 +258,15 @@ public partial class Player : CharacterBody2D {
 	}
 
 	public override void _PhysicsProcess(double delta) {
-		_velocity = Velocity;
 		_remainingInputBufferTime -= (float)delta;
+		
+		_timeSinceLastGroundedPosition += (float)delta;
+		
+		if (!_inControl) {
+			return;
+		}
+		
+		_velocity = Velocity;
 
 		RotationPoint.Rotation = RotationPoint.GlobalPosition.DirectionTo(GetGlobalMousePosition()).Angle();
 
@@ -268,5 +288,13 @@ public partial class Player : CharacterBody2D {
 		if (Input.IsActionJustPressed("next_arrow_type")) {
 			Quiver?.ChangeArrowType(1);
 		}
+	}
+
+	public void HitKillZone() {
+		GlobalPosition = _lastGroundedPosition;
+		_inControl = false;
+
+		SceneTreeTimer? timer = GetTree().CreateTimer(KillZoneControlLossTime);
+		timer.Timeout += () => _inControl = true;
 	}
 }
