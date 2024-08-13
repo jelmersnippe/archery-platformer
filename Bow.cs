@@ -36,7 +36,7 @@ public partial class Bow : Node2D {
 		CurrentArrow?.QueueFree();
 		CurrentArrow = null;
 		BowAnimationPlayer.Stop();
-		TrajectoryLine.ClearPoints();
+		TrajectoryLine.StopCalculating();
 	}
 
 	public void ReleaseArrow() {
@@ -48,6 +48,6 @@ public partial class Bow : Node2D {
 
 		CurrentArrow = null;
 		BowAnimationPlayer.Stop();
-		TrajectoryLine.ClearPoints();
+		TrajectoryLine.StopCalculating();
 	}
 }
