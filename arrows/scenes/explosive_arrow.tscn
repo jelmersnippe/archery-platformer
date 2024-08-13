@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://hkvea43osh4m"]
+[gd_scene load_steps=11 format=3 uid="uid://hkvea43osh4m"]
 
 [ext_resource type="Script" path="res://arrows/scripts/ExplosiveArrow.cs" id="1_6t4sq"]
+[ext_resource type="PackedScene" uid="uid://cghtbxh8ohv5y" path="res://explosion.tscn" id="2_f8vvn"]
 [ext_resource type="Texture2D" uid="uid://cjlpc2mbegfan" path="res://sprites/exploding_arrow.png" id="2_h6bmp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wf8ly"]
@@ -55,6 +56,7 @@ collision_mask = 2
 motion_mode = 1
 wall_min_slide_angle = 3.14159
 script = ExtResource("1_6t4sq")
+ExplosionScene = ExtResource("2_f8vvn")
 Sprite = NodePath("AnimatedSprite2D")
 CollisionShape2D = NodePath("CollisionShape2D")
 metadata/_edit_group_ = true
