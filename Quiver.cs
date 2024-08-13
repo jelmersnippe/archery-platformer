@@ -82,8 +82,13 @@ public partial class Quiver : Node {
 
 		// TODO: Move into specific RecallQuiver -> normal quiver does not automatically get arrows back
 		// arrow.Released += CurrentArrowOnReleased;
+		arrow.Cancelled += ArrowOnCancelled;
 
 		return arrow;
+	}
+
+	private void ArrowOnCancelled(Arrow activeArrow) {
+		ReturnArrow(activeArrow);
 	}
 
 	public void ReturnArrow(Arrow arrow) {

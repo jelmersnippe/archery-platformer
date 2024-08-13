@@ -3,6 +3,8 @@ using Godot;
 public abstract partial class Arrow : CharacterBody2D {
 	[Signal]
 	public delegate void ReleasedEventHandler(Arrow activeArrow);
+	[Signal]
+	public delegate void CancelledEventHandler(Arrow activeArrow);
 
 	[Export] public AnimatedSprite2D Sprite = null!;
 	[Export] public CollisionShape2D CollisionShape2D = null!;
@@ -10,6 +12,11 @@ public abstract partial class Arrow : CharacterBody2D {
 
 	private bool _collided;
 	private bool _released;
+	private bool _validRelease = true;
+
+	public override void _Ready() {
+		CollisionShape2D.SetDeferred("disabled", false);
+	}
 
 	public override void _PhysicsProcess(double delta) {
 		if (_collided) {
@@ -17,6 +24,15 @@ public abstract partial class Arrow : CharacterBody2D {
 		}
 
 		if (!_released) {
+			KinematicCollision2D preReleaseCollision = MoveAndCollide(Transform.X * (float)delta, true);
+			if (preReleaseCollision != null) {
+				Sprite.Modulate = Colors.Red;
+				_validRelease = false;
+			}
+			else {
+				Sprite.Modulate = Colors.White;
+				_validRelease = true;
+			}
 			return;
 		}
 
@@ -42,8 +58,13 @@ public abstract partial class Arrow : CharacterBody2D {
 		MoveAndSlide();
 	}
 
-
 	public void Release(Vector2 velocity) {
+		if (!_validRelease) {
+			EmitSignal(SignalName.Cancelled, this);
+			QueueFree();
+			return;
+		}
+		
 		Velocity = velocity;
 		CollisionShape2D.SetDeferred("disabled", false);
 		Reparent(GetTree().CurrentScene);

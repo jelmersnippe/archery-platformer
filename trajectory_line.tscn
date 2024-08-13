@@ -13,6 +13,7 @@ joint_mode = 2
 begin_cap_mode = 2
 end_cap_mode = 2
 script = ExtResource("1_g0ygk")
+MaxPointCount = 60
 CollisionBody = NodePath("StaticBody2D")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
