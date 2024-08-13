@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" path="res://arrows/scripts/ImpactEffectArrow.cs" id="1_fq3rc"]
 [ext_resource type="PackedScene" uid="uid://gs1fl2ybqkjf" path="res://auto_growing_vine.tscn" id="2_kueul"]
-[ext_resource type="Script" path="res://CollisionFilter.cs" id="3_5fxs4"]
+[ext_resource type="Script" path="res://Filters/CollisionNormalFilter.cs" id="3_5dfyy"]
 [ext_resource type="Texture2D" uid="uid://dlk8x1eps8ikt" path="res://sprites/vine_arrow.png" id="4_7r2tv"]
 
-[sub_resource type="Resource" id="Resource_topji"]
-script = ExtResource("3_5fxs4")
-AcceptedNormal = Vector2i(0, 1)
+[sub_resource type="Resource" id="Resource_ruiiw"]
+script = ExtResource("3_5dfyy")
+AcceptedNormals = [Vector2i(0, 1)]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wf8ly"]
 size = Vector2(32, 6)
@@ -62,7 +62,7 @@ motion_mode = 1
 wall_min_slide_angle = 3.14159
 script = ExtResource("1_fq3rc")
 ImpactScene = ExtResource("2_kueul")
-Filter = SubResource("Resource_topji")
+Filter = SubResource("Resource_ruiiw")
 Sprite = NodePath("AnimatedSprite2D")
 CollisionShape2D = NodePath("CollisionShape2D")
 metadata/_edit_group_ = true
