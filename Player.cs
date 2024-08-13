@@ -11,6 +11,7 @@ public partial class Player : CharacterBody2D {
 	[Export] public Node2D RotationPoint = null!;
 	[Export] public Node2D BowOffset = null!;
 	[Export] public Area2D GrabArea = null!;
+	[Export] public Area2D PickupArea = null!;
 
 	[ExportCategory("Archery")] [Export] public Bow? Bow;
 	[Export] public Quiver? Quiver;
@@ -47,25 +48,22 @@ public partial class Player : CharacterBody2D {
 	public override void _Ready() {
 		GrabArea.AreaEntered += GrabAreaOnAreaEntered;
 		GrabArea.AreaExited += GrabAreaOnAreaExited;
+		
+		PickupArea.AreaEntered += PickupAreaOnAreaEntered;
+		PickupArea.AreaExited += PickupAreaOnAreaExited;
+	}
+	
+	private void PickupAreaOnAreaExited(Area2D area) {
+		if (area == _pickupInRange) {
+			_pickupInRange.ShowInteractable(false);
+			_pickupInRange = null;
+		}
 	}
 
 	private void GrabAreaOnAreaExited(Area2D area) {
-		switch (area) {
-			case Vine vine: {
-				if (vine == _vineInRange) {
-					_vineInRange = null;
-					_isClimbing = false;
-				}
-
-				break;
-			}
-			case Pickup pickup: {
-				if (pickup == _pickupInRange) {
-					_pickupInRange = null;
-				}
-
-				break;
-			}
+		if (area == _vineInRange) {
+			_vineInRange = null;
+			_isClimbing = false;
 		}
 	}
 
@@ -96,16 +94,18 @@ public partial class Player : CharacterBody2D {
 		quiver?.NotifyArrowTypeChanged();
 	}
 
-	private Vine? _vineInRange;
+	private Node2D? _vineInRange;
 	private Pickup? _pickupInRange;
 
 	private void GrabAreaOnAreaEntered(Area2D area) {
-		if (area is Vine vine) {
-			_vineInRange = vine;
-		}
-
+		_vineInRange = area;
+	}
+	
+	private void PickupAreaOnAreaEntered(Area2D area) {
 		if (area is Pickup pickup) {
+			_pickupInRange?.ShowInteractable(false);
 			_pickupInRange = pickup;
+			_pickupInRange.ShowInteractable(true);
 		}
 	}
 
@@ -196,6 +196,8 @@ public partial class Player : CharacterBody2D {
 
 		CancelArrow();
 
+		// TODO: Add climbing animation
+		Sprite.Play("jump");
 		_velocity = Vector2.Zero;
 		GlobalPosition =
 			new Vector2(

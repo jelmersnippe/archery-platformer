@@ -1,11 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://bdb52ynp8qtxn"]
+[gd_scene load_steps=6 format=3 uid="uid://bdb52ynp8qtxn"]
 
 [ext_resource type="Script" path="res://Quiver.cs" id="1_60msv"]
 [ext_resource type="Resource" uid="uid://c14eor8x11kco" path="res://arrows/types/regular_arrow_type.tres" id="2_m08ie"]
 [ext_resource type="Resource" uid="uid://w43krgl312ky" path="res://arrows/types/reinforced_arrow_type.tres" id="3_3hr0k"]
 [ext_resource type="Resource" uid="uid://d05acp4wly8y8" path="res://arrows/types/explosive_arrow_type.tres" id="4_bdd38"]
+[ext_resource type="Resource" uid="uid://c8mnm4wim5p28" path="res://arrows/types/vine_arrow_type.tres" id="5_23s44"]
 
 [node name="Quiver" type="Node"]
 script = ExtResource("1_60msv")
 InitialArrowCount = 3
-ArrowTypes = [ExtResource("2_m08ie"), ExtResource("3_3hr0k"), ExtResource("4_bdd38")]
+ArrowTypes = [ExtResource("2_m08ie"), ExtResource("3_3hr0k"), ExtResource("4_bdd38"), ExtResource("5_23s44")]

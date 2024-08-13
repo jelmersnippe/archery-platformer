@@ -8,7 +8,8 @@
 radius = 32.0
 
 [node name="QuiverPickup" type="Area2D" node_paths=PackedStringArray("Sprite", "Text")]
-collision_layer = 128
+collision_layer = 256
+collision_mask = 0
 script = ExtResource("1_8p61g")
 SingleUseTrigger = ExtResource("2_resp5")
 Sprite = NodePath("Sprite2D")

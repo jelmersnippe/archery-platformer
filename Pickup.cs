@@ -16,19 +16,8 @@ public abstract partial class Pickup : Area2D {
 			return;
 		}
 
-		AreaEntered += OnBodyEntered;
-		AreaExited += OnBodyExited;
-
 		Text.Hide();
 		SpawnPickupVisual();
-	}
-
-	private void OnBodyExited(Node2D body) {
-		ShowInteractable(false);
-	}
-
-	private void OnBodyEntered(Node2D body) {
-		ShowInteractable(true);
 	}
 
 	protected abstract void Apply(Player player);
@@ -52,7 +41,7 @@ public abstract partial class Pickup : Area2D {
 		ShowInteractable(false);
 	}
 
-	private void ShowInteractable(bool interactable) {
+	public void ShowInteractable(bool interactable) {
 		if (interactable) {
 			OutlineShader?.SetShaderParameter("width", 1);
 			Text.Show();
