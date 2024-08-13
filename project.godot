@@ -95,6 +95,7 @@ next_arrow_type={
 2d_physics/layer_3="arrows"
 2d_physics/layer_8="climbable"
 2d_physics/layer_9="pickups"
+2d_physics/layer_12="explosions"
 
 [rendering]
 

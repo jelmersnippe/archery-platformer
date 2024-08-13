@@ -88,6 +88,8 @@ RotationPoint = NodePath("RotationPoint")
 BowOffset = NodePath("RotationPoint/Offset")
 GrabArea = NodePath("GrabArea")
 PickupArea = NodePath("PickupArea")
+KillZoneControlLossTime = 0.3
+TimeBetweenGroundedPositionTracking = 1.0
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

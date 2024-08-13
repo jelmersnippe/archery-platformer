@@ -50,14 +50,12 @@ public partial class Quiver : Node {
 		SetArrowType((currentIndex + change) % ArrowTypes.Count);
 	}
 
-	public void SetArrowType(int index) {
+	private void SetArrowType(int index) {
 		if (index < 0 || index >= ArrowTypes.Count) {
-			GD.Print("Cant change arrow type because index is not in bounds");
 			return;
 		}
 
 		_currentArrowType = ArrowTypes[index];
-		GD.Print($"Changed arrow type to index {index}: {_currentArrowType.Name}");
 		NotifyArrowTypeChanged();
 	}
 
