@@ -81,17 +81,26 @@ public partial class Player : CharacterBody2D {
 
 	public void Equip(Quiver? quiver) {
 		if (quiver == null) {
-			Quiver?.QueueFree();
+			if (Quiver != null) {
+				Quiver.QueueFree();
+				Quiver.ArrowTypeChanged -= QuiverOnArrowTypeChanged;
+			}
 		}
 		else {
 			AddChild(quiver);
+			quiver.ArrowTypeChanged += QuiverOnArrowTypeChanged;
+			
+			EmitSignal(SignalName.QuiverEquipped, quiver);
+			
+			quiver?.NotifyArrowChanges();
+			quiver?.NotifyArrowTypeChanged();
 		}
 
 		Quiver = quiver;
+	}
 
-		EmitSignal(SignalName.QuiverEquipped, quiver);
-		quiver?.NotifyArrowChanges();
-		quiver?.NotifyArrowTypeChanged();
+	private void QuiverOnArrowTypeChanged(ArrowType? arrowType) {
+		CancelArrow();
 	}
 
 	private Node2D? _vineInRange;
