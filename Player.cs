@@ -200,6 +200,7 @@ public partial class Player : CharacterBody2D {
 
 		if (!isPerformingWallClimbInput && (_remainingWallClimbGraceTime <= 0 || _remainingWallJumpGraceTime <= 0)) {
 			if (_remainingWallClimbGraceTime <= 0) {
+				_knownWallNormalX = wallNormal;
 				_currentState = MovementState.WallSlide;
 			}
 			else {
@@ -399,6 +400,8 @@ public partial class Player : CharacterBody2D {
 		}
 	}
 
+	private float _knownWallNormalX;
+
 	private void HandleWallSlide(float delta) {
 		float directionX = MoveHorizontal(delta);
 
@@ -408,6 +411,13 @@ public partial class Player : CharacterBody2D {
 
 		if (isPerformingWallClimbInput) {
 			_currentState = MovementState.WallGrab;
+			return;
+		}
+
+		// Because there is no input IsOnWall() is likely false. Manually check if there is still a wall next to the player
+		KinematicCollision2D? collision = MoveAndCollide(new Vector2(-_knownWallNormalX * 9f, 0), true);
+		if (collision == null) {
+			_currentState = MovementState.Airborne;
 			return;
 		}
 
