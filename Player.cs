@@ -15,6 +15,9 @@ public partial class Player : CharacterBody2D {
 
 	[ExportCategory("Archery")] [Export] public Bow? Bow;
 	[Export] public Quiver? Quiver;
+	[Export] public bool ArcheryUsableWhenNotGrounded = true;
+	[Export] public float DrawHorizontalSlowdown = 0.4f;
+	[Export] public float DrawVerticalSlowdown = 0.6f;
 
 	[ExportCategory("Movement")] [Export] public float AccelerationTime = 0.3f;
 	[Export] public float DecelerationTime = 0.2f;
@@ -44,7 +47,7 @@ public partial class Player : CharacterBody2D {
 	[Export] public float WallJumpGraceTime = 0.1f;
 	[Export] public float DefaultWallJumpHorizontalForce = 200f;
 	[Export] public float BoostWallJumpHorizontalForce = 300f;
-	[Export] public float WallSlideSpeed = 20f;
+	[Export] public float WallSlideSpeed = 40f;
 
 	private bool _canWallJump;
 	private float _remainingWallClimbGraceTime;
@@ -161,8 +164,6 @@ public partial class Player : CharacterBody2D {
 	}
 
 	private void HandleAir(float delta) {
-		CancelArrow();
-
 		_remainingCoyoteTime -= delta;
 		_velocity.Y += Gravity * delta;
 		Sprite.Play("jump");
@@ -275,8 +276,6 @@ public partial class Player : CharacterBody2D {
 			return;
 		}
 
-		CancelArrow();
-
 		// TODO: Add climbing animation
 		Sprite.Play("jump");
 		_velocity = Vector2.Zero;
@@ -307,12 +306,14 @@ public partial class Player : CharacterBody2D {
 		if (direction != 0) {
 			_velocity.X = Mathf.MoveToward(Velocity.X, MaxSpeed * direction,
 				MaxSpeed / (IsOnFloor() ? AccelerationTime : AerialAccelerationTime) * delta);
+
 			Sprite.FlipH = direction < 0;
 		}
 		else {
 			_velocity.X = Mathf.MoveToward(Velocity.X, 0,
 				MaxSpeed / (IsOnFloor() ? DecelerationTime : AerialDecelerationTime) * delta);
 		}
+
 
 		return direction;
 	}
@@ -334,6 +335,10 @@ public partial class Player : CharacterBody2D {
 			_currentState = MovementState.Grounded;
 		}
 
+		if (!ArcheryUsableWhenNotGrounded && !IsOnFloor()) {
+			CancelArrow();
+		}
+
 		switch (_currentState) {
 			case MovementState.Grounded:
 				HandleGrounded((float)delta);
@@ -352,7 +357,17 @@ public partial class Player : CharacterBody2D {
 				break;
 		}
 
+		float availableMaxHorizontalSpeed = MaxSpeed;
+		float availableMaxVerticalSpeed = JumpVelocity;
+		if (Bow != null && Bow.HasArrowDrawn()) {
+			availableMaxHorizontalSpeed *= DrawHorizontalSlowdown;
+			availableMaxVerticalSpeed *= DrawVerticalSlowdown;
+		}
+
+		_velocity.X = Mathf.Clamp(_velocity.X, -availableMaxHorizontalSpeed, availableMaxHorizontalSpeed);
+		_velocity.Y = Mathf.Max(_velocity.Y, availableMaxVerticalSpeed);
 		Velocity = _velocity;
+
 		MoveAndSlide();
 
 		if (Input.IsActionJustPressed("recall")) {
@@ -367,7 +382,7 @@ public partial class Player : CharacterBody2D {
 			Quiver?.ChangeArrowType(1);
 		}
 
-		if (_currentState == MovementState.Grounded) {
+		if (ArcheryUsableWhenNotGrounded || _currentState == MovementState.Grounded) {
 			if (Input.IsActionJustPressed("shoot")) {
 				Arrow? arrow = Quiver?.GetArrow();
 				if (arrow != null) {

@@ -50,4 +50,8 @@ public partial class Bow : Node2D {
 		BowAnimationPlayer.Stop();
 		TrajectoryLine.StopCalculating();
 	}
+
+	public bool HasArrowDrawn() {
+		return CurrentArrow != null;
+	}
 }
