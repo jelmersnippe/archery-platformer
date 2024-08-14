@@ -11,7 +11,7 @@ public partial class Player : CharacterBody2D {
 	[Export] public Node2D RotationPoint = null!;
 	[Export] public Node2D BowOffset = null!;
 	[Export] public Area2D GrabArea = null!;
-	[Export] public Area2D PickupArea = null!;
+	[Export] public Area2D InteractableArea = null!;
 
 	[ExportCategory("Archery")] [Export] public Bow? Bow;
 	[Export] public Quiver? Quiver;
@@ -56,15 +56,15 @@ public partial class Player : CharacterBody2D {
 		GrabArea.AreaEntered += GrabAreaOnAreaEntered;
 		GrabArea.AreaExited += GrabAreaOnAreaExited;
 		
-		PickupArea.AreaEntered += PickupAreaOnAreaEntered;
-		PickupArea.AreaExited += PickupAreaOnAreaExited;
+		InteractableArea.AreaEntered += InteractableAreaOnAreaEntered;
+		InteractableArea.AreaExited += InteractableAreaOnAreaExited;
 		_lastGroundedPosition = GlobalPosition;
 	}
 	
-	private void PickupAreaOnAreaExited(Area2D area) {
-		if (area == _pickupInRange) {
-			_pickupInRange.ShowInteractable(false);
-			_pickupInRange = null;
+	private void InteractableAreaOnAreaExited(Area2D area) {
+		if (area == _interactableInRange) {
+			_interactableInRange.ShowInteractable(false);
+			_interactableInRange = null;
 		}
 	}
 
@@ -112,17 +112,17 @@ public partial class Player : CharacterBody2D {
 	}
 
 	private Node2D? _vineInRange;
-	private Pickup? _pickupInRange;
+	private Interactable? _interactableInRange;
 
 	private void GrabAreaOnAreaEntered(Area2D area) {
 		_vineInRange = area;
 	}
 	
-	private void PickupAreaOnAreaEntered(Area2D area) {
-		if (area is Pickup pickup) {
-			_pickupInRange?.ShowInteractable(false);
-			_pickupInRange = pickup;
-			_pickupInRange.ShowInteractable(true);
+	private void InteractableAreaOnAreaEntered(Area2D area) {
+		if (area is Interactable interactable) {
+			_interactableInRange?.ShowInteractable(false);
+			_interactableInRange = interactable;
+			_interactableInRange.ShowInteractable(true);
 		}
 	}
 
@@ -282,7 +282,7 @@ public partial class Player : CharacterBody2D {
 		}
 
 		if (Input.IsActionJustPressed("interact")) {
-			_pickupInRange?.Grab(this);
+			_interactableInRange?.Interact(this);
 		}
 
 		if (Input.IsActionJustPressed("next_arrow_type")) {

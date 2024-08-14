@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://d3gu3jio3rqym"]
 
-[ext_resource type="Script" path="res://BowPickup.cs" id="1_xf3gf"]
-[ext_resource type="Resource" uid="uid://cuot2vpiu6dau" path="res://triggers/bow_pickup.tres" id="2_5mdy4"]
+[ext_resource type="Script" path="res://Interactable.cs" id="1_t3d53"]
 [ext_resource type="Texture2D" uid="uid://cxhskr4c8o65d" path="res://sprites/bow.png" id="2_8vdk2"]
+[ext_resource type="Script" path="res://BowUpgrade.cs" id="3_qwpa4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7hvbt"]
 radius = 32.0
@@ -10,8 +10,7 @@ radius = 32.0
 [node name="BowPickup" type="Area2D" node_paths=PackedStringArray("Sprite", "Text")]
 collision_layer = 256
 collision_mask = 0
-script = ExtResource("1_xf3gf")
-SingleUseTrigger = ExtResource("2_5mdy4")
+script = ExtResource("1_t3d53")
 Sprite = NodePath("Sprite2D")
 Text = NodePath("Label")
 
@@ -35,3 +34,8 @@ shape = SubResource("CircleShape2D_7hvbt")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_8vdk2")
 hframes = 4
+
+[node name="BowUpgrade" type="Node" parent="."]
+script = ExtResource("3_qwpa4")
+
+[connection signal="Interacted" from="." to="BowUpgrade" method="Apply"]

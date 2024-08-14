@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://clg6pvxusa4fi"]
+[gd_scene load_steps=12 format=3 uid="uid://clg6pvxusa4fi"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="2_14ctw"]
 [ext_resource type="PackedScene" uid="uid://dba6uv67l33se" path="res://quiver_pickup.tscn" id="2_622jt"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://cx1et7k7daj2" path="res://rock.tscn" id="6_cdgea"]
 [ext_resource type="Script" path="res://Trigger.cs" id="7_s4w41"]
 [ext_resource type="PackedScene" uid="uid://t368vy0v0d5m" path="res://patrolling_enemy.tscn" id="8_p1r1j"]
+[ext_resource type="PackedScene" uid="uid://dvhjp4jotn4no" path="res://quiver_restock.tscn" id="9_kuqvv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5n656"]
 size = Vector2(10, 160)
@@ -62,3 +63,6 @@ Trigger = SubResource("Resource_ipn0w")
 
 [node name="PatrollingEnemy" parent="." instance=ExtResource("8_p1r1j")]
 position = Vector2(272, 456)
+
+[node name="QuiverRestock" parent="." instance=ExtResource("9_kuqvv")]
+position = Vector2(232, 464)

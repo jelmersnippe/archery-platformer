@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://dba6uv67l33se"]
 
-[ext_resource type="Script" path="res://QuiverPickup.cs" id="1_8p61g"]
+[ext_resource type="Script" path="res://Interactable.cs" id="1_itfe3"]
 [ext_resource type="Texture2D" uid="uid://ouu8p6xh08a6" path="res://sprites/quiver.png" id="2_ex3ce"]
-[ext_resource type="Resource" uid="uid://ny4c624rkfbd" path="res://triggers/quiver_pickup.tres" id="2_resp5"]
+[ext_resource type="Script" path="res://QuiverUpgrade.cs" id="3_kbksl"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7hvbt"]
 radius = 32.0
@@ -10,8 +10,7 @@ radius = 32.0
 [node name="QuiverPickup" type="Area2D" node_paths=PackedStringArray("Sprite", "Text")]
 collision_layer = 256
 collision_mask = 0
-script = ExtResource("1_8p61g")
-SingleUseTrigger = ExtResource("2_resp5")
+script = ExtResource("1_itfe3")
 Sprite = NodePath("Sprite2D")
 Text = NodePath("Label")
 
@@ -34,3 +33,8 @@ shape = SubResource("CircleShape2D_7hvbt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_ex3ce")
+
+[node name="QuiverUpgrade" type="Node" parent="."]
+script = ExtResource("3_kbksl")
+
+[connection signal="Interacted" from="." to="QuiverUpgrade" method="Apply"]
