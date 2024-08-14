@@ -16,6 +16,7 @@ public abstract partial class Arrow : CharacterBody2D {
 
 	public override void _Ready() {
 		CollisionShape2D.SetDeferred("disabled", false);
+		SetCollisionLayerValue(3, false);
 	}
 
 	public override void _PhysicsProcess(double delta) {
@@ -64,6 +65,8 @@ public abstract partial class Arrow : CharacterBody2D {
 			QueueFree();
 			return;
 		}
+		
+		SetCollisionLayerValue(3, true);
 		
 		Velocity = velocity;
 		CollisionShape2D.SetDeferred("disabled", false);

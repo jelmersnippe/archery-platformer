@@ -1,9 +1,6 @@
 using Godot;
 
 public partial class StuckArrow : StaticBody2D {
-	[Signal]
-	public delegate void LifeTimeRanOutEventHandler();
-
 	[Export] public Area2D PlayerDetectionArea = null!;
 	[Export] public CollisionShape2D CollisionShape = null!;
 	[Export] public CollisionShape2D PlayerDetectionShape = null!;
@@ -63,7 +60,6 @@ public partial class StuckArrow : StaticBody2D {
 		}
 
 		if (_remainingLifeTime <= 0f) {
-			EmitSignal(SignalName.LifeTimeRanOut);
 			QueueFree();
 		}
 	}

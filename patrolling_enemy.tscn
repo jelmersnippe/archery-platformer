@@ -7,7 +7,7 @@
 size = Vector2(16, 16)
 
 [node name="PatrollingEnemy" type="CharacterBody2D" node_paths=PackedStringArray("InputComponent")]
-collision_layer = 0
+collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_fahg3")
 InputComponent = NodePath("PatrollingInputComponent")
