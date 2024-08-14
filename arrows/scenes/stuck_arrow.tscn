@@ -9,13 +9,14 @@ size = Vector2(32, 6)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ckxtd"]
 size = Vector2(36, 10)
 
-[node name="StuckArrow" type="StaticBody2D" node_paths=PackedStringArray("PlayerDetectionArea", "CollisionShape", "PlayerDetectionShape")]
+[node name="StuckArrow" type="StaticBody2D" node_paths=PackedStringArray("PlayerDetectionArea", "CollisionShape", "PlayerDetectionShape", "Sprite")]
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_k12qw")
 PlayerDetectionArea = NodePath("PlayerDetectionArea")
 CollisionShape = NodePath("CollisionShape2D")
 PlayerDetectionShape = NodePath("PlayerDetectionArea/CollisionShape2D")
+Sprite = NodePath("Sprite2D")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -36,4 +37,3 @@ disabled = true
 position = Vector2(0, 1)
 scale = Vector2(2, 2)
 texture = ExtResource("2_fdm8s")
-hframes = 5

@@ -1,7 +1,6 @@
-[gd_scene load_steps=11 format=3 uid="uid://cqpc2he5alk77"]
+[gd_scene load_steps=10 format=3 uid="uid://cqpc2he5alk77"]
 
 [ext_resource type="Script" path="res://arrows/scripts/RegularArrow.cs" id="1_bmllj"]
-[ext_resource type="PackedScene" uid="uid://bo2rpe4c3ixxr" path="res://arrows/scenes/stuck_arrow.tscn" id="2_7olxw"]
 [ext_resource type="Texture2D" uid="uid://df0reywfjo2w3" path="res://sprites/arrow.png" id="3_tiy0k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wf8ly"]
@@ -56,7 +55,6 @@ collision_mask = 10
 motion_mode = 1
 wall_min_slide_angle = 3.14159
 script = ExtResource("1_bmllj")
-StuckArrowScene = ExtResource("2_7olxw")
 Sprite = NodePath("AnimatedSprite2D")
 CollisionShape2D = NodePath("CollisionShape2D")
 metadata/_edit_group_ = true

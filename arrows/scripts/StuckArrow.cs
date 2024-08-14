@@ -4,6 +4,7 @@ public partial class StuckArrow : StaticBody2D {
 	[Export] public Area2D PlayerDetectionArea = null!;
 	[Export] public CollisionShape2D CollisionShape = null!;
 	[Export] public CollisionShape2D PlayerDetectionShape = null!;
+	[Export] public Sprite2D Sprite = null!;
 
 	private float _remainingLifeTime;
 	private Player? _trackingPlayer;
