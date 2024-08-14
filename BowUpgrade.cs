@@ -1,7 +1,6 @@
 using Godot;
 
-namespace ArcherPlatformer;
-
+[GlobalClass]
 public partial class BowUpgrade : Upgrade {
 	private readonly PackedScene _bowScene =
 		ResourceLoader.Load<PackedScene>("res://bow.tscn");

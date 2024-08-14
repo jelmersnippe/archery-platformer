@@ -1,5 +1,6 @@
 ﻿using Godot;
 
-public abstract partial class Upgrade : Node {
+[GlobalClass]
+public abstract partial class Upgrade : Resource {
 	public abstract void Apply(Player player);
 }

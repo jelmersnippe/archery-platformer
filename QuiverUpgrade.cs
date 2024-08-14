@@ -1,5 +1,6 @@
 using Godot;
 
+[GlobalClass]
 public partial class QuiverUpgrade : Upgrade {
 	private readonly PackedScene _quiverScene =
 		ResourceLoader.Load<PackedScene>("res://quiver.tscn");
