@@ -45,8 +45,6 @@ public partial class Player : CharacterBody2D {
 	public float WallClimbGraceTime = 0.2f;
 
 	[Export] public float WallJumpGraceTime = 0.1f;
-	[Export] public float DefaultWallJumpHorizontalForce = 200f;
-	[Export] public float BoostWallJumpHorizontalForce = 300f;
 	[Export] public float WallSlideSpeed = 40f;
 
 	private bool _canWallJump;
@@ -227,9 +225,9 @@ public partial class Player : CharacterBody2D {
 
 		if (_canWallJump && Input.IsActionJustPressed("jump")) {
 			_velocity.Y = JumpVelocity;
-			_velocity.X = Mathf.Sign(wallNormal) *
-						  (holdingOppositeDirection ? MaxSpeed : MaxSpeed * (2f / 3f));
+			_velocity.X = Mathf.Sign(wallNormal) * MaxSpeed;
 			_canWallJump = false;
+			Sprite.Modulate = Colors.Red;
 			_currentState = MovementState.Airborne;
 		}
 	}
@@ -251,6 +249,7 @@ public partial class Player : CharacterBody2D {
 		Sprite.Play(horizontalDirection != 0 ? "move" : "idle");
 
 		_canWallJump = true;
+		Sprite.Modulate = Colors.White;
 		if (_timeSinceLastGroundedPosition >= TimeBetweenGroundedPositionTracking) {
 			_lastGroundedPosition = GlobalPosition;
 			_timeSinceLastGroundedPosition = 0f;
@@ -426,8 +425,7 @@ public partial class Player : CharacterBody2D {
 
 		if (_canWallJump && Input.IsActionJustPressed("jump")) {
 			_velocity.Y = JumpVelocity;
-			_velocity.X = Mathf.Sign(wallNormal) *
-						  (holdingOppositeDirection ? MaxSpeed : MaxSpeed * (2f / 3f));
+			_velocity.X = Mathf.Sign(wallNormal) * MaxSpeed;
 			_canWallJump = false;
 			_currentState = MovementState.Airborne;
 		}
