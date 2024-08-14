@@ -19,9 +19,11 @@ public partial class Player : CharacterBody2D {
 	[ExportCategory("Movement")] [Export] public float AccelerationTime = 0.3f;
 	[Export] public float DecelerationTime = 0.2f;
 	[Export] public float MaxSpeed = 300.0f;
-	[Export] public float AerialAccelerationTime = 0.2f;
+	[Export] public float AerialAccelerationTime = 0.6f;
 
-	[ExportCategory("Climbing")] [Export] public float ClimbingAccelerationTime = 0.2f;
+	[ExportCategory("Vine Climbing")] [Export]
+	public float ClimbingAccelerationTime = 0.2f;
+
 	[Export] public float ClimbingDecelerationTime = 0.2f;
 	[Export] public float ClimbingMaxSpeed = 200.0f;
 	[Export] public float MoveToVineCenterSpeed = 150f;
@@ -35,6 +37,17 @@ public partial class Player : CharacterBody2D {
 	[Export] public float CoyoteTime = 0.1f;
 	[Export] public float InputBufferTime = 0.1f;
 
+	[ExportCategory("Wall Climbing")] [Export]
+	public float WallClimbGraceTime = 0.2f;
+
+	[Export] public float WallJumpGraceTime = 0.1f;
+	[Export] public float DefaultWallJumpHorizontalForce = 200f;
+	[Export] public float BoostWallJumpHorizontalForce = 300f;
+
+	private bool _canWallJump;
+	private float _remainingWallClimbGraceTime;
+	private float _remainingWallJumpGraceTime;
+
 	private float JumpVelocity => 2f * MaxJumpHeight / JumpTimeToPeak * -1f;
 	private float JumpGravity => -2f * MaxJumpHeight / (JumpTimeToPeak * JumpTimeToPeak) * -1f;
 	private float FallGravity => -2f * MaxJumpHeight / (JumpTimeToGround * JumpTimeToGround) * -1f;
@@ -45,8 +58,7 @@ public partial class Player : CharacterBody2D {
 
 	private bool _isClimbing;
 
-	[ExportCategory("KillZone")]
-	[Export] public float KillZoneControlLossTime = 0.5f;
+	[ExportCategory("KillZone")] [Export] public float KillZoneControlLossTime = 0.5f;
 	[Export] public float TimeBetweenGroundedPositionTracking = 2f;
 	private Vector2 _lastGroundedPosition;
 	private bool _inControl = true;
@@ -55,12 +67,12 @@ public partial class Player : CharacterBody2D {
 	public override void _Ready() {
 		GrabArea.AreaEntered += GrabAreaOnAreaEntered;
 		GrabArea.AreaExited += GrabAreaOnAreaExited;
-		
+
 		InteractableArea.AreaEntered += InteractableAreaOnAreaEntered;
 		InteractableArea.AreaExited += InteractableAreaOnAreaExited;
 		_lastGroundedPosition = GlobalPosition;
 	}
-	
+
 	private void InteractableAreaOnAreaExited(Area2D area) {
 		if (area == _interactableInRange) {
 			_interactableInRange.ShowInteractable(false);
@@ -97,9 +109,9 @@ public partial class Player : CharacterBody2D {
 		else {
 			AddChild(quiver);
 			quiver.ArrowTypeChanged += QuiverOnArrowTypeChanged;
-			
+
 			EmitSignal(SignalName.QuiverEquipped, quiver);
-			
+
 			quiver?.NotifyArrowChanges();
 			quiver?.NotifyArrowTypeChanged();
 		}
@@ -117,7 +129,7 @@ public partial class Player : CharacterBody2D {
 	private void GrabAreaOnAreaEntered(Area2D area) {
 		_vineInRange = area;
 	}
-	
+
 	private void InteractableAreaOnAreaEntered(Area2D area) {
 		if (area is Interactable interactable) {
 			_interactableInRange?.ShowInteractable(false);
@@ -136,8 +148,10 @@ public partial class Player : CharacterBody2D {
 		Bow?.CancelArrow();
 	}
 
+	private bool _isOnWall;
+
 	private void HandleAir(float delta) {
-		if (IsOnFloor() || _isClimbing) {
+		if (IsOnFloor() || _isClimbing || _isOnWall) {
 			return;
 		}
 
@@ -151,6 +165,7 @@ public partial class Player : CharacterBody2D {
 			_velocity.Y *= JumpDecelerationOnRelease;
 		}
 
+
 		if (Input.IsActionJustPressed("jump")) {
 			if (_remainingCoyoteTime > 0) {
 				_velocity.Y = JumpVelocity;
@@ -162,8 +177,58 @@ public partial class Player : CharacterBody2D {
 
 		_velocity.Y = Mathf.Min(_velocity.Y, TerminalVelocity);
 
-		MoveHorizontal(delta);
+		float directionX = MoveHorizontal(delta);
+		float wallNormal = GetWallNormal().X;
+		bool isPerformingWallClimbInput =
+			_velocity.Y >= 0 && IsOnWall() && Mathf.Sign(directionX) == -Mathf.Sign(wallNormal);
+		if (isPerformingWallClimbInput) {
+			_velocity = Vector2.Zero;
+			_isOnWall = true;
+			return;
+		}
+
 		GrabVine();
+	}
+
+	private void HandleWallMovement(float delta) {
+		if (!_isOnWall) {
+			return;
+		}
+
+		float directionX = MoveHorizontal(delta);
+
+		float wallNormal = GetWallNormal().X;
+		bool isPerformingWallClimbInput =
+			_velocity.Y >= 0 && IsOnWall() && Mathf.Sign(directionX) == -Mathf.Sign(wallNormal);
+
+		if (!isPerformingWallClimbInput && (_remainingWallClimbGraceTime <= 0 || _remainingWallJumpGraceTime <= 0)) {
+			GD.Print(_remainingWallClimbGraceTime);
+			GD.Print(_remainingWallJumpGraceTime);
+			_isOnWall = false;
+			return;
+		}
+
+		if (isPerformingWallClimbInput) {
+			_remainingWallClimbGraceTime = WallClimbGraceTime;
+			_remainingWallJumpGraceTime = WallJumpGraceTime;
+		}
+
+		_velocity = Vector2.Zero;
+
+		bool holdingOppositeDirection = Mathf.Sign(directionX) == Mathf.Sign(wallNormal);
+		if (holdingOppositeDirection) {
+			_remainingWallJumpGraceTime -= delta;
+		}
+
+		_remainingWallClimbGraceTime -= delta;
+
+		if (_canWallJump && Input.IsActionJustPressed("jump")) {
+			_velocity.Y = JumpVelocity;
+			_velocity.X = Mathf.Sign(wallNormal) *
+						  (holdingOppositeDirection ? MaxSpeed : MaxSpeed * (2f / 3f));
+			_isOnWall = false;
+			_canWallJump = false;
+		}
 	}
 
 	private void GrabVine() {
@@ -177,11 +242,12 @@ public partial class Player : CharacterBody2D {
 			return;
 		}
 
+		_canWallJump = true;
 		if (_timeSinceLastGroundedPosition >= TimeBetweenGroundedPositionTracking) {
 			_lastGroundedPosition = GlobalPosition;
 			_timeSinceLastGroundedPosition = 0f;
 		}
-		
+
 		_remainingCoyoteTime = CoyoteTime;
 		_velocity.Y = 0;
 
@@ -259,13 +325,13 @@ public partial class Player : CharacterBody2D {
 
 	public override void _PhysicsProcess(double delta) {
 		_remainingInputBufferTime -= (float)delta;
-		
+
 		_timeSinceLastGroundedPosition += (float)delta;
-		
+
 		if (!_inControl) {
 			return;
 		}
-		
+
 		_velocity = Velocity;
 
 		RotationPoint.Rotation = RotationPoint.GlobalPosition.DirectionTo(GetGlobalMousePosition()).Angle();
@@ -273,6 +339,7 @@ public partial class Player : CharacterBody2D {
 		HandleAir((float)delta);
 		HandleGrounded((float)delta);
 		HandleClimbing((float)delta);
+		HandleWallMovement((float)delta);
 
 		Velocity = _velocity;
 		MoveAndSlide();

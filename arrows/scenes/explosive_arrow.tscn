@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://hkvea43osh4m"]
 
 [ext_resource type="Script" path="res://arrows/scripts/ImpactEffectArrow.cs" id="1_kxkib"]
-[ext_resource type="PackedScene" uid="uid://cghtbxh8ohv5y" path="res://explosion.tscn" id="2_f8vvn"]
+[ext_resource type="PackedScene" path="res://explosion.tscn" id="2_f8vvn"]
 [ext_resource type="Texture2D" uid="uid://cjlpc2mbegfan" path="res://sprites/exploding_arrow.png" id="2_h6bmp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wf8ly"]
