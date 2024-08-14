@@ -20,6 +20,7 @@ public partial class Player : CharacterBody2D {
 	[Export] public float DecelerationTime = 0.2f;
 	[Export] public float MaxSpeed = 300.0f;
 	[Export] public float AerialAccelerationTime = 0.6f;
+	[Export] public float AerialDecelerationTime = 0.5f;
 
 	[ExportCategory("Vine Climbing")] [Export]
 	public float ClimbingAccelerationTime = 0.2f;
@@ -43,6 +44,7 @@ public partial class Player : CharacterBody2D {
 	[Export] public float WallJumpGraceTime = 0.1f;
 	[Export] public float DefaultWallJumpHorizontalForce = 200f;
 	[Export] public float BoostWallJumpHorizontalForce = 300f;
+	[Export] public float WallSlideSpeed = 20f;
 
 	private bool _canWallJump;
 	private float _remainingWallClimbGraceTime;
@@ -57,6 +59,16 @@ public partial class Player : CharacterBody2D {
 	private float _remainingInputBufferTime;
 
 	private bool _isClimbing;
+
+	private enum MovementState {
+		Grounded,
+		Airborne,
+		WallGrab,
+		WallSlide,
+		Climbing
+	}
+
+	private MovementState _currentState = MovementState.Grounded;
 
 	[ExportCategory("KillZone")] [Export] public float KillZoneControlLossTime = 0.5f;
 	[Export] public float TimeBetweenGroundedPositionTracking = 2f;
@@ -148,13 +160,7 @@ public partial class Player : CharacterBody2D {
 		Bow?.CancelArrow();
 	}
 
-	private bool _isOnWall;
-
 	private void HandleAir(float delta) {
-		if (IsOnFloor() || _isClimbing || _isOnWall) {
-			return;
-		}
-
 		CancelArrow();
 
 		_remainingCoyoteTime -= delta;
@@ -182,19 +188,11 @@ public partial class Player : CharacterBody2D {
 		bool isPerformingWallClimbInput =
 			_velocity.Y >= 0 && IsOnWall() && Mathf.Sign(directionX) == -Mathf.Sign(wallNormal);
 		if (isPerformingWallClimbInput) {
-			_velocity = Vector2.Zero;
-			_isOnWall = true;
-			return;
+			_currentState = MovementState.WallGrab;
 		}
-
-		GrabVine();
 	}
 
-	private void HandleWallMovement(float delta) {
-		if (!_isOnWall) {
-			return;
-		}
-
+	private void HandleWallGrab(float delta) {
 		float directionX = MoveHorizontal(delta);
 
 		float wallNormal = GetWallNormal().X;
@@ -202,9 +200,13 @@ public partial class Player : CharacterBody2D {
 			_velocity.Y >= 0 && IsOnWall() && Mathf.Sign(directionX) == -Mathf.Sign(wallNormal);
 
 		if (!isPerformingWallClimbInput && (_remainingWallClimbGraceTime <= 0 || _remainingWallJumpGraceTime <= 0)) {
-			GD.Print(_remainingWallClimbGraceTime);
-			GD.Print(_remainingWallJumpGraceTime);
-			_isOnWall = false;
+			if (_remainingWallClimbGraceTime <= 0) {
+				_currentState = MovementState.WallSlide;
+			}
+			else {
+				_currentState = MovementState.Airborne;
+			}
+
 			return;
 		}
 
@@ -226,8 +228,8 @@ public partial class Player : CharacterBody2D {
 			_velocity.Y = JumpVelocity;
 			_velocity.X = Mathf.Sign(wallNormal) *
 						  (holdingOppositeDirection ? MaxSpeed : MaxSpeed * (2f / 3f));
-			_isOnWall = false;
 			_canWallJump = false;
+			_currentState = MovementState.Airborne;
 		}
 	}
 
@@ -239,8 +241,13 @@ public partial class Player : CharacterBody2D {
 
 	private void HandleGrounded(float delta) {
 		if (!IsOnFloor()) {
+			_currentState = MovementState.Airborne;
 			return;
 		}
+
+		float horizontalDirection = MoveHorizontal(delta);
+
+		Sprite.Play(horizontalDirection != 0 ? "move" : "idle");
 
 		_canWallJump = true;
 		if (_timeSinceLastGroundedPosition >= TimeBetweenGroundedPositionTracking) {
@@ -251,34 +258,20 @@ public partial class Player : CharacterBody2D {
 		_remainingCoyoteTime = CoyoteTime;
 		_velocity.Y = 0;
 
-		if (_remainingInputBufferTime > 0) {
+		if (_remainingInputBufferTime > 0 || Input.IsActionJustPressed("jump")) {
 			_velocity.Y = JumpVelocity;
+			_currentState = MovementState.Airborne;
 		}
-
-		if (Input.IsActionJustPressed("jump")) {
-			_velocity.Y = JumpVelocity;
-		}
-
-		float horizontalDirection = MoveHorizontal(delta);
-
-		Sprite.Play(horizontalDirection != 0 ? "move" : "idle");
-
-		if (Input.IsActionJustPressed("shoot")) {
-			Arrow? arrow = Quiver?.GetArrow();
-			if (arrow != null) {
-				Bow?.ReadyArrow(arrow);
-			}
-		}
-
-		if (Input.IsActionJustReleased("shoot")) {
-			Bow?.ReleaseArrow();
-		}
-
-		GrabVine();
 	}
 
 	private void HandleClimbing(float delta) {
-		if (!_isClimbing || _vineInRange == null) {
+		if (_vineInRange == null) {
+			_currentState = MovementState.Airborne;
+			return;
+		}
+
+		if (!IsInstanceValid(_vineInRange)) {
+			_currentState = MovementState.Airborne;
 			return;
 		}
 
@@ -304,7 +297,7 @@ public partial class Player : CharacterBody2D {
 
 		if (Input.IsActionJustPressed("jump")) {
 			_velocity.Y = JumpVelocity;
-			_isClimbing = false;
+			_currentState = MovementState.Airborne;
 		}
 	}
 
@@ -317,7 +310,8 @@ public partial class Player : CharacterBody2D {
 			Sprite.FlipH = direction < 0;
 		}
 		else {
-			_velocity.X = Mathf.MoveToward(Velocity.X, 0, MaxSpeed / DecelerationTime * delta);
+			_velocity.X = Mathf.MoveToward(Velocity.X, 0,
+				MaxSpeed / (IsOnFloor() ? DecelerationTime : AerialDecelerationTime) * delta);
 		}
 
 		return direction;
@@ -336,10 +330,27 @@ public partial class Player : CharacterBody2D {
 
 		RotationPoint.Rotation = RotationPoint.GlobalPosition.DirectionTo(GetGlobalMousePosition()).Angle();
 
-		HandleAir((float)delta);
-		HandleGrounded((float)delta);
-		HandleClimbing((float)delta);
-		HandleWallMovement((float)delta);
+		if (IsOnFloor()) {
+			_currentState = MovementState.Grounded;
+		}
+
+		switch (_currentState) {
+			case MovementState.Grounded:
+				HandleGrounded((float)delta);
+				break;
+			case MovementState.Airborne:
+				HandleAir((float)delta);
+				break;
+			case MovementState.WallGrab:
+				HandleWallGrab((float)delta);
+				break;
+			case MovementState.WallSlide:
+				HandleWallSlide((float)delta);
+				break;
+			case MovementState.Climbing:
+				HandleClimbing((float)delta);
+				break;
+		}
 
 		Velocity = _velocity;
 		MoveAndSlide();
@@ -354,6 +365,56 @@ public partial class Player : CharacterBody2D {
 
 		if (Input.IsActionJustPressed("next_arrow_type")) {
 			Quiver?.ChangeArrowType(1);
+		}
+
+		if (_currentState == MovementState.Grounded) {
+			if (Input.IsActionJustPressed("shoot")) {
+				Arrow? arrow = Quiver?.GetArrow();
+				if (arrow != null) {
+					Bow?.ReadyArrow(arrow);
+				}
+			}
+
+			if (Input.IsActionJustReleased("shoot")) {
+				Bow?.ReleaseArrow();
+			}
+		}
+
+		if (_currentState == MovementState.Grounded || _currentState == MovementState.Airborne) {
+			GrabVine();
+		}
+	}
+
+	private void HandleWallSlide(float delta) {
+		float directionX = MoveHorizontal(delta);
+
+		float wallNormal = GetWallNormal().X;
+		bool isPerformingWallClimbInput =
+			_velocity.Y >= 0 && IsOnWall() && Mathf.Sign(directionX) == -Mathf.Sign(wallNormal);
+
+		if (isPerformingWallClimbInput) {
+			_currentState = MovementState.WallGrab;
+			return;
+		}
+
+		if (_remainingWallJumpGraceTime <= 0) {
+			_currentState = MovementState.Airborne;
+			return;
+		}
+
+		_velocity.Y = WallSlideSpeed;
+		_velocity.X = 0f;
+
+		bool holdingOppositeDirection = Mathf.Sign(directionX) == Mathf.Sign(wallNormal);
+		_remainingWallJumpGraceTime =
+			holdingOppositeDirection ? _remainingWallJumpGraceTime - delta : WallJumpGraceTime;
+
+		if (_canWallJump && Input.IsActionJustPressed("jump")) {
+			_velocity.Y = JumpVelocity;
+			_velocity.X = Mathf.Sign(wallNormal) *
+						  (holdingOppositeDirection ? MaxSpeed : MaxSpeed * (2f / 3f));
+			_canWallJump = false;
+			_currentState = MovementState.Airborne;
 		}
 	}
 
