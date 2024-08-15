@@ -4,7 +4,8 @@ public partial class Camera : Camera2D {
 	private Player? _target;
 	[Export] public Area2D Area2D = null!;
 	[Export] public float SmoothingX = 0.06f;
-	[Export] public float SmoothingY = 0.02f;
+	[Export] public float SmoothingYJumping = 0.02f;
+	[Export] public float SmoothingYFalling = 0.08f;
 	[Export] public float LookAheadX = 48f;
 	[Export] public float FallingLookAheadY = 96f;
 	[Export] public float DirectionFlipDeadZone = 128f;
@@ -61,10 +62,10 @@ public partial class Camera : Camera2D {
 			_lookAheadDirection = targetDirection;
 		}
 
-		var targetPosition = _target.GlobalPosition +  new Vector2(_lookAheadDirection * LookAheadX, _target.Velocity.Y > 0 ? FallingLookAheadY : 0f);
+		var targetPosition = _target.GlobalPosition + new Vector2(_lookAheadDirection * LookAheadX, _target.Velocity.Y > 0 ?  FallingLookAheadY : 0f);
 		GlobalPosition = new Vector2() {
 			X = Mathf.Lerp(GlobalPosition.X, targetPosition.X, SmoothingX),
-			Y = Mathf.Lerp(GlobalPosition.Y, targetPosition.Y, SmoothingY),
+			Y = Mathf.Lerp(GlobalPosition.Y, targetPosition.Y, _target.Velocity.Y > 0 ? SmoothingYFalling : SmoothingYJumping),
 		};
 	}
 }

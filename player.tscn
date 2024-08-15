@@ -89,6 +89,7 @@ RotationPoint = NodePath("RotationPoint")
 BowOffset = NodePath("RotationPoint/Offset")
 GrabArea = NodePath("GrabArea")
 InteractableArea = NodePath("InteractableArea")
+CanUseArcheryStates = [0, 1, 2, 3]
 AccelerationTime = 0.2
 DecelerationTime = 0.1
 AerialAccelerationTime = 0.4

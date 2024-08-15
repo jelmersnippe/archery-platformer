@@ -1,4 +1,5 @@
 using Godot;
+using Godot.Collections;
 
 public partial class Player : CharacterBody2D {
 	[Signal]
@@ -15,7 +16,9 @@ public partial class Player : CharacterBody2D {
 
 	[ExportCategory("Archery")] [Export] public Bow? Bow;
 	[Export] public Quiver? Quiver;
-	[Export] public bool ArcheryUsableWhenNotGrounded = true;
+	[Export] public Array<MovementState> CanUseArcheryStates = new () {
+		MovementState.Grounded
+	};
 	[Export] public float DrawHorizontalSlowdown = 0.4f;
 	[Export] public float DrawVerticalSlowdown = 0.6f;
 
@@ -61,7 +64,7 @@ public partial class Player : CharacterBody2D {
 
 	private bool _isClimbing;
 
-	private enum MovementState {
+	public enum MovementState {
 		Grounded,
 		Airborne,
 		WallGrab,
@@ -330,10 +333,6 @@ public partial class Player : CharacterBody2D {
 			_currentState = MovementState.Grounded;
 		}
 
-		if (!ArcheryUsableWhenNotGrounded && !IsOnFloor()) {
-			CancelArrow();
-		}
-
 		switch (_currentState) {
 			case MovementState.Grounded:
 				HandleGrounded((float)delta);
@@ -367,7 +366,10 @@ public partial class Player : CharacterBody2D {
 			Quiver?.ChangeArrowType(1);
 		}
 
-		if (ArcheryUsableWhenNotGrounded || _currentState == MovementState.Grounded) {
+		if (!CanUseArcheryStates.Contains(_currentState)) {
+			CancelArrow();
+		}
+		else {
 			if (Input.IsActionJustPressed("shoot")) {
 				Arrow? arrow = Quiver?.GetArrow();
 				if (arrow != null) {
