@@ -5,7 +5,7 @@ public partial class QuiverUpgrade : Upgrade {
 	private readonly PackedScene _quiverScene =
 		ResourceLoader.Load<PackedScene>("res://quiver.tscn");
 
-	public override void Apply(Player player) {
+	protected override void Apply(Player player) {
 		var quiver = _quiverScene.Instantiate<Quiver>();
 		player.Equip(quiver);
 	}

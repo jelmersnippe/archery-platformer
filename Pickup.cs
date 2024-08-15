@@ -13,6 +13,6 @@ public partial class Pickup : Node2D {
 	}
 
 	private void InteractableOnInteracted(Player player) {
-		Upgrade.Apply(player);
+		Upgrade.Use(player);
 	}
 }
