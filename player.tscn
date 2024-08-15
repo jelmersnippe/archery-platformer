@@ -1,9 +1,10 @@
-[gd_scene load_steps=15 format=3 uid="uid://dl0p8dvvo8wa6"]
+[gd_scene load_steps=16 format=3 uid="uid://dl0p8dvvo8wa6"]
 
 [ext_resource type="Script" path="res://Player.cs" id="1_2qic4"]
 [ext_resource type="Texture2D" uid="uid://bk5cpkkag2b6y" path="res://sprites/player_idle.png" id="3_nldyr"]
 [ext_resource type="Texture2D" uid="uid://bg55sr4q1ovhj" path="res://sprites/player_jump.png" id="4_lmhu6"]
 [ext_resource type="Texture2D" uid="uid://7rwxoh5nclqr" path="res://sprites/player_walk.png" id="4_tf127"]
+[ext_resource type="Script" path="res://Knockable.cs" id="5_yw58q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nu74t"]
 size = Vector2(28, 30)
@@ -91,7 +92,6 @@ InteractableArea = NodePath("InteractableArea")
 AccelerationTime = 0.2
 DecelerationTime = 0.1
 AerialAccelerationTime = 0.4
-AerialDecelerationTime = 0.3
 KillZoneControlLossTime = 0.3
 TimeBetweenGroundedPositionTracking = 1.0
 metadata/_edit_group_ = true
@@ -124,3 +124,6 @@ shape = SubResource("CircleShape2D_eqi88")
 
 [node name="Offset" type="Node2D" parent="RotationPoint"]
 position = Vector2(20, 0)
+
+[node name="Knockable" type="Node" parent="."]
+script = ExtResource("5_yw58q")

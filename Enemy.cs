@@ -20,7 +20,7 @@ public partial class Enemy : CharacterBody2D
 		Vector2 direction = InputComponent.GetDirection();
 		if (direction != Vector2.Zero && IsOnFloor())
 		{
-			velocity.X = direction.X * Speed;
+			velocity.X = Mathf.MoveToward(Velocity.X, direction.X * Speed, Speed);
 		}
 		else
 		{

@@ -74,7 +74,6 @@ public partial class Player : CharacterBody2D {
 	[ExportCategory("KillZone")] [Export] public float KillZoneControlLossTime = 0.5f;
 	[Export] public float TimeBetweenGroundedPositionTracking = 2f;
 	private Vector2 _lastGroundedPosition;
-	private bool _inControl = true;
 	private float _timeSinceLastGroundedPosition;
 
 	public override void _Ready() {
@@ -323,10 +322,6 @@ public partial class Player : CharacterBody2D {
 
 		_timeSinceLastGroundedPosition += (float)delta;
 
-		if (!_inControl) {
-			return;
-		}
-
 		_velocity = Velocity;
 
 		RotationPoint.Rotation = RotationPoint.GlobalPosition.DirectionTo(GetGlobalMousePosition()).Angle();
@@ -357,17 +352,7 @@ public partial class Player : CharacterBody2D {
 				break;
 		}
 
-		float availableMaxHorizontalSpeed = MaxSpeed;
-		float availableMaxVerticalSpeed = JumpVelocity;
-		if (Bow != null && Bow.HasArrowDrawn()) {
-			availableMaxHorizontalSpeed *= DrawHorizontalSlowdown;
-			availableMaxVerticalSpeed *= DrawVerticalSlowdown;
-		}
-
-		_velocity.X = Mathf.Clamp(_velocity.X, -availableMaxHorizontalSpeed, availableMaxHorizontalSpeed);
-		_velocity.Y = Mathf.Max(_velocity.Y, availableMaxVerticalSpeed);
 		Velocity = _velocity;
-
 		MoveAndSlide();
 
 		if (Input.IsActionJustPressed("recall")) {
@@ -443,9 +428,5 @@ public partial class Player : CharacterBody2D {
 
 	public void HitKillZone() {
 		GlobalPosition = _lastGroundedPosition;
-		_inControl = false;
-
-		SceneTreeTimer? timer = GetTree().CreateTimer(KillZoneControlLossTime);
-		timer.Timeout += () => _inControl = true;
 	}
 }
