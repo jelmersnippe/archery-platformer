@@ -7,16 +7,10 @@ public partial class Rock : Node2D {
 	
 	public override void _Ready()
 	{
-		if (GlobalTriggerState.GetTriggerState(Trigger)) {
-			QueueFree();
-			return;
-		}
-		
 		Area.AreaEntered += OnAreaEntered; 
 	}
 
 	private void OnAreaEntered(Area2D area) {
 		GlobalTriggerState.SetTriggerState(Trigger, true);
-		QueueFree();
 	}
 }

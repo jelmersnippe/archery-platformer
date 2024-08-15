@@ -1,9 +1,9 @@
 [gd_scene load_steps=7 format=3 uid="uid://fg32aticxo6x"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="1_vw8t4"]
-[ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://scene_door.tscn" id="2_3jdy0"]
-[ext_resource type="PackedScene" uid="uid://d3gu3jio3rqym" path="res://bow_pickup.tscn" id="3_jdal2"]
-[ext_resource type="PackedScene" uid="uid://dba6uv67l33se" path="res://quiver_pickup.tscn" id="4_ewrxo"]
+[ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://environment/scene_door.tscn" id="2_3jdy0"]
+[ext_resource type="PackedScene" path="res://bow_pickup.tscn" id="3_jdal2"]
+[ext_resource type="PackedScene" path="res://quiver_pickup.tscn" id="4_ewrxo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s1rd0"]
 size = Vector2(5, 96)

@@ -10,6 +10,7 @@ public abstract partial class Arrow : CharacterBody2D {
 	[Export] public CollisionShape2D CollisionShape2D = null!;
 	[Export] public float Gravity = 20f;
 	[Export] public float StuckArrowLifeTime;
+	[Export] public bool TransitionsToStuck = true;
 	private PackedScene _stuckArrowScene = ResourceLoader.Load<PackedScene>("res://arrows/scenes/stuck_arrow.tscn");
 
 	private bool _collided;
@@ -59,11 +60,16 @@ public abstract partial class Arrow : CharacterBody2D {
 			}
 
 			Vector2 normal = collision.GetNormal();
-			Sprite.AnimationFinished += () => {
-				var stuckArrow = SpawnStuckArrow(Mathf.Abs(normal.X) > Mathf.Abs(normal.Y));
-				Impact(collision, stuckArrow);
-				QueueFree();
-			};
+			if (TransitionsToStuck) {
+				Sprite.AnimationFinished += () => {
+					SpawnStuckArrow(Mathf.Abs(normal.X) > Mathf.Abs(normal.Y));
+					Impact(collision);
+				};
+			}
+			else {
+				Impact(collision);
+			}
+			QueueFree();
 			return;
 		}
 
@@ -86,7 +92,7 @@ public abstract partial class Arrow : CharacterBody2D {
 		_released = true;
 	}
 
-	protected abstract void Impact(KinematicCollision2D collision, StuckArrow stuckArrow);
+	protected abstract void Impact(KinematicCollision2D collision);
 	
 	private StuckArrow SpawnStuckArrow(bool isSolid) {
 		var stuckArrow = _stuckArrowScene.Instantiate<StuckArrow>();

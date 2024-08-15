@@ -1,7 +1,7 @@
 [gd_scene load_steps=13 format=3 uid="uid://bq4j1judd8abk"]
 
 [ext_resource type="Script" path="res://arrows/scripts/ImpactEffectArrow.cs" id="1_fq3rc"]
-[ext_resource type="PackedScene" uid="uid://gs1fl2ybqkjf" path="res://auto_growing_vine.tscn" id="2_kueul"]
+[ext_resource type="PackedScene" uid="uid://gs1fl2ybqkjf" path="res://environment/auto_growing_vine.tscn" id="2_kueul"]
 [ext_resource type="Script" path="res://Filters/CollisionNormalFilter.cs" id="3_5dfyy"]
 [ext_resource type="Texture2D" uid="uid://dlk8x1eps8ikt" path="res://sprites/vine_arrow.png" id="4_7r2tv"]
 

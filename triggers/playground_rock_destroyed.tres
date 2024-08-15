@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="Trigger" load_steps=2 format=3 uid="uid://c16bwqt5wgvg1"]
+
+[ext_resource type="Script" path="res://triggers/Trigger.cs" id="1_68som"]
+
+[resource]
+script = ExtResource("1_68som")
+Name = "playground_rock_destroyed"

@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://d0mtphymm7xht"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="1_q8pdb"]
-[ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://scene_door.tscn" id="2_ghrmb"]
+[ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://environment/scene_door.tscn" id="2_ghrmb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_s1rd0"]
 size = Vector2(5, 96)

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://CameraZone.cs" id="1_k7w12"]
 [ext_resource type="Texture2D" uid="uid://bwh6blxq2wmr2" path="res://sprites/tilemap.png" id="3_joeja"]
-[ext_resource type="Script" path="res://SceneDoor.cs" id="8_ukkk7"]
+[ext_resource type="Script" path="res://environment/SceneDoor.cs" id="8_ukkk7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6q5cl"]
 size = Vector2(870, 476)

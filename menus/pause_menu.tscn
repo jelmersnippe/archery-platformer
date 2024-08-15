@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cvqwe2ls1lhwg"]
 
-[ext_resource type="Script" path="res://PauseMenu.cs" id="1_qnpwe"]
+[ext_resource type="Script" path="res://menus/PauseMenu.cs" id="1_qnpwe"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 layer = 10

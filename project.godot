@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Archer Platformer"
-run/main_scene="res://main_menu.tscn"
+run/main_scene="res://menus/main_menu.tscn"
 config/features=PackedStringArray("4.2", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -19,7 +19,7 @@ config/icon="res://icon.svg"
 
 PauseController="*res://PauseController.cs"
 SceneTransitionHandler="*res://SceneTransitionHandler.cs"
-PauseMenu="*res://pause_menu.tscn"
+PauseMenu="*res://menus/pause_menu.tscn"
 Hud="*res://hud.tscn"
 Camera="*res://camera.tscn"
 

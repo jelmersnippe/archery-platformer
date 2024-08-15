@@ -57,9 +57,9 @@ motion_mode = 1
 wall_min_slide_angle = 3.14159
 script = ExtResource("1_kxkib")
 ImpactScene = ExtResource("2_f8vvn")
-DestroyStuckArrow = true
 Sprite = NodePath("AnimatedSprite2D")
 CollisionShape2D = NodePath("CollisionShape2D")
+TransitionsToStuck = false
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

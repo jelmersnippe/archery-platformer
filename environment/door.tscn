@@ -1,13 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://cp7dq1ufuuj4a"]
+[gd_scene load_steps=3 format=3 uid="uid://bpm6myq1xakxq"]
+
+[ext_resource type="Script" path="res://environment/Door.cs" id="1_c58p3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g3bmf"]
 size = Vector2(40, 40)
 
-[node name="Floor" type="StaticBody2D"]
+[node name="Door" type="StaticBody2D"]
 position = Vector2(578, 530)
-scale = Vector2(10, 1)
+scale = Vector2(1, 4)
 collision_layer = 2
 collision_mask = 0
+script = ExtResource("1_c58p3")
 metadata/_edit_group_ = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
@@ -22,7 +25,7 @@ offset_right = 20.0
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.473976, 0.473976, 0.473976, 1)
+color = Color(0.646595, 0.410067, 0.242301, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

@@ -2,8 +2,7 @@ using Godot;
 
 public partial class Door : StaticBody2D {
 	private Vector2 _initialPosition;
-	[Export] public CollisionShape2D CollisionShape2D;
-	[Export] public Trigger Trigger;
+	[Export] public Trigger Trigger = null!;
 
 	public override void _EnterTree() {
 		GlobalTriggerState.TriggerChanged += OnTriggerChanged;

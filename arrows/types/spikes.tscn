@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://d0oahqi1hma74"]
 
-[ext_resource type="Script" path="res://KillZone.cs" id="1_jpljr"]
+[ext_resource type="Script" path="res://environment/KillZone.cs" id="1_jpljr"]
 [ext_resource type="Texture2D" uid="uid://bru84ewnwf2xu" path="res://sprites/tile_set_aleatorio.png" id="2_127b5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g601j"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://t368vy0v0d5m"]
 
-[ext_resource type="Script" path="res://Enemy.cs" id="1_fahg3"]
+[ext_resource type="Script" path="res://enemies/Enemy.cs" id="1_fahg3"]
 [ext_resource type="Script" path="res://PatrollingInputComponent.cs" id="2_mn1gy"]
 [ext_resource type="Script" path="res://Knockable.cs" id="3_t52rg"]
 

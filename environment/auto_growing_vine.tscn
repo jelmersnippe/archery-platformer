@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://gs1fl2ybqkjf"]
 
-[ext_resource type="Script" path="res://AutoGrowingVine.cs" id="1_ju32p"]
+[ext_resource type="Script" path="res://environment/AutoGrowingVine.cs" id="1_ju32p"]
 [ext_resource type="Texture2D" uid="uid://bkeprsn8kdxrq" path="res://sprites/vine.png" id="2_h5mfv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d3cqm"]
