@@ -9,6 +9,8 @@ size = Vector2(16, 16)
 zoom = Vector2(1.7, 1.7)
 script = ExtResource("1_y3lri")
 Area2D = NodePath("Area2D")
+SmoothingX = 0.04
+LookAheadX = 96.0
 
 [node name="Area2D" type="Area2D" parent="."]
 collision_layer = 0
