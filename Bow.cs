@@ -4,8 +4,8 @@ public partial class Bow : Node2D {
 	[Export] public AnimationPlayer BowAnimationPlayer = null!;
 	[Export] public Node2D FiringPoint = null!;
 	[Export] public float MaxDrawTime = 1f;
-	[Export] public float MinArrowVelocity = 400f;
-	[Export] public float MaxArrowVelocity = 1000f;
+	[Export] public float MinArrowVelocity = 800f;
+	[Export] public float MaxArrowVelocity = 1600f;
 	[Export] public TrajectoryLine TrajectoryLine = null!;
 
 	private float _drawTime;

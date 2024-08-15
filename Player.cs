@@ -62,8 +62,6 @@ public partial class Player : CharacterBody2D {
 	private float _remainingCoyoteTime = 0.1f;
 	private float _remainingInputBufferTime;
 
-	private bool _isClimbing;
-
 	public enum MovementState {
 		Grounded,
 		Airborne,
@@ -98,7 +96,7 @@ public partial class Player : CharacterBody2D {
 	private void GrabAreaOnAreaExited(Area2D area) {
 		if (area == _vineInRange) {
 			_vineInRange = null;
-			_isClimbing = false;
+			_currentState = MovementState.Airborne;
 		}
 	}
 
@@ -236,8 +234,12 @@ public partial class Player : CharacterBody2D {
 	}
 
 	private void GrabVine() {
-		if (!_isClimbing && _vineInRange != null && Input.IsActionPressed("move_up")) {
-			_isClimbing = true;
+		if (_vineInRange != null && Input.IsActionPressed("move_up")) {
+			if (IsOnFloor()) {
+				// Move slightly off ground
+				Position += new Vector2(0, -4);
+			}
+			_currentState = MovementState.Climbing;
 		}
 	}
 
@@ -286,10 +288,10 @@ public partial class Player : CharacterBody2D {
 				Mathf.MoveToward(GlobalPosition.X, _vineInRange.GlobalPosition.X, MoveToVineCenterSpeed * delta),
 				GlobalPosition.Y);
 
-		float direction = Input.GetAxis("move_up", "move_down");
+		float verticalDirection = Input.GetAxis("move_up", "move_down");
 
-		if (direction != 0) {
-			_velocity.Y = Mathf.MoveToward(Velocity.Y, ClimbingMaxSpeed * direction,
+		if (verticalDirection != 0) {
+			_velocity.Y = Mathf.MoveToward(Velocity.Y, ClimbingMaxSpeed * verticalDirection,
 				ClimbingMaxSpeed / ClimbingAccelerationTime * delta);
 		}
 		else {
@@ -298,6 +300,7 @@ public partial class Player : CharacterBody2D {
 
 		if (Input.IsActionJustPressed("jump")) {
 			_velocity.Y = JumpVelocity;
+			_velocity.X = MoveHorizontal(delta) * MaxSpeed;
 			_currentState = MovementState.Airborne;
 		}
 	}

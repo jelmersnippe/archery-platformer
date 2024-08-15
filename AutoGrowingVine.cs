@@ -9,6 +9,12 @@ public partial class AutoGrowingVine : Area2D {
 	private float _currentLength = 0;
 	private bool _collided;
 
+	private RectangleShape2D shape = new RectangleShape2D();
+
+	public override void _Ready() {
+		CollisionShape.Shape = shape;
+	}
+
 	public override void _Process(double delta) {
 		if (_collided) {
 			return;
@@ -26,9 +32,7 @@ public partial class AutoGrowingVine : Area2D {
 			Vector2.Zero, new(0, _currentLength)
 		};
 		
-		CollisionShape.Position = new Vector2(Display.Width, _currentLength / 2f);
-		var shape = new RectangleShape2D();
+		CollisionShape.Position = new Vector2(0, _currentLength / 2f);
 		shape.Size = new Vector2(Display.Width, _currentLength);
-		CollisionShape.Shape = shape;
 	}
 }
