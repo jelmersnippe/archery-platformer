@@ -1,5 +1,5 @@
+using System.Runtime.InteropServices;
 using Godot;
-using System;
 
 public partial class Enemy : CharacterBody2D
 {
@@ -7,6 +7,15 @@ public partial class Enemy : CharacterBody2D
 	private readonly float _gravity = ProjectSettings.GetSetting("physics/2d/default_gravity").AsSingle();
 
 	[Export] public InputComponent InputComponent = null!;
+	[Export] public HealthComponent HealthComponent = null!;
+	[Export] public HurtboxComponent HurtboxComponent = null!;
+
+	public override void _Ready() {
+		HealthComponent.Died += QueueFree;
+		HurtboxComponent.Hit += (component, direction) => {
+			HealthComponent.TakeDamage(component.ContactDamage);
+		};
+	}
 
 	public override void _PhysicsProcess(double delta)
 	{

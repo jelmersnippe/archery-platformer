@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctviuf5nrjo61"]
+
+[ext_resource type="Script" path="res://components/HitboxComponent.cs" id="1_g6wxa"]
+
+[node name="Hitbox" type="Area2D"]
+script = ExtResource("1_g6wxa")
+ContactDamage = 4

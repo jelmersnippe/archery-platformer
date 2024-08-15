@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://di5gt44csylpv"]
+
+[ext_resource type="Script" path="res://components/HitflashComponent.cs" id="1_u5k2m"]
+
+[node name="Hitflash" type="Node" node_paths=PackedStringArray("Sprite")]
+script = ExtResource("1_u5k2m")
+Sprite = NodePath("")

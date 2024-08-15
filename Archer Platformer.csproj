@@ -9,5 +9,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<Content Include=".editorconfig"/>
+		<Content Include="hit_flash.gdshader" />
+		<Content Include="hit_flash_material.tres" />
 	</ItemGroup>
 </Project>

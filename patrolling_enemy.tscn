@@ -1,17 +1,25 @@
-[gd_scene load_steps=5 format=3 uid="uid://t368vy0v0d5m"]
+[gd_scene load_steps=9 format=3 uid="uid://t368vy0v0d5m"]
 
 [ext_resource type="Script" path="res://enemies/Enemy.cs" id="1_fahg3"]
 [ext_resource type="Script" path="res://PatrollingInputComponent.cs" id="2_mn1gy"]
-[ext_resource type="Script" path="res://Knockable.cs" id="3_t52rg"]
+[ext_resource type="PackedScene" uid="uid://nuugtrmxhp0v" path="res://components/knockable.tscn" id="3_famdj"]
+[ext_resource type="PackedScene" uid="uid://b6pda6vjuygg3" path="res://components/health.tscn" id="4_1bkda"]
+[ext_resource type="PackedScene" uid="uid://db5xs4pspyhyb" path="res://components/hurtbox.tscn" id="5_aw5m5"]
+[ext_resource type="PackedScene" uid="uid://di5gt44csylpv" path="res://components/hitflash.tscn" id="6_6x0bc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2gkl"]
 size = Vector2(16, 16)
 
-[node name="PatrollingEnemy" type="CharacterBody2D" node_paths=PackedStringArray("InputComponent")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_axhpa"]
+size = Vector2(16, 16)
+
+[node name="PatrollingEnemy" type="CharacterBody2D" node_paths=PackedStringArray("InputComponent", "HealthComponent", "HurtboxComponent")]
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_fahg3")
 InputComponent = NodePath("PatrollingInputComponent")
+HealthComponent = NodePath("Health")
+HurtboxComponent = NodePath("Hurtbox")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_g2gkl")
@@ -47,6 +55,17 @@ target_position = Vector2(2, 10)
 collision_mask = 2
 collide_with_areas = true
 
-[node name="Knockable" type="Node" parent="."]
-script = ExtResource("3_t52rg")
-LockY = true
+[node name="Knockable" parent="." instance=ExtResource("3_famdj")]
+
+[node name="Health" parent="." instance=ExtResource("4_1bkda")]
+
+[node name="Hurtbox" parent="." node_paths=PackedStringArray("HitflashComponent") instance=ExtResource("5_aw5m5")]
+collision_layer = 8
+collision_mask = 4
+HitflashComponent = NodePath("../Hitflash")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_axhpa")
+
+[node name="Hitflash" parent="." node_paths=PackedStringArray("Sprite") instance=ExtResource("6_6x0bc")]
+Sprite = NodePath("../ColorRect")

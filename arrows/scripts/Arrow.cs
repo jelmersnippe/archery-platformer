@@ -64,12 +64,13 @@ public abstract partial class Arrow : CharacterBody2D {
 				Sprite.AnimationFinished += () => {
 					SpawnStuckArrow(Mathf.Abs(normal.X) > Mathf.Abs(normal.Y));
 					Impact(collision);
+					QueueFree();
 				};
 			}
 			else {
 				Impact(collision);
+				QueueFree();
 			}
-			QueueFree();
 			return;
 		}
 
