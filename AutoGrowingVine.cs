@@ -9,10 +9,10 @@ public partial class AutoGrowingVine : Area2D {
 	private float _currentLength = 0;
 	private bool _collided;
 
-	private RectangleShape2D shape = new RectangleShape2D();
+	private RectangleShape2D _shape = new();
 
 	public override void _Ready() {
-		CollisionShape.Shape = shape;
+		CollisionShape.Shape = _shape;
 	}
 
 	public override void _Process(double delta) {
@@ -33,6 +33,6 @@ public partial class AutoGrowingVine : Area2D {
 		};
 		
 		CollisionShape.Position = new Vector2(0, _currentLength / 2f);
-		shape.Size = new Vector2(Display.Width, _currentLength);
+		_shape.Size = new Vector2(Display.Width, _currentLength);
 	}
 }
