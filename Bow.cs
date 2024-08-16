@@ -7,12 +7,13 @@ public partial class Bow : Node2D {
 	[Export] public float MinArrowVelocity = 800f;
 	[Export] public float MaxArrowVelocity = 1600f;
 	[Export] public TrajectoryLine TrajectoryLine = null!;
+	[Export] public Node2D RotationPoint;
 
 	private float _drawTime;
 
 	public Arrow? CurrentArrow { get; private set; }
 
-	private Vector2 ArrowVelocity => GlobalPosition.DirectionTo(GetGlobalMousePosition()) *
+	private Vector2 ArrowVelocity => RotationPoint.GlobalPosition.DirectionTo(GetGlobalMousePosition()) *
 									 Mathf.Lerp(MinArrowVelocity, MaxArrowVelocity, _drawTime / MaxDrawTime);
 
 	public override void _PhysicsProcess(double delta) {

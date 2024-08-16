@@ -8,6 +8,7 @@ public abstract partial class Arrow : CharacterBody2D {
 
 	[Export] public AnimatedSprite2D Sprite = null!;
 	[Export] public CollisionShape2D CollisionShape2D = null!;
+	[Export] public CollisionShape2D HitboxCollision = null!;
 	[Export] public float Gravity = 20f;
 	[Export] public float StuckArrowLifeTime;
 	[Export] public bool TransitionsToStuck = true;
@@ -19,7 +20,7 @@ public abstract partial class Arrow : CharacterBody2D {
 
 	public override void _Ready() {
 		CollisionShape2D.SetDeferred("disabled", false);
-		SetCollisionLayerValue(3, false);
+		HitboxCollision.SetDeferred("disabled", false);
 	}
 
 	public override void _PhysicsProcess(double delta) {
@@ -88,6 +89,7 @@ public abstract partial class Arrow : CharacterBody2D {
 		
 		Velocity = velocity;
 		CollisionShape2D.SetDeferred("disabled", false);
+		HitboxCollision.SetDeferred("disabled", false);
 		Reparent(GetTree().CurrentScene);
 		EmitSignal(SignalName.Released, this);
 		_released = true;

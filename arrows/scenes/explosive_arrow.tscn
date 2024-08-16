@@ -1,8 +1,9 @@
-[gd_scene load_steps=11 format=3 uid="uid://hkvea43osh4m"]
+[gd_scene load_steps=13 format=3 uid="uid://hkvea43osh4m"]
 
 [ext_resource type="Script" path="res://arrows/scripts/ImpactEffectArrow.cs" id="1_kxkib"]
 [ext_resource type="PackedScene" uid="uid://cghtbxh8ohv5y" path="res://explosion.tscn" id="2_f8vvn"]
 [ext_resource type="Texture2D" uid="uid://cjlpc2mbegfan" path="res://sprites/exploding_arrow.png" id="2_h6bmp"]
+[ext_resource type="PackedScene" uid="uid://ctviuf5nrjo61" path="res://components/hitbox.tscn" id="4_ydl6x"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wf8ly"]
 size = Vector2(32, 6)
@@ -50,8 +51,11 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="ExplosiveArrow" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "CollisionShape2D")]
-collision_layer = 4
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0yw57"]
+size = Vector2(32, 7)
+
+[node name="ExplosiveArrow" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "CollisionShape2D", "HitboxCollision")]
+collision_layer = 0
 collision_mask = 10
 motion_mode = 1
 wall_min_slide_angle = 3.14159
@@ -59,6 +63,7 @@ script = ExtResource("1_kxkib")
 ImpactScene = ExtResource("2_f8vvn")
 Sprite = NodePath("AnimatedSprite2D")
 CollisionShape2D = NodePath("CollisionShape2D")
+HitboxCollision = NodePath("Hitbox/CollisionShape2D")
 TransitionsToStuck = false
 metadata/_edit_group_ = true
 
@@ -72,3 +77,11 @@ position = Vector2(0, 1)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_w0ado")
 frame_progress = 1.0
+
+[node name="Hitbox" parent="." instance=ExtResource("4_ydl6x")]
+collision_layer = 4
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_0yw57")

@@ -1,9 +1,10 @@
-[gd_scene load_steps=13 format=3 uid="uid://bq4j1judd8abk"]
+[gd_scene load_steps=15 format=3 uid="uid://bq4j1judd8abk"]
 
 [ext_resource type="Script" path="res://arrows/scripts/ImpactEffectArrow.cs" id="1_fq3rc"]
 [ext_resource type="PackedScene" uid="uid://gs1fl2ybqkjf" path="res://environment/auto_growing_vine.tscn" id="2_kueul"]
 [ext_resource type="Script" path="res://Filters/CollisionNormalFilter.cs" id="3_5dfyy"]
 [ext_resource type="Texture2D" uid="uid://dlk8x1eps8ikt" path="res://sprites/vine_arrow.png" id="4_7r2tv"]
+[ext_resource type="PackedScene" uid="uid://ctviuf5nrjo61" path="res://components/hitbox.tscn" id="5_kh60x"]
 
 [sub_resource type="Resource" id="Resource_ruiiw"]
 script = ExtResource("3_5dfyy")
@@ -55,7 +56,10 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="VineArrow" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "CollisionShape2D")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pqks4"]
+size = Vector2(32, 7)
+
+[node name="VineArrow" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "CollisionShape2D", "HitboxCollision")]
 collision_layer = 4
 collision_mask = 10
 motion_mode = 1
@@ -65,6 +69,7 @@ ImpactScene = ExtResource("2_kueul")
 Filter = SubResource("Resource_ruiiw")
 Sprite = NodePath("AnimatedSprite2D")
 CollisionShape2D = NodePath("CollisionShape2D")
+HitboxCollision = NodePath("Hitbox/CollisionShape2D")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -77,3 +82,11 @@ position = Vector2(0, 1)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_w0ado")
 frame_progress = 1.0
+
+[node name="Hitbox" parent="." instance=ExtResource("5_kh60x")]
+collision_layer = 4
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_pqks4")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://t368vy0v0d5m"]
+[gd_scene load_steps=12 format=3 uid="uid://t368vy0v0d5m"]
 
 [ext_resource type="Script" path="res://enemies/Enemy.cs" id="1_fahg3"]
 [ext_resource type="Script" path="res://PatrollingInputComponent.cs" id="2_mn1gy"]
@@ -6,12 +6,28 @@
 [ext_resource type="PackedScene" uid="uid://b6pda6vjuygg3" path="res://components/health.tscn" id="4_1bkda"]
 [ext_resource type="PackedScene" uid="uid://db5xs4pspyhyb" path="res://components/hurtbox.tscn" id="5_aw5m5"]
 [ext_resource type="PackedScene" uid="uid://di5gt44csylpv" path="res://components/hitflash.tscn" id="6_6x0bc"]
+[ext_resource type="Texture2D" uid="uid://duixakxrruilx" path="res://sprites/enemy.png" id="7_wu117"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2gkl"]
-size = Vector2(16, 16)
+size = Vector2(14, 10)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_axhpa"]
-size = Vector2(16, 16)
+size = Vector2(14, 10)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uc6k8"]
+atlas = ExtResource("7_wu117")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hx51d"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uc6k8")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [node name="PatrollingEnemy" type="CharacterBody2D" node_paths=PackedStringArray("InputComponent", "HealthComponent", "HurtboxComponent")]
 collision_layer = 8
@@ -22,21 +38,8 @@ HealthComponent = NodePath("Health")
 HurtboxComponent = NodePath("Hurtbox")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_g2gkl")
-
-[node name="ColorRect" type="ColorRect" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -8.0
-offset_top = -8.0
-offset_right = 8.0
-offset_bottom = 8.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 0.223529, 0.239216, 1)
 
 [node name="PatrollingInputComponent" type="Node2D" parent="." node_paths=PackedStringArray("WallCheck", "FloorCheck")]
 script = ExtResource("2_mn1gy")
@@ -59,13 +62,18 @@ collide_with_areas = true
 
 [node name="Health" parent="." instance=ExtResource("4_1bkda")]
 
-[node name="Hurtbox" parent="." node_paths=PackedStringArray("HitflashComponent") instance=ExtResource("5_aw5m5")]
+[node name="Hurtbox" parent="." node_paths=PackedStringArray("HitflashComponent", "Sprite") instance=ExtResource("5_aw5m5")]
 collision_layer = 8
 collision_mask = 4
 HitflashComponent = NodePath("../Hitflash")
+Sprite = NodePath("../AnimatedSprite2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 3)
 shape = SubResource("RectangleShape2D_axhpa")
 
 [node name="Hitflash" parent="." node_paths=PackedStringArray("Sprite") instance=ExtResource("6_6x0bc")]
-Sprite = NodePath("../ColorRect")
+Sprite = NodePath("../AnimatedSprite2D")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_hx51d")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://clg6pvxusa4fi"]
+[gd_scene load_steps=24 format=3 uid="uid://clg6pvxusa4fi"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="2_14ctw"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://environment/scene_door.tscn" id="4_a6y13"]
@@ -15,6 +15,7 @@
 [ext_resource type="Script" path="res://QuiverRestock.cs" id="12_hd4y2"]
 [ext_resource type="Resource" uid="uid://ny4c624rkfbd" path="res://triggers/quiver_pickup.tres" id="12_qktbh"]
 [ext_resource type="Resource" uid="uid://c16bwqt5wgvg1" path="res://triggers/playground_rock_destroyed.tres" id="14_eou67"]
+[ext_resource type="Script" path="res://MovingPlatform.cs" id="16_70i7o"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5n656"]
 size = Vector2(10, 160)
@@ -29,6 +30,21 @@ Trigger = ExtResource("12_qktbh")
 
 [sub_resource type="Resource" id="Resource_w0kif"]
 script = ExtResource("12_hd4y2")
+
+[sub_resource type="Curve2D" id="Curve2D_wojow"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 2.08165e-12, 2.08165e-12, 0, 0, 0, 0, 200, 2.08165e-12)
+}
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xomig"]
+size = Vector2(64, 16)
+
+[sub_resource type="Curve2D" id="Curve2D_l3bwo"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -160, 16, 0, 0, 0, 0, -160, -256, 0, 0, 0, 0, 224, -256, 0, 0, 0, 0, 352, -432, 0, 0, 0, 0, 560, -432, 0, 0, 0, 0, 560, 16)
+}
+point_count = 6
 
 [node name="Playground" type="Node2D"]
 
@@ -97,3 +113,76 @@ Trigger = ExtResource("14_eou67")
 position = Vector2(992, 464)
 scale = Vector2(2, 2)
 Trigger = ExtResource("14_eou67")
+
+[node name="Path2D" type="Path2D" parent="."]
+position = Vector2(622, 247)
+curve = SubResource("Curve2D_wojow")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D" node_paths=PackedStringArray("Body")]
+position = Vector2(2.08165e-12, 2.08165e-12)
+rotates = false
+loop = false
+script = ExtResource("16_70i7o")
+Body = NodePath("../AnimatableBody2D")
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Path2D/PathFollow2D"]
+remote_path = NodePath("../../AnimatableBody2D")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="Path2D"]
+collision_layer = 2
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Path2D/AnimatableBody2D"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -8.0
+offset_right = 32.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.439216, 0.388235, 0.239216, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/AnimatableBody2D"]
+shape = SubResource("RectangleShape2D_xomig")
+
+[node name="Path2D2" type="Path2D" parent="."]
+position = Vector2(622, 247)
+curve = SubResource("Curve2D_l3bwo")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D2" node_paths=PackedStringArray("Body")]
+position = Vector2(-160, 16)
+rotates = false
+loop = false
+script = ExtResource("16_70i7o")
+Body = NodePath("../../Path2D/AnimatableBody2D")
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Path2D2/PathFollow2D"]
+remote_path = NodePath("../../AnimatableBody2D")
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="Path2D2"]
+position = Vector2(-160, 16)
+collision_layer = 2
+collision_mask = 0
+
+[node name="ColorRect" type="ColorRect" parent="Path2D2/AnimatableBody2D"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -8.0
+offset_right = 32.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.439216, 0.388235, 0.239216, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D2/AnimatableBody2D"]
+shape = SubResource("RectangleShape2D_xomig")

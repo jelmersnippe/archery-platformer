@@ -106,6 +106,7 @@ public partial class Player : CharacterBody2D {
 		}
 		else {
 			BowOffset.AddChild(bow);
+			bow.RotationPoint = RotationPoint;
 		}
 
 		Bow = bow;
