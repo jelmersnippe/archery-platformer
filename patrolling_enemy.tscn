@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://t368vy0v0d5m"]
+[gd_scene load_steps=14 format=3 uid="uid://t368vy0v0d5m"]
 
 [ext_resource type="Script" path="res://enemies/Enemy.cs" id="1_fahg3"]
 [ext_resource type="Script" path="res://PatrollingInputComponent.cs" id="2_mn1gy"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://db5xs4pspyhyb" path="res://components/hurtbox.tscn" id="5_aw5m5"]
 [ext_resource type="PackedScene" uid="uid://di5gt44csylpv" path="res://components/hitflash.tscn" id="6_6x0bc"]
 [ext_resource type="Texture2D" uid="uid://duixakxrruilx" path="res://sprites/enemy.png" id="7_wu117"]
+[ext_resource type="PackedScene" uid="uid://ctviuf5nrjo61" path="res://components/hitbox.tscn" id="8_y1edt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2gkl"]
 size = Vector2(14, 10)
@@ -28,6 +29,9 @@ animations = [{
 "name": &"default",
 "speed": 5.0
 }]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b7miq"]
+size = Vector2(14, 10)
 
 [node name="PatrollingEnemy" type="CharacterBody2D" node_paths=PackedStringArray("InputComponent", "HealthComponent", "HurtboxComponent")]
 collision_layer = 8
@@ -77,3 +81,12 @@ Sprite = NodePath("../AnimatedSprite2D")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_hx51d")
+
+[node name="Hitbox" parent="." instance=ExtResource("8_y1edt")]
+collision_layer = 8
+ContactDamage = 1
+KnockbackForce = 300.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_b7miq")

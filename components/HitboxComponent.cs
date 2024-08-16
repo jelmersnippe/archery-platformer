@@ -5,7 +5,7 @@ public partial class HitboxComponent : Area2D {
 	public delegate void HitEventHandler(Node2D node);
 
 	[Export] public int ContactDamage = 1;
-	[Export] public float HitstopTime = 0.02f;
+	[Export] public float KnockbackForce = 200f;
 
 	public override void _Ready() {
 		AreaEntered += HandleCollision;

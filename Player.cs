@@ -13,6 +13,10 @@ public partial class Player : CharacterBody2D {
 	[Export] public Node2D BowOffset = null!;
 	[Export] public Area2D GrabArea = null!;
 	[Export] public Area2D InteractableArea = null!;
+	[Export] public HealthComponent HealthComponent = null!;
+	[Export] public HurtboxComponent HurtboxComponent = null!;
+	[Export] public Knockable Knockable = null!;
+	[Export] public PlayerInputComponent InputComponent = null!;
 
 	[ExportCategory("Archery")] [Export] public Bow? Bow;
 	[Export] public Quiver? Quiver;
@@ -84,6 +88,18 @@ public partial class Player : CharacterBody2D {
 		InteractableArea.AreaEntered += InteractableAreaOnAreaEntered;
 		InteractableArea.AreaExited += InteractableAreaOnAreaExited;
 		_lastGroundedPosition = GlobalPosition;
+		
+		HurtboxComponent.Hit += HurtboxComponentOnHit;
+		HealthComponent.Died += HealthComponentOnDied;
+	}
+
+	private void HealthComponentOnDied() {
+		GetTree().ReloadCurrentScene();
+	}
+
+	private void HurtboxComponentOnHit(HitboxComponent hitboxComponent, Vector2 direction) {
+		HealthComponent.TakeDamage(hitboxComponent.ContactDamage);
+		Knockable.ApplyKnockback(hitboxComponent.KnockbackForce * -direction);
 	}
 
 	private void InteractableAreaOnAreaExited(Area2D area) {
@@ -235,7 +251,7 @@ public partial class Player : CharacterBody2D {
 	}
 
 	private void GrabVine() {
-		if (_vineInRange != null && Input.IsActionPressed("move_up")) {
+		if (_vineInRange != null && InputComponent.GetDirectionalInput().Y < 0) {
 			if (IsOnFloor()) {
 				// Move slightly off ground
 				Position += new Vector2(0, -4);
@@ -289,7 +305,7 @@ public partial class Player : CharacterBody2D {
 				Mathf.MoveToward(GlobalPosition.X, _vineInRange.GlobalPosition.X, MoveToVineCenterSpeed * delta),
 				GlobalPosition.Y);
 
-		float verticalDirection = Input.GetAxis("move_up", "move_down");
+		float verticalDirection = InputComponent.GetDirectionalInput().Y;
 
 		if (verticalDirection != 0) {
 			_velocity.Y = Mathf.MoveToward(Velocity.Y, ClimbingMaxSpeed * verticalDirection,
@@ -307,7 +323,10 @@ public partial class Player : CharacterBody2D {
 	}
 
 	private float MoveHorizontal(float delta) {
-		float direction = Input.GetAxis("move_left", "move_right");
+		if (InputComponent.Disabled) {
+			return 0f;
+		}
+		float direction = InputComponent.GetDirectionalInput().X;
 
 		if (direction != 0) {
 			_velocity.X = Mathf.MoveToward(Velocity.X, MaxSpeed * direction,
@@ -320,11 +339,12 @@ public partial class Player : CharacterBody2D {
 				MaxSpeed / (IsOnFloor() ? DecelerationTime : AerialDecelerationTime) * delta);
 		}
 
-
 		return direction;
 	}
 
 	public override void _PhysicsProcess(double delta) {
+		InputComponent.Disabled = Knockable.ControlLossTimeLeft > 0f;
+		
 		_remainingInputBufferTime -= (float)delta;
 
 		_timeSinceLastGroundedPosition += (float)delta;
@@ -428,6 +448,7 @@ public partial class Player : CharacterBody2D {
 			_velocity.Y = JumpVelocity;
 			_velocity.X = Mathf.Sign(wallNormal) * MaxSpeed;
 			_canWallJump = false;
+			Sprite.Modulate = Colors.Red;
 			_currentState = MovementState.Airborne;
 		}
 	}

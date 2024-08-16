@@ -6,6 +6,8 @@ public partial class HurtboxComponent : Area2D {
 
 	[Export] public HitflashComponent? HitflashComponent;
 	[Export] public float HurtTime = 0.2f;
+	[Export] public CollisionShape2D CollisionShape2D = null!;
+	[Export] public float InvulnerableTime = 0.2f;
 	[Export] public AnimatedSprite2D? Sprite;
 
 	public override void _Ready() {
@@ -19,6 +21,13 @@ public partial class HurtboxComponent : Area2D {
 		}
 
 		EmitSignal(SignalName.Hit, hitboxComponent, GlobalPosition.DirectionTo(hitboxComponent.GlobalPosition));
+		
+		if (InvulnerableTime > 0f) {
+			CollisionShape2D.SetDeferred("disabled", true);
+
+			var timer = GetTree().CreateTimer(InvulnerableTime);
+			timer.Timeout += () => CollisionShape2D.SetDeferred("disabled", false);
+		}
 
 		if (Sprite != null && Sprite.SpriteFrames.HasAnimation("Hurt")) {
 			Sprite.Play("Hurt");
@@ -28,10 +37,5 @@ public partial class HurtboxComponent : Area2D {
 		}
 
 		HitflashComponent?.Flash();
-
-		Engine.TimeScale = 0;
-
-		SceneTreeTimer? hitStopTimer = GetTree().CreateTimer(hitboxComponent.HitstopTime, ignoreTimeScale: true);
-		hitStopTimer.Timeout += () => Engine.TimeScale = 1f;
 	}
 }
