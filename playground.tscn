@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://clg6pvxusa4fi"]
+[gd_scene load_steps=30 format=3 uid="uid://clg6pvxusa4fi"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="2_14ctw"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://environment/scene_door.tscn" id="4_a6y13"]
@@ -17,6 +17,7 @@
 [ext_resource type="Resource" uid="uid://c16bwqt5wgvg1" path="res://triggers/playground_rock_destroyed.tres" id="14_eou67"]
 [ext_resource type="Script" path="res://MovingPlatform.cs" id="16_70i7o"]
 [ext_resource type="Script" path="res://TimedPlatform.cs" id="17_ktq6v"]
+[ext_resource type="Script" path="res://SeesawPlatform.cs" id="18_xln65"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5n656"]
 size = Vector2(10, 160)
@@ -52,6 +53,12 @@ size = Vector2(64, 16)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jrqrh"]
 size = Vector2(64, 4)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_svhgb"]
+size = Vector2(128, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wcm8v"]
+size = Vector2(128, 4)
 
 [node name="Playground" type="Node2D"]
 
@@ -195,7 +202,7 @@ metadata/_edit_use_anchors_ = true
 shape = SubResource("RectangleShape2D_xomig")
 
 [node name="TimedPlatform" type="StaticBody2D" parent="." node_paths=PackedStringArray("PlayerDetectionArea", "CollisionShape2D", "Display")]
-position = Vector2(813, 378)
+position = Vector2(250, 364)
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("17_ktq6v")
@@ -227,3 +234,36 @@ collision_layer = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TimedPlatform/PlayerDetectionArea"]
 position = Vector2(0, -8)
 shape = SubResource("RectangleShape2D_jrqrh")
+
+[node name="SeesawPlatform" type="StaticBody2D" parent="." node_paths=PackedStringArray("PlayerDetectionArea", "CollisionShape2D")]
+position = Vector2(814, 403)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("18_xln65")
+PlayerDetectionArea = NodePath("PlayerDetectionArea")
+CollisionShape2D = NodePath("PlayerDetectionArea/CollisionShape2D")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SeesawPlatform"]
+shape = SubResource("RectangleShape2D_svhgb")
+
+[node name="ColorRect" type="ColorRect" parent="SeesawPlatform"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -8.0
+offset_right = 64.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.291118, 0.143017, 0.125763, 1)
+
+[node name="PlayerDetectionArea" type="Area2D" parent="SeesawPlatform"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SeesawPlatform/PlayerDetectionArea"]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_wcm8v")
