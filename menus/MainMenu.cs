@@ -6,7 +6,7 @@ public partial class MainMenu : CanvasLayer {
 	}
 
 	private void OnPlayButtonPressed() {
-		GetTree().ChangeSceneToFile("res://forest/forest2.tscn");
+		GetTree().ChangeSceneToFile("res://forest/forest1.tscn");
 	}
 
 	private void OnPlaygroundButtonPressed() {

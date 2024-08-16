@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3 uid="uid://dx3o2plskwdnn"]
+
+[ext_resource type="Script" path="res://SeesawPlatform.cs" id="1_gduta"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_svhgb"]
+size = Vector2(128, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wcm8v"]
+size = Vector2(128, 4)
+
+[node name="SeesawPlatform" type="StaticBody2D" node_paths=PackedStringArray("PlayerDetectionArea", "CollisionShape2D")]
+position = Vector2(814, 403)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("1_gduta")
+PlayerDetectionArea = NodePath("")
+CollisionShape2D = NodePath("")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_svhgb")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -64.0
+offset_top = -8.0
+offset_right = 64.0
+offset_bottom = 8.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.291118, 0.143017, 0.125763, 1)
+
+[node name="PlayerDetectionArea" type="Area2D" parent="."]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionArea"]
+position = Vector2(0, -8)
+shape = SubResource("RectangleShape2D_wcm8v")
