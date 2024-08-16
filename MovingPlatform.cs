@@ -17,9 +17,6 @@ public partial class MovingPlatform : PathFollow2D {
 		ProgressRatio = 0f;
 		var timeToComplete = _pathLength / Speed;
 		_progressPerSecond = 100 / timeToComplete;
-		GD.Print(_pathLength);
-		GD.Print(timeToComplete);
-		GD.Print(_progressPerSecond);
 		
 		Pause();
 	}
