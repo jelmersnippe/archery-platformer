@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=3 uid="uid://c70gh4df4tr5x"]
+
+[ext_resource type="Script" path="res://QuiverRestockPickup.cs" id="1_bd7mu"]
+[ext_resource type="Texture2D" uid="uid://ouu8p6xh08a6" path="res://sprites/quiver.png" id="2_tdk63"]
+[ext_resource type="PackedScene" uid="uid://dj47werg8y7kj" path="res://interactable.tscn" id="3_5t7l4"]
+
+[node name="QuiverRestock" type="Node2D" node_paths=PackedStringArray("Interactable")]
+script = ExtResource("1_bd7mu")
+Text = "restock"
+Texture = ExtResource("2_tdk63")
+Interactable = NodePath("Interactable")
+
+[node name="Interactable" parent="." instance=ExtResource("3_5t7l4")]

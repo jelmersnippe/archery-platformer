@@ -64,7 +64,6 @@ ImpactScene = ExtResource("2_f8vvn")
 Sprite = NodePath("AnimatedSprite2D")
 CollisionShape2D = NodePath("CollisionShape2D")
 HitboxCollision = NodePath("Hitbox/CollisionShape2D")
-TransitionsToStuck = false
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

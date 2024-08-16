@@ -18,11 +18,13 @@ public partial class Player : CharacterBody2D {
 	[Export] public Knockable Knockable = null!;
 	[Export] public PlayerInputComponent InputComponent = null!;
 
-	[ExportCategory("Archery")] [Export] public Bow? Bow;
-	[Export] public Quiver? Quiver;
-	[Export] public Array<MovementState> CanUseArcheryStates = new () {
+	[ExportCategory("Archery")] public Bow? Bow { get; private set; }
+	public Quiver? Quiver { get; private set; }
+
+	[Export] public Array<MovementState> CanUseArcheryStates = new() {
 		MovementState.Grounded
 	};
+
 	[Export] public float DrawHorizontalSlowdown = 0.4f;
 	[Export] public float DrawVerticalSlowdown = 0.6f;
 
@@ -88,7 +90,7 @@ public partial class Player : CharacterBody2D {
 		InteractableArea.AreaEntered += InteractableAreaOnAreaEntered;
 		InteractableArea.AreaExited += InteractableAreaOnAreaExited;
 		_lastGroundedPosition = GlobalPosition;
-		
+
 		HurtboxComponent.Hit += HurtboxComponentOnHit;
 		HealthComponent.Died += HealthComponentOnDied;
 	}
@@ -116,7 +118,7 @@ public partial class Player : CharacterBody2D {
 		}
 	}
 
-	public void Equip(Bow? bow) {
+	public void EquipBow(Bow? bow) {
 		if (bow == null) {
 			Bow?.QueueFree();
 		}
@@ -129,7 +131,7 @@ public partial class Player : CharacterBody2D {
 		EmitSignal(SignalName.BowEquipped, bow);
 	}
 
-	public void Equip(Quiver? quiver) {
+	public void EquipQuiver(Quiver? quiver) {
 		if (quiver == null) {
 			if (Quiver != null) {
 				Quiver.QueueFree();
@@ -256,6 +258,7 @@ public partial class Player : CharacterBody2D {
 				// Move slightly off ground
 				Position += new Vector2(0, -4);
 			}
+
 			_currentState = MovementState.Climbing;
 		}
 	}
@@ -326,6 +329,7 @@ public partial class Player : CharacterBody2D {
 		if (InputComponent.Disabled) {
 			return 0f;
 		}
+
 		float direction = InputComponent.GetDirectionalInput().X;
 
 		if (direction != 0) {
@@ -344,7 +348,7 @@ public partial class Player : CharacterBody2D {
 
 	public override void _PhysicsProcess(double delta) {
 		InputComponent.Disabled = Knockable.ControlLossTimeLeft > 0f;
-		
+
 		_remainingInputBufferTime -= (float)delta;
 
 		_timeSinceLastGroundedPosition += (float)delta;

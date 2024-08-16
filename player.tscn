@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dl0p8dvvo8wa6"]
+[gd_scene load_steps=28 format=3 uid="uid://dl0p8dvvo8wa6"]
 
 [ext_resource type="Script" path="res://Player.cs" id="1_2qic4"]
 [ext_resource type="Texture2D" uid="uid://bk5cpkkag2b6y" path="res://sprites/player_idle.png" id="3_nldyr"]
@@ -9,6 +9,11 @@
 [ext_resource type="PackedScene" uid="uid://db5xs4pspyhyb" path="res://components/hurtbox.tscn" id="7_sotf1"]
 [ext_resource type="PackedScene" uid="uid://b6pda6vjuygg3" path="res://components/health.tscn" id="8_ortie"]
 [ext_resource type="Script" path="res://PlayerInputComponent.cs" id="9_ojluc"]
+[ext_resource type="Script" path="res://UpgradeSystem.cs" id="10_lg6ju"]
+[ext_resource type="Resource" uid="uid://cuot2vpiu6dau" path="res://triggers/bow_pickup.tres" id="11_5nk6o"]
+[ext_resource type="Script" path="res://BowUpgrade.cs" id="12_tjmel"]
+[ext_resource type="Resource" uid="uid://ny4c624rkfbd" path="res://triggers/quiver_pickup.tres" id="13_8602o"]
+[ext_resource type="Script" path="res://QuiverUpgrade.cs" id="14_7iamt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nu74t"]
 size = Vector2(28, 30)
@@ -86,6 +91,14 @@ radius = 12.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cc40e"]
 size = Vector2(24, 24)
 
+[sub_resource type="Resource" id="Resource_wc1wr"]
+script = ExtResource("12_tjmel")
+Trigger = ExtResource("11_5nk6o")
+
+[sub_resource type="Resource" id="Resource_q63ou"]
+script = ExtResource("14_7iamt")
+Trigger = ExtResource("13_8602o")
+
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "RotationPoint", "BowOffset", "GrabArea", "InteractableArea", "HealthComponent", "HurtboxComponent", "Knockable", "InputComponent")]
 z_index = 10
 position = Vector2(2.08165e-12, 2.08165e-12)
@@ -161,3 +174,7 @@ StartingHealth = 3
 
 [node name="Input" type="Node" parent="."]
 script = ExtResource("9_ojluc")
+
+[node name="UpgradeSystem" type="Node" parent="."]
+script = ExtResource("10_lg6ju")
+Upgrades = [SubResource("Resource_wc1wr"), SubResource("Resource_q63ou")]

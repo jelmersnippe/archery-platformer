@@ -13,8 +13,8 @@ position = Vector2(814, 403)
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_gduta")
-PlayerDetectionArea = NodePath("")
-CollisionShape2D = NodePath("")
+PlayerDetectionArea = NodePath("PlayerDetectionArea")
+CollisionShape2D = NodePath("CollisionShape2D")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

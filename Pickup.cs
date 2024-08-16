@@ -1,9 +1,8 @@
 using Godot;
 
-public partial class Pickup : Node2D {
+public abstract partial class Pickup : Node2D {
 	[Export] public string Text = "pickup";
 	[Export] public Texture2D Texture = null!;
-	[Export] public Upgrade Upgrade = null!;
 	[Export] public Interactable Interactable = null!;
 
 	public override void _Ready() {
@@ -12,7 +11,5 @@ public partial class Pickup : Node2D {
 		Interactable.Interacted += InteractableOnInteracted;
 	}
 
-	private void InteractableOnInteracted(Player player) {
-		Upgrade.Use(player);
-	}
+	protected abstract void InteractableOnInteracted(Player player);
 }

@@ -3,7 +3,6 @@ using Godot;
 public partial class MovingPlatform : PathFollow2D {
 	[Export] public float Speed = 50f;
 	[Export] public float PauseTime = 1.5f;
-	[Export] public AnimatableBody2D Body = null!;
 
 	private bool _isPaused = true;
 	private int _progressDirection = 1;

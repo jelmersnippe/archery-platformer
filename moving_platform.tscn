@@ -15,19 +15,14 @@ size = Vector2(64, 16)
 position = Vector2(622, 247)
 curve = SubResource("Curve2D_wojow")
 
-[node name="PathFollow2D" type="PathFollow2D" parent="." node_paths=PackedStringArray("Body")]
+[node name="PathFollow2D" type="PathFollow2D" parent="."]
 position = Vector2(2.08165e-12, 2.08165e-12)
 rotates = false
 loop = false
 script = ExtResource("1_w51sb")
-Body = NodePath("")
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="PathFollow2D"]
 remote_path = NodePath("../../AnimatableBody2D")
-
-[node name="_Timer_136558" type="Timer" parent="PathFollow2D"]
-wait_time = 0.2
-one_shot = true
 
 [node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
 collision_layer = 2

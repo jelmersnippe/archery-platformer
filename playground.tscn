@@ -1,38 +1,25 @@
-[gd_scene load_steps=26 format=3 uid="uid://clg6pvxusa4fi"]
+[gd_scene load_steps=21 format=3 uid="uid://clg6pvxusa4fi"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="2_14ctw"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://environment/scene_door.tscn" id="4_a6y13"]
 [ext_resource type="PackedScene" uid="uid://d0oahqi1hma74" path="res://arrows/types/spikes.tscn" id="5_khpys"]
 [ext_resource type="PackedScene" uid="uid://cx1et7k7daj2" path="res://environment/rock.tscn" id="6_cdgea"]
 [ext_resource type="PackedScene" uid="uid://d1gtmwrr0eggp" path="res://conditional_node.tscn" id="7_24oln"]
-[ext_resource type="PackedScene" uid="uid://cw7cbvuwpulis" path="res://upgrade.tscn" id="7_imq5u"]
+[ext_resource type="PackedScene" uid="uid://be54d8dnj370w" path="res://trigger_pickup.tscn" id="7_yv0br"]
 [ext_resource type="Resource" uid="uid://cuot2vpiu6dau" path="res://triggers/bow_pickup.tres" id="8_b4mwv"]
 [ext_resource type="Texture2D" uid="uid://ouu8p6xh08a6" path="res://sprites/quiver.png" id="8_kdtie"]
 [ext_resource type="PackedScene" uid="uid://t368vy0v0d5m" path="res://patrolling_enemy.tscn" id="8_p1r1j"]
-[ext_resource type="Script" path="res://QuiverUpgrade.cs" id="9_rxrcd"]
-[ext_resource type="Texture2D" uid="uid://cxhskr4c8o65d" path="res://sprites/bow.png" id="10_1u8dw"]
-[ext_resource type="Script" path="res://BowUpgrade.cs" id="11_wie1b"]
-[ext_resource type="Script" path="res://QuiverRestock.cs" id="12_hd4y2"]
+[ext_resource type="Texture2D" uid="uid://dy5e0ywoe3ktg" path="res://sprites/bow_ui.png" id="8_vmxw3"]
 [ext_resource type="Resource" uid="uid://ny4c624rkfbd" path="res://triggers/quiver_pickup.tres" id="12_qktbh"]
 [ext_resource type="Resource" uid="uid://c16bwqt5wgvg1" path="res://triggers/playground_rock_destroyed.tres" id="14_eou67"]
 [ext_resource type="Script" path="res://MovingPlatform.cs" id="16_70i7o"]
 [ext_resource type="PackedScene" uid="uid://bxf7g7leeersp" path="res://moving_platform.tscn" id="16_clqn5"]
+[ext_resource type="PackedScene" uid="uid://c70gh4df4tr5x" path="res://quiver_restock_pickup.tscn" id="17_u6si6"]
 [ext_resource type="PackedScene" uid="uid://8c8vutc40vyp" path="res://timed_platform.tscn" id="18_hwrbk"]
 [ext_resource type="PackedScene" uid="uid://dx3o2plskwdnn" path="res://seesaw_platform.tscn" id="19_cmn82"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5n656"]
 size = Vector2(10, 160)
-
-[sub_resource type="Resource" id="Resource_53tv0"]
-script = ExtResource("11_wie1b")
-Trigger = ExtResource("8_b4mwv")
-
-[sub_resource type="Resource" id="Resource_4nuaa"]
-script = ExtResource("9_rxrcd")
-Trigger = ExtResource("12_qktbh")
-
-[sub_resource type="Resource" id="Resource_w0kif"]
-script = ExtResource("12_hd4y2")
 
 [sub_resource type="Curve2D" id="Curve2D_l3bwo"]
 _data = {
@@ -79,29 +66,21 @@ position = Vector2(856, 488)
 [node name="PatrollingEnemy" parent="." instance=ExtResource("8_p1r1j")]
 position = Vector2(272, 456)
 
-[node name="ConditionalNode3" parent="." instance=ExtResource("7_24oln")]
+[node name="BowPickup" parent="." instance=ExtResource("7_24oln")]
 Trigger = ExtResource("8_b4mwv")
 
-[node name="BowUpgrade" parent="ConditionalNode3" instance=ExtResource("7_imq5u")]
-position = Vector2(568, 464)
-Text = "equip"
-Texture = ExtResource("10_1u8dw")
-Upgrade = SubResource("Resource_53tv0")
+[node name="TriggerPickup" parent="BowPickup" instance=ExtResource("7_yv0br")]
+position = Vector2(415, 465)
+Trigger = ExtResource("8_b4mwv")
+Texture = ExtResource("8_vmxw3")
 
-[node name="ConditionalNode" parent="." instance=ExtResource("7_24oln")]
+[node name="QuiverPickup" parent="." instance=ExtResource("7_24oln")]
 Trigger = ExtResource("12_qktbh")
 
-[node name="QuiverUpgrade" parent="ConditionalNode" instance=ExtResource("7_imq5u")]
-position = Vector2(504, 464)
-Text = "equip"
+[node name="TriggerPickup" parent="QuiverPickup" instance=ExtResource("7_yv0br")]
+position = Vector2(453, 465)
+Trigger = ExtResource("12_qktbh")
 Texture = ExtResource("8_kdtie")
-Upgrade = SubResource("Resource_4nuaa")
-
-[node name="QuiverRestock" parent="." instance=ExtResource("7_imq5u")]
-position = Vector2(304, 464)
-Text = "restock"
-Texture = ExtResource("8_kdtie")
-Upgrade = SubResource("Resource_w0kif")
 
 [node name="ConditionalNode2" parent="." instance=ExtResource("7_24oln")]
 Trigger = ExtResource("14_eou67")
@@ -117,12 +96,11 @@ Trigger = ExtResource("14_eou67")
 position = Vector2(622, 247)
 curve = SubResource("Curve2D_l3bwo")
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D2" node_paths=PackedStringArray("Body")]
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D2"]
 position = Vector2(-160, 16)
 rotates = false
 loop = false
 script = ExtResource("16_70i7o")
-Body = NodePath("")
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="Path2D2/PathFollow2D"]
 remote_path = NodePath("../../AnimatableBody2D")
@@ -153,3 +131,6 @@ shape = SubResource("RectangleShape2D_xomig")
 [node name="TimedPlatform" parent="." instance=ExtResource("18_hwrbk")]
 
 [node name="SeesawPlatform" parent="." instance=ExtResource("19_cmn82")]
+
+[node name="QuiverRestock" parent="." instance=ExtResource("17_u6si6")]
+position = Vector2(224, 463)

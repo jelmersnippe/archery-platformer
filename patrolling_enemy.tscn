@@ -66,10 +66,11 @@ collide_with_areas = true
 
 [node name="Health" parent="." instance=ExtResource("4_1bkda")]
 
-[node name="Hurtbox" parent="." node_paths=PackedStringArray("HitflashComponent", "Sprite") instance=ExtResource("5_aw5m5")]
+[node name="Hurtbox" parent="." node_paths=PackedStringArray("HitflashComponent", "CollisionShape2D", "Sprite") instance=ExtResource("5_aw5m5")]
 collision_layer = 8
 collision_mask = 4
 HitflashComponent = NodePath("../Hitflash")
+CollisionShape2D = NodePath("CollisionShape2D")
 Sprite = NodePath("../AnimatedSprite2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
