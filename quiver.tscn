@@ -1,9 +1,25 @@
-[gd_scene load_steps=3 format=3 uid="uid://bdb52ynp8qtxn"]
+[gd_scene load_steps=10 format=3 uid="uid://bdb52ynp8qtxn"]
 
 [ext_resource type="Script" path="res://Quiver.cs" id="1_60msv"]
 [ext_resource type="Resource" uid="uid://c14eor8x11kco" path="res://arrows/types/regular_arrow_type.tres" id="2_m08ie"]
+[ext_resource type="Resource" uid="uid://bisho1xgokwy0" path="res://triggers/explosive_arrow_unlock.tres" id="3_akin8"]
+[ext_resource type="Script" path="res://ArrowTypeUpgrade.cs" id="4_2tlum"]
+[ext_resource type="Resource" uid="uid://d05acp4wly8y8" path="res://arrows/types/explosive_arrow_type.tres" id="4_bdd38"]
+[ext_resource type="Resource" path="res://arrows/types/vine_arrow_type.tres" id="5_23s44"]
+[ext_resource type="Resource" uid="uid://c538btgxql4ax" path="res://triggers/vine_arrow_unlock.tres" id="6_g74ep"]
+
+[sub_resource type="Resource" id="Resource_cabvs"]
+script = ExtResource("4_2tlum")
+Trigger = ExtResource("3_akin8")
+ArrowType = ExtResource("4_bdd38")
+
+[sub_resource type="Resource" id="Resource_s0jw4"]
+script = ExtResource("4_2tlum")
+Trigger = ExtResource("6_g74ep")
+ArrowType = ExtResource("5_23s44")
 
 [node name="Quiver" type="Node"]
 script = ExtResource("1_60msv")
 InitialArrowCount = 3
+UnlockableArrows = [SubResource("Resource_cabvs"), SubResource("Resource_s0jw4")]
 ArrowTypes = [ExtResource("2_m08ie")]

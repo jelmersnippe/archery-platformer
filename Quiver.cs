@@ -1,3 +1,4 @@
+using System.Linq;
 using Godot;
 using Godot.Collections;
 
@@ -10,6 +11,7 @@ public partial class Quiver : Node {
 
 	[Export] public int InitialArrowCount = 5;
 
+	[Export] public Array<ArrowTypeUpgrade> UnlockableArrows = new();
 	[Export] public Array<ArrowType> ArrowTypes = new();
 	private ArrowType? _currentArrowType;
 
@@ -24,6 +26,43 @@ public partial class Quiver : Node {
 		SetArrowType(0);
 
 		NotifyArrowChanges();
+
+		foreach (ArrowTypeUpgrade unlockableArrow in UnlockableArrows) {
+			if (GlobalTriggerState.GetTriggerState(unlockableArrow.Trigger)) {
+				AddArrowType(unlockableArrow.ArrowType);
+			}
+			else {
+				RemoveArrowType(unlockableArrow.ArrowType);
+			}
+		}
+
+		GlobalTriggerState.TriggerChanged += TriggerChanged;
+	}
+
+	private void TriggerChanged(Trigger trigger, bool state) {
+		ArrowTypeUpgrade? unlockableArrow = UnlockableArrows.FirstOrDefault(x => x.Trigger == trigger);
+		if (unlockableArrow == null) {
+			return;
+		}
+
+		if (state) {
+			AddArrowType(unlockableArrow.ArrowType);
+		}
+		else {
+			RemoveArrowType(unlockableArrow.ArrowType);
+		}
+	}
+
+	private void AddArrowType(ArrowType arrowType) {
+		if (ArrowTypes.Contains(arrowType)) {
+			return;
+		}
+
+		ArrowTypes.Add(arrowType);
+	}
+
+	private void RemoveArrowType(ArrowType arrowType) {
+		ArrowTypes.Remove(arrowType);
 	}
 
 	public void NotifyArrowChanges() {

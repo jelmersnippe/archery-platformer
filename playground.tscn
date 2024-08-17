@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=4 uid="uid://clg6pvxusa4fi"]
+[gd_scene load_steps=28 format=4 uid="uid://clg6pvxusa4fi"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="2_14ctw"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://environment/scene_door.tscn" id="4_a6y13"]
@@ -13,8 +13,12 @@
 [ext_resource type="Resource" uid="uid://0c4jqluc7cfi" path="res://triggers/archery_upgrade.tres" id="9_3atsb"]
 [ext_resource type="Resource" uid="uid://c0xfty32eofrg" path="res://triggers/wall_movement_upgrade.tres" id="10_hn8np"]
 [ext_resource type="Resource" uid="uid://c7j102vplyvqk" path="res://triggers/stand_on_arrows_upgrade.tres" id="11_m2gyw"]
+[ext_resource type="Resource" uid="uid://bisho1xgokwy0" path="res://triggers/explosive_arrow_unlock.tres" id="12_h6pqm"]
 [ext_resource type="Resource" uid="uid://ny4c624rkfbd" path="res://triggers/quiver_pickup.tres" id="12_qktbh"]
+[ext_resource type="Texture2D" uid="uid://bgwjuogasibmp" path="res://sprites/exploding_arrow_ui.png" id="13_6xqc7"]
+[ext_resource type="Resource" uid="uid://c538btgxql4ax" path="res://triggers/vine_arrow_unlock.tres" id="14_66mrh"]
 [ext_resource type="Resource" uid="uid://c16bwqt5wgvg1" path="res://triggers/playground_rock_destroyed.tres" id="14_eou67"]
+[ext_resource type="Texture2D" uid="uid://c0jjjtlx6ghnw" path="res://sprites/vine_arrow_ui.png" id="15_xm1aj"]
 [ext_resource type="Script" path="res://MovingPlatform.cs" id="16_70i7o"]
 [ext_resource type="PackedScene" uid="uid://bxf7g7leeersp" path="res://moving_platform.tscn" id="16_clqn5"]
 [ext_resource type="PackedScene" uid="uid://c70gh4df4tr5x" path="res://quiver_restock_pickup.tscn" id="17_u6si6"]
@@ -100,6 +104,22 @@ Trigger = ExtResource("11_m2gyw")
 position = Vector2(738, 466)
 Trigger = ExtResource("11_m2gyw")
 Texture = ExtResource("8_vmxw3")
+
+[node name="ExplosiveArrowPickup" parent="." instance=ExtResource("7_24oln")]
+Trigger = ExtResource("12_h6pqm")
+
+[node name="TriggerPickup" parent="ExplosiveArrowPickup" instance=ExtResource("7_yv0br")]
+position = Vector2(465, 328)
+Trigger = ExtResource("12_h6pqm")
+Texture = ExtResource("13_6xqc7")
+
+[node name="VineArrowPickup" parent="." instance=ExtResource("7_24oln")]
+Trigger = ExtResource("14_66mrh")
+
+[node name="TriggerPickup" parent="VineArrowPickup" instance=ExtResource("7_yv0br")]
+position = Vector2(555, 331)
+Trigger = ExtResource("14_66mrh")
+Texture = ExtResource("15_xm1aj")
 
 [node name="QuiverPickup" parent="." instance=ExtResource("7_24oln")]
 Trigger = ExtResource("12_qktbh")
