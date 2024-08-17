@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dl0p8dvvo8wa6"]
+[gd_scene load_steps=37 format=3 uid="uid://dl0p8dvvo8wa6"]
 
 [ext_resource type="Script" path="res://Player.cs" id="1_2qic4"]
 [ext_resource type="Texture2D" uid="uid://bk5cpkkag2b6y" path="res://sprites/player_idle.png" id="3_nldyr"]
@@ -14,6 +14,12 @@
 [ext_resource type="Script" path="res://BowUpgrade.cs" id="12_tjmel"]
 [ext_resource type="Resource" uid="uid://ny4c624rkfbd" path="res://triggers/quiver_pickup.tres" id="13_8602o"]
 [ext_resource type="Script" path="res://QuiverUpgrade.cs" id="14_7iamt"]
+[ext_resource type="Resource" uid="uid://0c4jqluc7cfi" path="res://triggers/archery_upgrade.tres" id="15_65fr5"]
+[ext_resource type="Script" path="res://ArcheryUpgrade.cs" id="16_1toqn"]
+[ext_resource type="Resource" uid="uid://c7j102vplyvqk" path="res://triggers/stand_on_arrows_upgrade.tres" id="17_7khs3"]
+[ext_resource type="Script" path="res://StandOnArrowsUpgrade.cs" id="18_3a21x"]
+[ext_resource type="Resource" uid="uid://c0xfty32eofrg" path="res://triggers/wall_movement_upgrade.tres" id="19_1hqhf"]
+[ext_resource type="Script" path="res://WallMovementUpgrade.cs" id="20_dfp04"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nu74t"]
 size = Vector2(28, 30)
@@ -99,6 +105,20 @@ Trigger = ExtResource("11_5nk6o")
 script = ExtResource("14_7iamt")
 Trigger = ExtResource("13_8602o")
 
+[sub_resource type="Resource" id="Resource_v45tx"]
+script = ExtResource("16_1toqn")
+ArcheryStates = [1, 2, 3]
+Trigger = ExtResource("15_65fr5")
+
+[sub_resource type="Resource" id="Resource_ed4op"]
+script = ExtResource("18_3a21x")
+ArrowCollisionLayer = 32
+Trigger = ExtResource("17_7khs3")
+
+[sub_resource type="Resource" id="Resource_brsna"]
+script = ExtResource("20_dfp04")
+Trigger = ExtResource("19_1hqhf")
+
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "RotationPoint", "BowOffset", "GrabArea", "InteractableArea", "HealthComponent", "HurtboxComponent", "Knockable", "InputComponent")]
 z_index = 10
 position = Vector2(2.08165e-12, 2.08165e-12)
@@ -113,7 +133,6 @@ HealthComponent = NodePath("Health")
 HurtboxComponent = NodePath("Hurtbox")
 Knockable = NodePath("Knockable")
 InputComponent = NodePath("Input")
-CanUseArcheryStates = [0, 1, 2, 3]
 AccelerationTime = 0.2
 DecelerationTime = 0.1
 AerialAccelerationTime = 0.4
@@ -177,4 +196,4 @@ script = ExtResource("9_ojluc")
 
 [node name="UpgradeSystem" type="Node" parent="."]
 script = ExtResource("10_lg6ju")
-Upgrades = [SubResource("Resource_wc1wr"), SubResource("Resource_q63ou")]
+Upgrades = [SubResource("Resource_wc1wr"), SubResource("Resource_q63ou"), SubResource("Resource_v45tx"), SubResource("Resource_ed4op"), SubResource("Resource_brsna")]

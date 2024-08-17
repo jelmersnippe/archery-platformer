@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="Trigger" load_steps=2 format=3 uid="uid://0c4jqluc7cfi"]
+
+[ext_resource type="Script" path="res://triggers/Trigger.cs" id="1_q4lcs"]
+
+[resource]
+script = ExtResource("1_q4lcs")
+Name = "archery_upgrade"

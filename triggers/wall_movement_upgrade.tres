@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="Trigger" load_steps=2 format=3 uid="uid://c0xfty32eofrg"]
+
+[ext_resource type="Script" path="res://triggers/Trigger.cs" id="1_fl6jd"]
+
+[resource]
+script = ExtResource("1_fl6jd")
+Name = "wall_movement_upgrade"

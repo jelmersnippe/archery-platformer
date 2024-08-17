@@ -33,6 +33,7 @@ public partial class Player : CharacterBody2D {
 	[Export] public float MaxSpeed = 300.0f;
 	[Export] public float AerialAccelerationTime = 0.6f;
 	[Export] public float AerialDecelerationTime = 0.5f;
+	[Export] public bool WallMovementAllowed;
 
 	[ExportCategory("Vine Climbing")] [Export]
 	public float ClimbingAccelerationTime = 0.2f;
@@ -96,7 +97,8 @@ public partial class Player : CharacterBody2D {
 	}
 
 	private void HealthComponentOnDied() {
-		GetTree().ReloadCurrentScene();
+		SceneTreeTimer? timer = GetTree().CreateTimer(1.5f);
+		timer.Timeout += () => GetTree().ReloadCurrentScene();
 	}
 
 	private void HurtboxComponentOnHit(HitboxComponent hitboxComponent, Vector2 direction) {
@@ -211,6 +213,11 @@ public partial class Player : CharacterBody2D {
 	}
 
 	private void HandleWallGrab(float delta) {
+		if (!WallMovementAllowed) {
+			_currentState = MovementState.Airborne;
+			return;
+		}
+
 		float directionX = MoveHorizontal(delta);
 
 		float wallNormal = GetWallNormal().X;
@@ -418,6 +425,11 @@ public partial class Player : CharacterBody2D {
 	private float _knownWallNormalX;
 
 	private void HandleWallSlide(float delta) {
+		if (!WallMovementAllowed) {
+			_currentState = MovementState.Airborne;
+			return;
+		}
+
 		float directionX = MoveHorizontal(delta);
 
 		float wallNormal = GetWallNormal().X;
