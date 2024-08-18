@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="Trigger" load_steps=2 format=3 uid="uid://6gmuxyrl33kf"]
+
+[ext_resource type="Script" path="res://triggers/Trigger.cs" id="1_xmn0t"]
+
+[resource]
+script = ExtResource("1_xmn0t")
+Name = "recall_quiver_upgrade"

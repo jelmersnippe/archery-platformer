@@ -389,8 +389,8 @@ public partial class Player : CharacterBody2D {
 		Velocity = _velocity;
 		MoveAndSlide();
 
-		if (Input.IsActionJustPressed("recall")) {
-			Quiver?.Recall();
+		if (Input.IsActionJustPressed("recall") && Quiver is RecallQuiver recallQuiver) {
+			recallQuiver.Recall();
 		}
 
 		if (Input.IsActionJustPressed("interact")) {

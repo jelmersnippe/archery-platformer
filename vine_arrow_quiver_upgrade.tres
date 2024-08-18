@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ArrowTypeUpgrade" load_steps=4 format=3 uid="uid://dgkjwdb0i7ric"]
+
+[ext_resource type="Resource" path="res://arrows/types/vine_arrow_type.tres" id="1_hck7k"]
+[ext_resource type="Resource" uid="uid://c538btgxql4ax" path="res://triggers/vine_arrow_unlock.tres" id="2_n2fk1"]
+[ext_resource type="Script" path="res://ArrowTypeUpgrade.cs" id="3_24hhg"]
+
+[resource]
+script = ExtResource("3_24hhg")
+Trigger = ExtResource("2_n2fk1")
+ArrowType = ExtResource("1_hck7k")

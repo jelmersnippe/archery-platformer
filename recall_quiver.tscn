@@ -1,0 +1,12 @@
+[gd_scene load_steps=5 format=3 uid="uid://c3we33y40msj8"]
+
+[ext_resource type="Script" path="res://RecallQuiver.cs" id="1_akb6t"]
+[ext_resource type="Resource" uid="uid://gecidmeyidmd" path="res://explosive_arrow_quiver_upgrade.tres" id="2_nve2n"]
+[ext_resource type="Resource" uid="uid://dgkjwdb0i7ric" path="res://vine_arrow_quiver_upgrade.tres" id="3_en5vt"]
+[ext_resource type="Resource" uid="uid://c14eor8x11kco" path="res://arrows/types/regular_arrow_type.tres" id="7_s2mam"]
+
+[node name="RecallQuiver" type="Node"]
+script = ExtResource("1_akb6t")
+InitialArrowCount = 3
+UnlockableArrows = [ExtResource("2_nve2n"), ExtResource("3_en5vt")]
+ArrowTypes = [ExtResource("7_s2mam")]

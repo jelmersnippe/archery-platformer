@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://dl0p8dvvo8wa6"]
+[gd_scene load_steps=40 format=3 uid="uid://dl0p8dvvo8wa6"]
 
 [ext_resource type="Script" path="res://Player.cs" id="1_2qic4"]
 [ext_resource type="Texture2D" uid="uid://bk5cpkkag2b6y" path="res://sprites/player_idle.png" id="3_nldyr"]
@@ -20,6 +20,8 @@
 [ext_resource type="Script" path="res://StandOnArrowsUpgrade.cs" id="18_3a21x"]
 [ext_resource type="Resource" uid="uid://c0xfty32eofrg" path="res://triggers/wall_movement_upgrade.tres" id="19_1hqhf"]
 [ext_resource type="Script" path="res://WallMovementUpgrade.cs" id="20_dfp04"]
+[ext_resource type="Resource" uid="uid://6gmuxyrl33kf" path="res://triggers/recall_quiver_upgrade.tres" id="21_mxuhe"]
+[ext_resource type="Script" path="res://RecallQuiverUpgrade.cs" id="22_o7k4a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nu74t"]
 size = Vector2(28, 30)
@@ -119,6 +121,10 @@ Trigger = ExtResource("17_7khs3")
 script = ExtResource("20_dfp04")
 Trigger = ExtResource("19_1hqhf")
 
+[sub_resource type="Resource" id="Resource_vvdbx"]
+script = ExtResource("22_o7k4a")
+Trigger = ExtResource("21_mxuhe")
+
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "RotationPoint", "BowOffset", "GrabArea", "InteractableArea", "HealthComponent", "HurtboxComponent", "Knockable", "InputComponent")]
 z_index = 10
 position = Vector2(2.08165e-12, 2.08165e-12)
@@ -196,4 +202,4 @@ script = ExtResource("9_ojluc")
 
 [node name="UpgradeSystem" type="Node" parent="."]
 script = ExtResource("10_lg6ju")
-Upgrades = [SubResource("Resource_wc1wr"), SubResource("Resource_q63ou"), SubResource("Resource_v45tx"), SubResource("Resource_ed4op"), SubResource("Resource_brsna")]
+Upgrades = [SubResource("Resource_wc1wr"), SubResource("Resource_q63ou"), SubResource("Resource_v45tx"), SubResource("Resource_ed4op"), SubResource("Resource_brsna"), SubResource("Resource_vvdbx")]

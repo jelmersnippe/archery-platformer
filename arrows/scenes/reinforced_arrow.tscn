@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://405napoe2e4f"]
+[gd_scene load_steps=13 format=3 uid="uid://bwg8iekhc545g"]
 
 [ext_resource type="Script" path="res://arrows/scripts/RegularArrow.cs" id="1_rbmjf"]
 [ext_resource type="Texture2D" uid="uid://df0reywfjo2w3" path="res://sprites/arrow.png" id="2_byum1"]
@@ -53,7 +53,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pq1y8"]
 size = Vector2(32, 7)
 
-[node name="ReinforcedArrow" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "CollisionShape2D", "HitboxCollision")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_irf18"]
+size = Vector2(36, 10)
+
+[node name="ReinforcedArrow" type="CharacterBody2D" node_paths=PackedStringArray("Sprite", "CollisionShape2D", "HitboxCollision", "PlayerDetectionArea")]
 collision_layer = 4
 collision_mask = 10
 motion_mode = 1
@@ -62,7 +65,7 @@ script = ExtResource("1_rbmjf")
 Sprite = NodePath("AnimatedSprite2D")
 CollisionShape2D = NodePath("CollisionShape2D")
 HitboxCollision = NodePath("Hitbox/CollisionShape2D")
-StuckArrowLifeTime = 2.0
+PlayerDetectionArea = NodePath("PlayerDetectionArea")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -84,3 +87,12 @@ collision_mask = 8
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_pq1y8")
+
+[node name="PlayerDetectionArea" type="Area2D" parent="."]
+position = Vector2(0, 1)
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerDetectionArea"]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_irf18")
+disabled = true

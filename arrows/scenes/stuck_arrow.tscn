@@ -1,7 +1,76 @@
-[gd_scene load_steps=5 format=3 uid="uid://bo2rpe4c3ixxr"]
+[gd_scene load_steps=5 format=3 uid="uid://c4j60wsnbxbwu"]
 
-[ext_resource type="Script" path="res://arrows/scripts/StuckArrow.cs" id="1_k12qw"]
 [ext_resource type="Texture2D" uid="uid://df0reywfjo2w3" path="res://sprites/arrow.png" id="2_fdm8s"]
+
+[sub_resource type="CSharpScript" id="CSharpScript_1iqe0"]
+script/source = "using Godot;
+
+public partial class StuckArrow : StaticBody2D {
+	[Export] public Area2D PlayerDetectionArea = null!;
+	[Export] public CollisionShape2D CollisionShape = null!;
+	[Export] public CollisionShape2D PlayerDetectionShape = null!;
+	[Export] public Sprite2D Sprite = null!;
+
+	private float _remainingLifeTime;
+	private Player? _trackingPlayer;
+
+	private bool _destroyOnContact = true;
+
+	public override void _Ready() {
+		PlayerDetectionArea.BodyEntered += PlayerDetectionAreaOnAreaEntered;
+		PlayerDetectionArea.BodyExited += PlayerDetectionAreaOnBodyExited;
+	}
+
+	public void SetSolid(float lifeTime) {
+		_remainingLifeTime = lifeTime;
+		// Always detect player when solid so arrow can break
+		PlayerDetectionShape.SetDeferred(\"disabled\", false);
+
+		float normalizedRotation = (GlobalRotationDegrees + 360) % 360;
+
+		if (!(lifeTime > 0f)) {
+			return;
+		}
+
+		// Collision for jumping is disabled by default, otherwise player can jump once with
+		// input buffering time before touching the arrow. SO when it has lifetime we enable
+		CollisionShape.SetDeferred(\"disabled\", false);
+		if (normalizedRotation >= 90f && normalizedRotation <= 270f) {
+			CollisionShape.RotationDegrees = 180f;
+		}
+	}
+
+	private void PlayerDetectionAreaOnBodyExited(Node2D body) {
+		if (body == _trackingPlayer) {
+			_trackingPlayer = null;
+		}
+	}
+
+	private void PlayerDetectionAreaOnAreaEntered(Node2D area) {
+		if (area is not Player player) {
+			return;
+		}
+
+		_trackingPlayer = player;
+	}
+
+	public override void _Process(double delta) {
+		// If we are tracking the player and the player is not moving up
+		if (_trackingPlayer == null || _trackingPlayer.Velocity.Y < 0) {
+			return;
+		}
+
+		// Player is standing on the arrow
+		if (_trackingPlayer.Velocity.Y == 0) {
+			_remainingLifeTime -= (float)delta;
+		}
+
+		if (_remainingLifeTime <= 0f) {
+			QueueFree();
+		}
+	}
+}
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wf8ly"]
 size = Vector2(32, 6)
@@ -12,7 +81,7 @@ size = Vector2(36, 10)
 [node name="StuckArrow" type="StaticBody2D" node_paths=PackedStringArray("PlayerDetectionArea", "CollisionShape", "PlayerDetectionShape", "Sprite")]
 collision_layer = 32
 collision_mask = 0
-script = ExtResource("1_k12qw")
+script = SubResource("CSharpScript_1iqe0")
 PlayerDetectionArea = NodePath("PlayerDetectionArea")
 CollisionShape = NodePath("CollisionShape2D")
 PlayerDetectionShape = NodePath("PlayerDetectionArea/CollisionShape2D")

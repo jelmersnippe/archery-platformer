@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=4 uid="uid://clg6pvxusa4fi"]
+[gd_scene load_steps=29 format=4 uid="uid://clg6pvxusa4fi"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="2_14ctw"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://environment/scene_door.tscn" id="4_a6y13"]
@@ -23,6 +23,7 @@
 [ext_resource type="PackedScene" uid="uid://bxf7g7leeersp" path="res://moving_platform.tscn" id="16_clqn5"]
 [ext_resource type="PackedScene" uid="uid://c70gh4df4tr5x" path="res://quiver_restock_pickup.tscn" id="17_u6si6"]
 [ext_resource type="PackedScene" uid="uid://8c8vutc40vyp" path="res://timed_platform.tscn" id="18_hwrbk"]
+[ext_resource type="Resource" uid="uid://6gmuxyrl33kf" path="res://triggers/recall_quiver_upgrade.tres" id="18_xrkwx"]
 [ext_resource type="PackedScene" uid="uid://dx3o2plskwdnn" path="res://seesaw_platform.tscn" id="19_cmn82"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5n656"]
@@ -79,6 +80,7 @@ Trigger = ExtResource("8_b4mwv")
 [node name="TriggerPickup" parent="BowPickup" instance=ExtResource("7_yv0br")]
 position = Vector2(415, 465)
 Trigger = ExtResource("8_b4mwv")
+Text = "pickup bow"
 Texture = ExtResource("8_vmxw3")
 
 [node name="ArcheryPickup" parent="." instance=ExtResource("7_24oln")]
@@ -87,6 +89,7 @@ Trigger = ExtResource("9_3atsb")
 [node name="TriggerPickup" parent="ArcheryPickup" instance=ExtResource("7_yv0br")]
 position = Vector2(594, 465)
 Trigger = ExtResource("9_3atsb")
+Text = "pickup nimble archery"
 Texture = ExtResource("8_vmxw3")
 
 [node name="WallMovementPickup" parent="." instance=ExtResource("7_24oln")]
@@ -95,6 +98,7 @@ Trigger = ExtResource("10_hn8np")
 [node name="TriggerPickup" parent="WallMovementPickup" instance=ExtResource("7_yv0br")]
 position = Vector2(667, 466)
 Trigger = ExtResource("10_hn8np")
+Text = "pickup ninja skills"
 Texture = ExtResource("8_vmxw3")
 
 [node name="StandOnArrowsPickup" parent="." instance=ExtResource("7_24oln")]
@@ -103,6 +107,7 @@ Trigger = ExtResource("11_m2gyw")
 [node name="TriggerPickup" parent="StandOnArrowsPickup" instance=ExtResource("7_yv0br")]
 position = Vector2(738, 466)
 Trigger = ExtResource("11_m2gyw")
+Text = "pickup fleetfooted"
 Texture = ExtResource("8_vmxw3")
 
 [node name="ExplosiveArrowPickup" parent="." instance=ExtResource("7_24oln")]
@@ -111,6 +116,7 @@ Trigger = ExtResource("12_h6pqm")
 [node name="TriggerPickup" parent="ExplosiveArrowPickup" instance=ExtResource("7_yv0br")]
 position = Vector2(465, 328)
 Trigger = ExtResource("12_h6pqm")
+Text = "pickup explosive arrow"
 Texture = ExtResource("13_6xqc7")
 
 [node name="VineArrowPickup" parent="." instance=ExtResource("7_24oln")]
@@ -119,6 +125,7 @@ Trigger = ExtResource("14_66mrh")
 [node name="TriggerPickup" parent="VineArrowPickup" instance=ExtResource("7_yv0br")]
 position = Vector2(555, 331)
 Trigger = ExtResource("14_66mrh")
+Text = "pickup vine arrow"
 Texture = ExtResource("15_xm1aj")
 
 [node name="QuiverPickup" parent="." instance=ExtResource("7_24oln")]
@@ -127,6 +134,16 @@ Trigger = ExtResource("12_qktbh")
 [node name="TriggerPickup" parent="QuiverPickup" instance=ExtResource("7_yv0br")]
 position = Vector2(529, 466)
 Trigger = ExtResource("12_qktbh")
+Text = "pickup quiver"
+Texture = ExtResource("8_kdtie")
+
+[node name="RecallQuiverPickup" parent="." instance=ExtResource("7_24oln")]
+Trigger = ExtResource("18_xrkwx")
+
+[node name="TriggerPickup" parent="RecallQuiverPickup" instance=ExtResource("7_yv0br")]
+position = Vector2(529, 466)
+Trigger = ExtResource("18_xrkwx")
+Text = "pickup recall quiver"
 Texture = ExtResource("8_kdtie")
 
 [node name="ConditionalNode2" parent="." instance=ExtResource("7_24oln")]
