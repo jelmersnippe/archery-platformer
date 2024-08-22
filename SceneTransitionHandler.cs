@@ -22,6 +22,7 @@ public partial class SceneTransitionHandler : Node {
 	private string? _targetDoorId = "spawn";
 	private SceneDoor? _targetDoor;
 	private Vector2 _playerRelativePositionToDoor = Vector2.Zero;
+	private Camera2D? _camera;
 
 	public override void _EnterTree() {
 		if (_instance != null) {
@@ -37,10 +38,21 @@ public partial class SceneTransitionHandler : Node {
 	private void OnNodeAdded(Node node) {
 		if (node is SceneDoor door && (_targetDoorId == null || _targetDoorId == door.Id)) {
 			MovePlayerToDoor(door);
+
+			if (_camera != null) {
+				_camera.GlobalPosition = door.GlobalPosition;
+			}
 		}
 
 		if (node is TileMap tileMap) {
 			EmitSignal(SignalName.TileMapSpawned, tileMap);
+		}
+		if (node is Camera camera) {
+			_camera = camera;
+			
+			if (_targetDoor != null) {
+				_camera.GlobalPosition = _targetDoor.GlobalPosition;
+			}
 		}
 	}
 
