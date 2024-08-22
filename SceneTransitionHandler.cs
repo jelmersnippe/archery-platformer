@@ -12,7 +12,6 @@ public partial class SceneTransitionHandler : Node {
 	private readonly PackedScene _playerScene =
 		ResourceLoader.Load<PackedScene>("res://player.tscn");
 
-
 	public Player? Player { get; private set; }
 
 	private static SceneTransitionHandler? _instance;
@@ -68,6 +67,7 @@ public partial class SceneTransitionHandler : Node {
 		door.BodyExited += DoorOnBodyExited;
 
 		Player.GlobalPosition = door.GlobalPosition + doorOffset;
+		Player.LastSafePoint = Player.GlobalPosition;
 		EmitSignal(SignalName.PlayerSpawned, Player);
 
 		return Player;

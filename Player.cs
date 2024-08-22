@@ -79,10 +79,7 @@ public partial class Player : CharacterBody2D {
 
 	private MovementState _currentState = MovementState.Grounded;
 
-	[ExportCategory("KillZone")] [Export] public float KillZoneControlLossTime = 0.5f;
-	[Export] public float TimeBetweenGroundedPositionTracking = 2f;
-	private Vector2 _lastGroundedPosition;
-	private float _timeSinceLastGroundedPosition;
+	public Vector2 LastSafePoint;
 
 	public override void _Ready() {
 		GrabArea.AreaEntered += GrabAreaOnAreaEntered;
@@ -90,7 +87,6 @@ public partial class Player : CharacterBody2D {
 
 		InteractableArea.AreaEntered += InteractableAreaOnAreaEntered;
 		InteractableArea.AreaExited += InteractableAreaOnAreaExited;
-		_lastGroundedPosition = GlobalPosition;
 
 		HurtboxComponent.Hit += HurtboxComponentOnHit;
 		HealthComponent.Died += HealthComponentOnDied;
@@ -282,10 +278,6 @@ public partial class Player : CharacterBody2D {
 
 		_canWallJump = true;
 		Sprite.Modulate = Colors.White;
-		if (_timeSinceLastGroundedPosition >= TimeBetweenGroundedPositionTracking) {
-			_lastGroundedPosition = GlobalPosition;
-			_timeSinceLastGroundedPosition = 0f;
-		}
 
 		_remainingCoyoteTime = CoyoteTime;
 		_velocity.Y = 0;
@@ -357,8 +349,6 @@ public partial class Player : CharacterBody2D {
 		InputComponent.Disabled = Knockable.ControlLossTimeLeft > 0f;
 
 		_remainingInputBufferTime -= (float)delta;
-
-		_timeSinceLastGroundedPosition += (float)delta;
 
 		_velocity = Velocity;
 
@@ -470,6 +460,6 @@ public partial class Player : CharacterBody2D {
 	}
 
 	public void HitKillZone() {
-		GlobalPosition = _lastGroundedPosition;
+		GlobalPosition = LastSafePoint;
 	}
 }

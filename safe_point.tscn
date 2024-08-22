@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cryiifumh5cko"]
+
+[ext_resource type="Script" path="res://SafePoint.cs" id="1_gu62s"]
+
+[node name="SafePoint" type="Area2D"]
+position = Vector2(1648, 304)
+collision_layer = 524288
+script = ExtResource("1_gu62s")
+metadata/_edit_group_ = true

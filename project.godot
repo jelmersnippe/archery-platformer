@@ -98,6 +98,7 @@ next_arrow_type={
 2d_physics/layer_8="climbable"
 2d_physics/layer_9="pickups"
 2d_physics/layer_12="explosions"
+2d_physics/layer_20="safe point"
 
 [rendering]
 
