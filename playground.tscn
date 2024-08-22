@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=4 uid="uid://clg6pvxusa4fi"]
+[gd_scene load_steps=30 format=4 uid="uid://clg6pvxusa4fi"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="2_14ctw"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://environment/scene_door.tscn" id="4_a6y13"]
@@ -34,6 +34,15 @@ _data = {
 "points": PackedVector2Array(0, 0, 0, 0, -160, 16, 0, 0, 0, 0, -160, -256, 0, 0, 0, 0, 224, -256, 0, 0, 0, 0, 352, -432, 0, 0, 0, 0, 560, -432, 0, 0, 0, 0, 560, 16)
 }
 point_count = 6
+
+[sub_resource type="Curve2D" id="Curve2D_odreq"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 980, 285, 0, 0, 0, 0, 983, 21)
+}
+point_count = 2
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b35xe"]
+size = Vector2(64, 3)
 
 [node name="Playground" type="Node2D"]
 
@@ -167,3 +176,23 @@ Platform = NodePath("../BasicPlatform")
 
 [node name="QuiverRestock" parent="." instance=ExtResource("17_u6si6")]
 position = Vector2(224, 463)
+
+[node name="Path2D" type="Path2D" parent="."]
+curve = SubResource("Curve2D_odreq")
+
+[node name="BasicPlatform" parent="Path2D" instance=ExtResource("22_ntg1j")]
+position = Vector2(981, 285)
+
+[node name="Area2D" type="Area2D" parent="Path2D/BasicPlatform"]
+collision_layer = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D/BasicPlatform/Area2D"]
+position = Vector2(0, -8.5)
+shape = SubResource("RectangleShape2D_b35xe")
+
+[node name="PathFollowPlatform" parent="Path2D" node_paths=PackedStringArray("PlayerDetectionArea", "Platform") instance=ExtResource("21_xscug")]
+position = Vector2(980, 285)
+PauseTime = 0.0
+WaitForPlayer = true
+PlayerDetectionArea = NodePath("../BasicPlatform/Area2D")
+Platform = NodePath("../BasicPlatform")
