@@ -79,6 +79,7 @@ public partial class Player : CharacterBody2D {
 
 	private MovementState _currentState = MovementState.Grounded;
 
+	[Export] public float KillZoneControllLossTime = 0.5f;
 	public Vector2 LastSafePoint;
 
 	public override void _Ready() {
@@ -100,6 +101,7 @@ public partial class Player : CharacterBody2D {
 	private void HurtboxComponentOnHit(HitboxComponent hitboxComponent, Vector2 direction) {
 		HealthComponent.TakeDamage(hitboxComponent.ContactDamage);
 		Knockable.ApplyKnockback(hitboxComponent.KnockbackForce * -direction);
+		InputComponent.SetDisabled(true, Knockable.ControlLossTime);
 	}
 
 	private void InteractableAreaOnAreaExited(Area2D area) {
@@ -183,12 +185,12 @@ public partial class Player : CharacterBody2D {
 		_velocity.Y += Gravity * delta;
 		Sprite.Play("jump");
 
-		if (_velocity.Y < 0 && Input.IsActionJustReleased("jump")) {
+		if (_velocity.Y < 0 && InputComponent.IsActionJustReleased("jump")) {
 			_velocity.Y *= JumpDecelerationOnRelease;
 		}
 
 
-		if (Input.IsActionJustPressed("jump")) {
+		if (InputComponent.IsActionJustPressed("jump")) {
 			if (_remainingCoyoteTime > 0) {
 				_velocity.Y = JumpVelocity;
 			}
@@ -246,7 +248,7 @@ public partial class Player : CharacterBody2D {
 
 		_remainingWallClimbGraceTime -= delta;
 
-		if (_canWallJump && Input.IsActionJustPressed("jump")) {
+		if (_canWallJump && InputComponent.IsActionJustPressed("jump")) {
 			_velocity.Y = JumpVelocity;
 			_velocity.X = Mathf.Sign(wallNormal) * MaxSpeed;
 			_canWallJump = false;
@@ -282,7 +284,7 @@ public partial class Player : CharacterBody2D {
 		_remainingCoyoteTime = CoyoteTime;
 		_velocity.Y = 0;
 
-		if (_remainingInputBufferTime > 0 || Input.IsActionJustPressed("jump")) {
+		if ((_remainingInputBufferTime > 0 && !InputComponent.Disabled) || InputComponent.IsActionJustPressed("jump")) {
 			_velocity.Y = JumpVelocity;
 			_currentState = MovementState.Airborne;
 		}
@@ -317,7 +319,7 @@ public partial class Player : CharacterBody2D {
 			_velocity.Y = Mathf.MoveToward(Velocity.Y, 0, ClimbingMaxSpeed / ClimbingDecelerationTime * delta);
 		}
 
-		if (Input.IsActionJustPressed("jump")) {
+		if (InputComponent.IsActionJustPressed("jump")) {
 			_velocity.Y = JumpVelocity;
 			_velocity.X = MoveHorizontal(delta) * MaxSpeed;
 			_currentState = MovementState.Airborne;
@@ -346,8 +348,6 @@ public partial class Player : CharacterBody2D {
 	}
 
 	public override void _PhysicsProcess(double delta) {
-		InputComponent.Disabled = Knockable.ControlLossTimeLeft > 0f;
-
 		_remainingInputBufferTime -= (float)delta;
 
 		_velocity = Velocity;
@@ -379,15 +379,15 @@ public partial class Player : CharacterBody2D {
 		Velocity = _velocity;
 		MoveAndSlide();
 
-		if (Input.IsActionJustPressed("recall") && Quiver is RecallQuiver recallQuiver) {
+		if (InputComponent.IsActionJustPressed("recall") && Quiver is RecallQuiver recallQuiver) {
 			recallQuiver.Recall();
 		}
 
-		if (Input.IsActionJustPressed("interact")) {
+		if (InputComponent.IsActionJustPressed("interact")) {
 			_interactableInRange?.Interact(this);
 		}
 
-		if (Input.IsActionJustPressed("next_arrow_type")) {
+		if (InputComponent.IsActionJustPressed("next_arrow_type")) {
 			Quiver?.ChangeArrowType(1);
 		}
 
@@ -395,14 +395,14 @@ public partial class Player : CharacterBody2D {
 			CancelArrow();
 		}
 		else {
-			if (Input.IsActionJustPressed("shoot")) {
+			if (InputComponent.IsActionJustPressed("shoot")) {
 				Arrow? arrow = Quiver?.GetArrow();
 				if (arrow != null) {
 					Bow?.ReadyArrow(arrow);
 				}
 			}
 
-			if (Input.IsActionJustReleased("shoot")) {
+			if (InputComponent.IsActionJustReleased("shoot")) {
 				Bow?.ReleaseArrow();
 			}
 		}
@@ -450,7 +450,7 @@ public partial class Player : CharacterBody2D {
 		_remainingWallJumpGraceTime =
 			holdingOppositeDirection ? _remainingWallJumpGraceTime - delta : WallJumpGraceTime;
 
-		if (_canWallJump && Input.IsActionJustPressed("jump")) {
+		if (_canWallJump && InputComponent.IsActionJustPressed("jump")) {
 			_velocity.Y = JumpVelocity;
 			_velocity.X = Mathf.Sign(wallNormal) * MaxSpeed;
 			_canWallJump = false;
@@ -461,5 +461,7 @@ public partial class Player : CharacterBody2D {
 
 	public void HitKillZone() {
 		GlobalPosition = LastSafePoint;
+		Velocity = Vector2.Zero;
+		InputComponent.SetDisabled(true, KillZoneControllLossTime);
 	}
 }

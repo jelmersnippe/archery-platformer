@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://clg6pvxusa4fi"]
+[gd_scene load_steps=28 format=4 uid="uid://clg6pvxusa4fi"]
 
 [ext_resource type="TileSet" uid="uid://b1gw0wjmby5da" path="res://tilemap.tres" id="2_14ctw"]
 [ext_resource type="PackedScene" uid="uid://dbhd8qjpg1pmw" path="res://environment/scene_door.tscn" id="4_a6y13"]
@@ -19,12 +19,12 @@
 [ext_resource type="Resource" uid="uid://c538btgxql4ax" path="res://triggers/vine_arrow_unlock.tres" id="14_66mrh"]
 [ext_resource type="Resource" uid="uid://c16bwqt5wgvg1" path="res://triggers/playground_rock_destroyed.tres" id="14_eou67"]
 [ext_resource type="Texture2D" uid="uid://c0jjjtlx6ghnw" path="res://sprites/vine_arrow_ui.png" id="15_xm1aj"]
-[ext_resource type="Script" path="res://MovingPlatform.cs" id="16_70i7o"]
-[ext_resource type="PackedScene" uid="uid://bxf7g7leeersp" path="res://moving_platform.tscn" id="16_clqn5"]
 [ext_resource type="PackedScene" uid="uid://c70gh4df4tr5x" path="res://quiver_restock_pickup.tscn" id="17_u6si6"]
 [ext_resource type="PackedScene" uid="uid://8c8vutc40vyp" path="res://timed_platform.tscn" id="18_hwrbk"]
 [ext_resource type="Resource" uid="uid://6gmuxyrl33kf" path="res://triggers/recall_quiver_upgrade.tres" id="18_xrkwx"]
 [ext_resource type="PackedScene" uid="uid://dx3o2plskwdnn" path="res://seesaw_platform.tscn" id="19_cmn82"]
+[ext_resource type="PackedScene" uid="uid://cqge4yf6rbubs" path="res://path_follow_platform.tscn" id="21_xscug"]
+[ext_resource type="PackedScene" uid="uid://c60rnj5uneo1v" path="res://basic_platform.tscn" id="22_ntg1j"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5n656"]
 size = Vector2(10, 160)
@@ -34,9 +34,6 @@ _data = {
 "points": PackedVector2Array(0, 0, 0, 0, -160, 16, 0, 0, 0, 0, -160, -256, 0, 0, 0, 0, 224, -256, 0, 0, 0, 0, 352, -432, 0, 0, 0, 0, 560, -432, 0, 0, 0, 0, 560, 16)
 }
 point_count = 6
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xomig"]
-size = Vector2(64, 16)
 
 [node name="Playground" type="Node2D"]
 
@@ -154,43 +151,15 @@ position = Vector2(992, 464)
 scale = Vector2(2, 2)
 Trigger = ExtResource("14_eou67")
 
-[node name="MovingPlatform" parent="." instance=ExtResource("16_clqn5")]
-
-[node name="Path2D2" type="Path2D" parent="."]
+[node name="Path" type="Path2D" parent="."]
 position = Vector2(622, 247)
 curve = SubResource("Curve2D_l3bwo")
 
-[node name="PathFollow2D" type="PathFollow2D" parent="Path2D2"]
+[node name="PathFollowPlatform" parent="Path" node_paths=PackedStringArray("Platform") instance=ExtResource("21_xscug")]
 position = Vector2(-160, 16)
-rotates = false
-loop = false
-script = ExtResource("16_70i7o")
+Platform = NodePath("../BasicPlatform")
 
-[node name="RemoteTransform2D" type="RemoteTransform2D" parent="Path2D2/PathFollow2D"]
-remote_path = NodePath("../../AnimatableBody2D")
-
-[node name="AnimatableBody2D" type="AnimatableBody2D" parent="Path2D2"]
-position = Vector2(-160, 16)
-collision_layer = 2
-collision_mask = 0
-
-[node name="ColorRect" type="ColorRect" parent="Path2D2/AnimatableBody2D"]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -32.0
-offset_top = -8.0
-offset_right = 32.0
-offset_bottom = 8.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.439216, 0.388235, 0.239216, 1)
-metadata/_edit_use_anchors_ = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Path2D2/AnimatableBody2D"]
-shape = SubResource("RectangleShape2D_xomig")
+[node name="BasicPlatform" parent="Path" instance=ExtResource("22_ntg1j")]
 
 [node name="TimedPlatform" parent="." instance=ExtResource("18_hwrbk")]
 

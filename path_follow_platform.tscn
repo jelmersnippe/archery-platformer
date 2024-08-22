@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cqge4yf6rbubs"]
+
+[ext_resource type="Script" path="res://PathFollowPlatform.cs" id="1_d1non"]
+
+[node name="PathFollowPlatform" type="PathFollow2D"]
+position = Vector2(2.08165e-12, 2.08165e-12)
+rotates = false
+loop = false
+script = ExtResource("1_d1non")
